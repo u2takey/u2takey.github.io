@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Other on Hugo Future Imperfect</title>
+    <link>http://LeiiBlog.github.io/categories/other/</link>
+    <description>Recent content in Other on Hugo Future Imperfect</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 02 Jul 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://LeiiBlog.github.io/categories/other/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>First</title>
+      <link>http://leiiblog.github.io/blog/first/</link>
+      <pubDate>Sat, 02 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://leiiblog.github.io/blog/first/</guid>
+      <description>
+
+&lt;h1 id=&#34;没错-智慧在这里安家了&#34;&gt;没错，智慧在这里安家了。&lt;/h1&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
