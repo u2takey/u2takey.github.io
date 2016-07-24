@@ -13,7 +13,7 @@
 <html>
     <head>
         
-            <title>Blog - Hugo Future Imperfect</title>
+            <title>Blog - LeiiWang&#39;s Blog</title>
         
 
         <meta charset="utf-8" />
@@ -85,7 +85,7 @@
     
 <header id="header">
     
-        <h2><a href="/">Future Imperfect</i></a></h2>
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
     
 
     <nav class="links">
@@ -192,6 +192,14 @@
                     </li>
                 
                     <li>
+                        <a href="http://u2takey.github.io/blog/golang_faq/"><p>Golang笔记之常见问题</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/launchd/"><p>Launchd Tutorial</p></a>
+                    </li>
+                
+                    <li>
                         <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
                     </li>
                 
@@ -231,8 +239,6 @@
             datetime='2016-07-24'>
             July 24, 2016</time>
         <span class="author">leiiwang</span>
-        
-            <p>1 minute read</p>
         
         
     </div>
@@ -305,7 +311,7 @@
     <header>
     <div class="title">
         
-            <h2><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h2>
+            <h2><a href="http://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h2>
         
         
     </div>
@@ -315,11 +321,9 @@
         
 
         <time class="published"
-            datetime='2015-02-01'>
-            February 1, 2015</time>
+            datetime='2016-04-01'>
+            April 1, 2016</time>
         <span class="author">leiiwang</span>
-        
-            <p>12 minute read</p>
         
         
     </div>
@@ -343,17 +347,105 @@
 
         
 
-        <a href="http://u2takey.github.io/blog/coredata/" class="image featured">
-            <img src="/img/2015/02/winter.jpg" alt="" />
+        <a href="http://u2takey.github.io/blog/golang_faq/" class="image featured">
+            <img src="/img/2016/04/sunset-1506365_960_720.jpg" alt="" />
         </a>
     
 
 
-    <p>注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1.</p>
+    <p>参考GolangFrequently Asked Questions ，很好的参考文档，理解Golang必读。 1. Golang的特点和发起目的 2. Golang设计原则 3. 为什么没有泛型 4. 为什么没有exceptions 5. 为什么没有assertion 6. 为什么build concurrency on the ideas of CSP 7. Why goroutines instead of threads 8. 为什么map非线程安全 9. Golang是面对对象语言吗 10. 为什么Golang没有运算符或者方法重载 11. interface的一个有疑问的例子Why doesn&rsquo;t type T satisfy the Equal interface 12. Error和nil的一个例子 13. go不支持tagged or untagged union 14. 1为什么没有隐式类型转换 15. Why are maps, slices, and channels references while arrays are values? 16. When should I use a pointer to an interface 17.</p>
 
     <footer>
         <ul class="actions">
-            <li><a href="http://u2takey.github.io/blog/coredata/" class="button big">Continue Reading</a></li>
+            <li><a href="http://u2takey.github.io/blog/golang_faq/" class="button big">Continue Reading</a></li>
+        </ul>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesgolang'>Golang</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+
+        
+            <article class="post">
+    <header>
+    <div class="title">
+        
+            <h2><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h2>
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-04-01'>
+            April 1, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="http://u2takey.github.io/blog/launchd/" class="image featured">
+            <img src="/img/2016/04/sunset-1506365_960_720.jpg" alt="" />
+        </a>
+    
+
+
+    <p><ol>
+<li>Launchd Tutorial 1.1. 什么是launchd 1.2. 为什么要launchd 1.3. Daemons and Agents 1.4. 行为配置 1.5. 操作 1.6. recipes（例子） 1.6.1. 例1 app自动重启 1.6.2. 例2 一个crontab任务（同时监控文件state） 1.6.3. 例3 一个inetd任务 2. Launchd Sourcecode 2.1. 准备知识 2.2. 命令launchctl list的运行流程 2.3. 命令launchctl load的运行流程 3. 参考 1. Launchd Tutorial 1.1. 什么是launchd A unified, open-source service management framework for starting, stopping and managing daemons, applications, processes, and scripts. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License.</li>
+</ol>
+</p>
+
+    <footer>
+        <ul class="actions">
+            <li><a href="http://u2takey.github.io/blog/launchd/" class="button big">Continue Reading</a></li>
         </ul>
         <ul class="stats">
     
@@ -388,93 +480,6 @@
 </article>
 
         
-            <article class="post">
-    <header>
-    <div class="title">
-        
-            <h2><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h2>
-        
-        
-    </div>
-    <div class="meta">
-        
-            
-        
-
-        <time class="published"
-            datetime='2012-10-14'>
-            October 14, 2012</time>
-        <span class="author">leiiwang</span>
-        
-            <p>1 minute read</p>
-        
-        
-    </div>
-</header>
-
-    
-    
-
-    
-        
-        
-
-
-
-
-    
-    
-        
-    
-
-
-        
-
-        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/" class="image featured">
-            <img src="/img/2012/10/lake-scenery-1365288_960_720.jpg" alt="" />
-        </a>
-    
-
-
-    <p>这是12年我写在新浪博客的文章，现在看起来觉得&hellip;.我为什么会写这么奇怪的东西&hellip;那时候我一定不太正常。 知名的技术博客酷壳上有一篇文章，谈到对技术的态度，但大都是从技术角度谈技术，并没有真正谈到，面对日新月异的技术，一个人应该拥有的生活态度和哲学态度。 相比之下，《禅与摩托车维修艺术》则给出了一些很具体的思考和答案，也解决了我的一些困惑。 我出生在80年代，那时候技术革命开始在中国发生，在我的童年里经历了收音机，黑白电视机，彩色电视机，电脑等等变化，应接不暇。 和每个孩子一样，我起初对这些东西充满好奇，也对这些东西的神奇魔力无比困惑，我拆过随身听，电脑，电视机，当看到那些小小的元 件拼接在一起就可以实现那么多不可思议的事。可是后来我的态度却从好奇渐渐变成了麻木，以致厌恶。为什么会这样呢，这一点不难解释， 这件事也随时在发生。技术日新月异，各种革命性的东西不断出现，即使是一个精力充沛的智商超群的成年人一辈子也无法了解其中的千万 分之一，这些技术被人们使用，接受，然而却不在人们的控制，了解之中。这是一件令人苦恼的事。想象一下，一个人因为在使用电视机的时 候，却在苦恼于不能明白其实现原理，这时候他的好奇心对他来说反倒是一种折磨。这种情况逐渐发展，许多时候人们开始拒绝接受新技术， 他们习惯与那些了解的东西，认为那才是原始的。对于不断变化的时代，仿佛自己受到背叛，也因为无法控制而缺乏安全感。 他们眼中世界的本来面目是自己了解的一面，技术的变化没有使人人兴奋，反倒使人疲惫，因为他感到即使了解了那些新的东西，他们也还是很快会被背叛。 这就是现实。尽管他们不曾放弃科技带来的好处，却时常宣称：原始的才是最好的，上帝的世界是几千年前的世界，他们甚至认为，对技术的贪婪会导致人类的灭亡。 这或许是一种反智主义在这个技术时代的体现。 有这种思想的人随处可见，每天都可以见到拒绝服用医药，拒绝手术，拒绝使用电脑，手机，拒绝生物技术，拒绝基因产品和各种新科技的人们。 甚至，他们有时候在这个世界的力量强大得能够影响到许多技术的发展（尽管是暂时的）。 可是。这是世界的本来面目，也是自我的本来面目。 技术与原始，并没有多少矛盾，这些矛盾只是理智的产物罢了。这里说的理智并不是我们在研究技术时所用的智力因素， 而是那种存在于这个世界，在人们心中，总试图分析这个世界，把这个世界分解成一个个矛盾体的分别心。从这点来说， 技术的使用和发展并不需要理智，技术只是工具，是人们的本性。技术的就是原始的，当人们第一次试图用石头制造一个工具的时候，技术就开始发展，他是人类的一部分。 承认了这些，你才能树立好正确对待技术的态度，因为在这个时代，对待技术的态度，就是对待生活的态度。</p>
-
-    <footer>
-        <ul class="actions">
-            <li><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/" class="button big">Continue Reading</a></li>
-        </ul>
-        <ul class="stats">
-    
-        
-
-        
-        
-            <li>
-                
-                
-                    
-
-                    
-
-                    
-
-                    
-                        Category
-                    
-                
-            </li>
-        
-    
-
-    
-    
-        <li><a href='/categories%E9%9A%8F%E6%84%9F'>随感</a></li>
-    
-</ul>
-
-    </footer>
-</article>
-
-        
 
         
 <ul class="actions pagination">
@@ -483,7 +488,8 @@
     
 
     
-        <li><a href="#" class="disabled button big next">Next Page</a></li>
+        <li><a href="/blog/page/2/"
+                class="button big next">Next Page</a></li>
     
 </ul>
 
@@ -601,6 +607,34 @@
                     <li>
                         <article>
                             <header>
+                                <h3><a href="http://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
                                 
                                     
@@ -628,6 +662,16 @@
                 
 
                 
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
             </ul>
         </section>
 
@@ -649,6 +693,15 @@
                     <li>
                         <article>
                             <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
                                 <span style="float:right;">2</span>
                             </header>
@@ -658,7 +711,7 @@
                     <li>
                         <article>
                             <header>
-                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <a href="/categories/golang/">Golang</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -745,7 +798,7 @@
                 
             </ul>
 
-            <p class="copyright">&copy; Hugo Future Imperfect. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
         </section>
 
 </section>

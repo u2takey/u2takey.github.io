@@ -1,13 +1,437 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>IOS &amp; MacOS on Hugo Future Imperfect</title>
+    <title>IOS &amp; MacOS on LeiiWang&#39;s Blog</title>
     <link>http://u2takey.github.io/categories/ios--macos/</link>
-    <description>Recent content in IOS &amp; MacOS on Hugo Future Imperfect</description>
+    <description>Recent content in IOS &amp; MacOS on LeiiWang&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Feb 2015 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 01 Apr 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://u2takey.github.io/categories/ios--macos/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Launchd Tutorial</title>
+      <link>http://u2takey.github.io/blog/launchd/</link>
+      <pubDate>Fri, 01 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://u2takey.github.io/blog/launchd/</guid>
+      <description>
+
+&lt;hr /&gt;
+
+&lt;!-- vscode-markdown-toc --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1. &lt;a href=&#34;#LaunchdTutorial-0&#34;&gt; Launchd Tutorial&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1.1. &lt;a href=&#34;#launchd-1&#34;&gt; 什么是launchd&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.2. &lt;a href=&#34;#launchd-2&#34;&gt;为什么要launchd&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.3. &lt;a href=&#34;#DaemonsandAgents-3&#34;&gt;Daemons and Agents&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.4. &lt;a href=&#34;#-4&#34;&gt;行为配置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.5. &lt;a href=&#34;#-5&#34;&gt; 操作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.6. &lt;a href=&#34;#recipes-6&#34;&gt;recipes（例子）&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1.6.1. &lt;a href=&#34;#1app-7&#34;&gt;例1 app自动重启&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.6.2. &lt;a href=&#34;#2crontabstate-8&#34;&gt;例2 一个crontab任务（同时监控文件state）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.6.3. &lt;a href=&#34;#3inetd-9&#34;&gt;例3 一个inetd任务&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;2. &lt;a href=&#34;#LaunchdSourcecode-10&#34;&gt; Launchd Sourcecode&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2.1. &lt;a href=&#34;#-11&#34;&gt; 准备知识&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.2. &lt;a href=&#34;#launchctllist-12&#34;&gt; 命令launchctl list的运行流程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.3. &lt;a href=&#34;#launchctlload-13&#34;&gt; 命令launchctl load的运行流程&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;3. &lt;a href=&#34;#-14&#34;&gt;参考&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /vscode-markdown-toc --&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;1-a-name-launchdtutorial-0-a-launchd-tutorial&#34;&gt;1. &lt;a name=&#39;LaunchdTutorial-0&#39;&gt;&lt;/a&gt; Launchd Tutorial&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-a-name-launchd-1-a-什么是launchd&#34;&gt;1.1. &lt;a name=&#39;launchd-1&#39;&gt;&lt;/a&gt; 什么是launchd&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;A unified, open-source service management framework for &lt;code&gt;starting, stopping and managing daemons, applications, processes, and scripts&lt;/code&gt;. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;1-2-a-name-launchd-2-a-为什么要launchd&#34;&gt;1.2. &lt;a name=&#39;launchd-2&#39;&gt;&lt;/a&gt;为什么要launchd&lt;/h3&gt;
+
+&lt;p&gt;可以替代init，rc，init.d script，rc.d script，SystemStarter (OS X)，inetd / xinetd，crond / atd，watchdogd 而且使用更方便&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:footnote&#34;&gt;&lt;a rel=&#34;footnote&#34; href=&#34;#fn:footnote&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-3-a-name-daemonsandagents-3-a-daemons-and-agents&#34;&gt;1.3. &lt;a name=&#39;DaemonsandAgents-3&#39;&gt;&lt;/a&gt;Daemons and Agents&lt;/h3&gt;
+
+&lt;p&gt;launchd 根据运行权限的不同,区分daemons(rootor the user specified with the key User)和agent(user)。&lt;/p&gt;
+
+&lt;p&gt;不同的级别的daemon/agent存放位置也不同,其中/System/Library/为系统目录，不应该在此创建任何daemon/agent。第三方Library的目录在/Library/。而某个特别用户的目录在~/Library/&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th&gt;Location&lt;/th&gt;
+&lt;th&gt;Run on behalf of&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;User Agents&lt;/td&gt;
+&lt;td&gt;~/Library/LaunchAgents&lt;/td&gt;
+&lt;td&gt;Currently logged in user&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Global Agents&lt;/td&gt;
+&lt;td&gt;/Library/LaunchAgents&lt;/td&gt;
+&lt;td&gt;Currently logged in user&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Global Daemons&lt;/td&gt;
+&lt;td&gt;/Library/LaunchDaemons&lt;/td&gt;
+&lt;td&gt;root or the user specified with the key User&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;System Agents&lt;/td&gt;
+&lt;td&gt;/System/Library/LaunchAgents&lt;/td&gt;
+&lt;td&gt;Currently logged in user&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;System Daemons&lt;/td&gt;
+&lt;td&gt;/System/Library/LaunchDaemons&lt;/td&gt;
+&lt;td&gt;root or the user specified with the key User&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;1-4-a-name-4-a-行为配置&#34;&gt;1.4. &lt;a name=&#39;-4&#39;&gt;&lt;/a&gt;行为配置&lt;/h3&gt;
+
+&lt;p&gt;daemon/agent的行为由一个property list定义。launchd提供了30多种配置项,full list请参考apple文档和 &lt;a href=&#34;http://launchd.info/&#34;&gt;http://launchd.info/&lt;/a&gt; ，这里简单介绍其中的几个。（可以用一个第三方工具LaunchControl配置）&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Key&lt;/th&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Label&lt;/td&gt;
+&lt;td&gt;String&lt;/td&gt;
+&lt;td&gt;job名字. 一般和plist名字相同,Required.&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Program&lt;/td&gt;
+&lt;td&gt;String&lt;/td&gt;
+&lt;td&gt;执行程序路径. 如/Users/Me/Scripts/cleanup.sh.&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;ProgramArguments&lt;/td&gt;
+&lt;td&gt;Array of strings&lt;/td&gt;
+&lt;td&gt;Program 参数&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;UserName&lt;/td&gt;
+&lt;td&gt;String&lt;/td&gt;
+&lt;td&gt;执行user名(defaults to root or current user)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;RunAtLoad&lt;/td&gt;
+&lt;td&gt;Boolean&lt;/td&gt;
+&lt;td&gt;(defaults to NO) 标志任务是否要load进launchd立即启动&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;StartOnMount&lt;/td&gt;
+&lt;td&gt;Boolean&lt;/td&gt;
+&lt;td&gt;(defaults to NO)    标志任务是否要启动when a new filesystem is mounted.&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;QueueDirectories&lt;/td&gt;
+&lt;td&gt;Array of strings&lt;/td&gt;
+&lt;td&gt;Watch a directory for new files&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;WatchPaths&lt;/td&gt;
+&lt;td&gt;Array of strings&lt;/td&gt;
+&lt;td&gt;Watch a filesystem path for changes. Can be a file or folder.&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;StartInterval&lt;/td&gt;
+&lt;td&gt;Integer&lt;/td&gt;
+&lt;td&gt;Schedules job to run on a repeating schedule. Indicates number of seconds to wait between runs.&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;StartCalendarInterval&lt;/td&gt;
+&lt;td&gt;Dictionary of integers or Array of dictionaries of integers&lt;/td&gt;
+&lt;td&gt;Job scheduling. The syntax is similar to cron.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;1-5-a-name-5-a-操作&#34;&gt;1.5. &lt;a name=&#39;-5&#39;&gt;&lt;/a&gt; 操作&lt;/h3&gt;
+
+&lt;p&gt;所有行为都可以用一个命令行工具launchctl操作, 但使用LaunchControl更简单.下面列出了几个常见的操作。
+####获取当前运行的所有demon/agent&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;host:~ user$ launchctl list 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####Loading a Job&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;launchctl load ~/Library/LaunchAgents/com.leiiwang.firsttest.plist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;com.leiiwang.firsttest.plist的内容:一个crontab任务，每分钟执行一次crontab-test.s，这个脚本只有一句话date.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &amp;quot;-//Apple//DTD PLIST 1.0//EN&amp;quot; &amp;quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;quot;&amp;gt;
+&amp;lt;plist version=&amp;quot;1.0&amp;quot;&amp;gt;
+&amp;lt;dict&amp;gt;
+        &amp;lt;key&amp;gt;Label&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;com.leiiwang.firsttest&amp;lt;/string&amp;gt;
+
+        &amp;lt;key&amp;gt;ProgramArguments&amp;lt;/key&amp;gt;
+        &amp;lt;array&amp;gt;
+                &amp;lt;string&amp;gt;/Users/wangleo/bin/crontab-test.sh&amp;lt;/string&amp;gt;
+        &amp;lt;/array&amp;gt;
+
+        &amp;lt;key&amp;gt;KeepAlive&amp;lt;/key&amp;gt;
+        &amp;lt;false/&amp;gt;
+
+        &amp;lt;key&amp;gt;Nice&amp;lt;/key&amp;gt;
+        &amp;lt;integer&amp;gt;1&amp;lt;/integer&amp;gt;
+
+        &amp;lt;key&amp;gt;StartInterval&amp;lt;/key&amp;gt;
+        &amp;lt;integer&amp;gt;60&amp;lt;/integer&amp;gt;
+
+        &amp;lt;key&amp;gt;StandardErrorPath&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;/tmp/leiiwang.firsttest.err&amp;lt;/string&amp;gt;
+
+        &amp;lt;key&amp;gt;StandardOutPath&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;/tmp/leiiwang.firsttest.out&amp;lt;/string&amp;gt;
+&amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出/tmp/leiiwang.firsttest.out&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Sat Dec 12 16:58:02 CST 2015
+Sat Dec 12 16:59:02 CST 2015
+Sat Dec 12 17:00:02 CST 2015
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####Unloading a Job&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;launchctl unload ~/Library/LaunchAgents/com.leiiwang.firsttest.plist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-6-a-name-recipes-6-a-recipes-例子&#34;&gt;1.6. &lt;a name=&#39;recipes-6&#39;&gt;&lt;/a&gt;recipes（例子）&lt;/h3&gt;
+
+&lt;h4 id=&#34;1-6-1-a-name-1app-7-a-例1-app自动重启&#34;&gt;1.6.1. &lt;a name=&#39;1app-7&#39;&gt;&lt;/a&gt;例1 app自动重启&lt;/h4&gt;
+
+&lt;p&gt;这里用了macos 的open -W 命令.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &amp;quot;-//Apple//DTD PLIST 1.0//EN&amp;quot; &amp;quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;quot;&amp;gt;
+&amp;lt;plist version=&amp;quot;1.0&amp;quot;&amp;gt;
+	&amp;lt;dict&amp;gt;
+		&amp;lt;key&amp;gt;KeepAlive&amp;lt;/key&amp;gt;
+		&amp;lt;true/&amp;gt;
+		&amp;lt;key&amp;gt;Label&amp;lt;/key&amp;gt;
+		&amp;lt;string&amp;gt;local.Safari.keepAlive&amp;lt;/string&amp;gt;
+		&amp;lt;key&amp;gt;ProgramArguments&amp;lt;/key&amp;gt;
+		&amp;lt;array&amp;gt;
+			&amp;lt;string&amp;gt;/usr/bin/open&amp;lt;/string&amp;gt;
+			&amp;lt;string&amp;gt;-W&amp;lt;/string&amp;gt;
+			&amp;lt;string&amp;gt;/Applications/Safari.app&amp;lt;/string&amp;gt;
+		&amp;lt;/array&amp;gt;
+	&amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;1-6-2-a-name-2crontabstate-8-a-例2-一个crontab任务-同时监控文件state&#34;&gt;1.6.2. &lt;a name=&#39;2crontabstate-8&#39;&gt;&lt;/a&gt;例2 一个crontab任务（同时监控文件state）&lt;/h4&gt;
+
+&lt;p&gt;一个备份任务，在database运行的时候进行备份
+使用PathState检测PID file是否存在确定任务特定任务database是否在执行
+使用KeepAlive使得PID file存在时保持运行.
+使用ThrottleInterval，任务终止后多久后重启&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &amp;quot;-//Apple//DTD PLIST 1.0//EN&amp;quot; &amp;quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;quot;&amp;gt;
+&amp;lt;plist version=&amp;quot;1.0&amp;quot;&amp;gt;
+	&amp;lt;dict&amp;gt;
+		&amp;lt;key&amp;gt;Label&amp;lt;/key&amp;gt;
+		&amp;lt;string&amp;gt;com.example.app&amp;lt;/string&amp;gt;
+		&amp;lt;key&amp;gt;Program&amp;lt;/key&amp;gt;
+		&amp;lt;string&amp;gt;/Users/Me/Scripts/backup.sh&amp;lt;/string&amp;gt;
+		&amp;lt;key&amp;gt;KeepAlive&amp;lt;/key&amp;gt;
+		&amp;lt;dict&amp;gt;
+			&amp;lt;key&amp;gt;PathState&amp;lt;/key&amp;gt;
+			&amp;lt;dict&amp;gt;
+				&amp;lt;key&amp;gt;/var/log/mysql.pid&amp;lt;/key&amp;gt;
+				&amp;lt;true/&amp;gt;
+			&amp;lt;/dict&amp;gt;
+		&amp;lt;/dict&amp;gt;
+		&amp;lt;key&amp;gt;ThrottleInterval&amp;lt;/key&amp;gt;
+		&amp;lt;integer&amp;gt;3600&amp;lt;/integer&amp;gt;
+	&amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;1-6-3-a-name-3inetd-9-a-例3-一个inetd任务&#34;&gt;1.6.3. &lt;a name=&#39;3inetd-9&#39;&gt;&lt;/a&gt;例3 一个inetd任务&lt;/h4&gt;
+
+&lt;p&gt;使用Sockets创建一个server监听13117&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;plist version=&amp;quot;1.0&amp;quot;&amp;gt;
+&amp;lt;dict&amp;gt;
+  &amp;lt;key&amp;gt;Label&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;my.greeter&amp;lt;/string&amp;gt;
+  &amp;lt;key&amp;gt;ProgramArguments&amp;lt;/key&amp;gt;
+  &amp;lt;array&amp;gt;
+    &amp;lt;string&amp;gt;/usr/bin/ruby&amp;lt;/string&amp;gt;
+    &amp;lt;string&amp;gt;-e&amp;lt;/string&amp;gt;
+    &amp;lt;string&amp;gt;puts &amp;quot;Hi #{gets.match(/(\w+)\W*\z/)[1]}, happy #{Time.now.strftime(&amp;quot;%A&amp;quot;)}!&amp;quot;&amp;lt;/string&amp;gt;
+  &amp;lt;/array&amp;gt;
+  &amp;lt;key&amp;gt;inetdCompatibility&amp;lt;/key&amp;gt;&amp;lt;dict&amp;gt;&amp;lt;key&amp;gt;Wait&amp;lt;/key&amp;gt;&amp;lt;false/&amp;gt;&amp;lt;/dict&amp;gt;
+  &amp;lt;key&amp;gt;Sockets&amp;lt;/key&amp;gt;
+  &amp;lt;dict&amp;gt;
+    &amp;lt;key&amp;gt;Listeners&amp;lt;/key&amp;gt;
+    &amp;lt;dict&amp;gt;
+      &amp;lt;key&amp;gt;SockServiceName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;13117&amp;lt;/string&amp;gt;
+    &amp;lt;/dict&amp;gt;
+  &amp;lt;/dict&amp;gt;
+&amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;测试&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mac% launchctl load ~/Library/LaunchAgents/my.greeter.plist
+mac% echo &amp;quot;My name is Leiiwang.&amp;quot; | nc localhost 13117
+Hi Leiiwang, happy Saturday!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-a-name-launchdsourcecode-10-a-launchd-sourcecode&#34;&gt;2. &lt;a name=&#39;LaunchdSourcecode-10&#39;&gt;&lt;/a&gt; Launchd Sourcecode&lt;/h2&gt;
+
+&lt;p&gt;整体感受是典型大公司代码，很多人修改的痕迹，各种bug修复和打补丁，搞得有点难看，但从整体上来看质量还算可以。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-a-name-11-a-准备知识&#34;&gt;2.1. &lt;a name=&#39;-11&#39;&gt;&lt;/a&gt; 准备知识&lt;/h3&gt;
+
+&lt;p&gt;mach port: macos 的一种ipc类似一种消息队列和单向pipe的结合（macos在大部分版本中并不支持消息队列,大都时候mach port已经够好用了）,参见Ports, Port Rights, Port Sets, and Port Namespaces&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:footnote1&#34;&gt;&lt;a rel=&#34;footnote&#34; href=&#34;#fn:footnote1&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+kqueue: free bsd版本的epoll&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-a-name-launchctllist-12-a-命令launchctl-list的运行流程&#34;&gt;2.2. &lt;a name=&#39;launchctllist-12&#39;&gt;&lt;/a&gt; 命令launchctl list的运行流程&lt;/h3&gt;
+
+&lt;p&gt;launchctl是launchd提供的命令行工具,和其他类似的工具一样，launchctl作为一个server-client模式的client运行，client和server直接使用unix域套接字进行通信&lt;/p&gt;
+
+&lt;p&gt;launchd中数据传输几乎只依赖一种数据结构_launch_data这种数据做array，dict,string&amp;hellip;作用,效率是很低的,但是也可以满足launchd的业务需求了.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;struct _launch_data {
+	uint64_t type;
+	union {
+		struct {
+			union {
+				launch_data_t *_array;
+				char *string;
+				void *opaque;
+				int64_t __junk;
+			};
+			union {
+				uint64_t _array_cnt;
+				uint64_t string_len;
+				uint64_t opaque_size;
+			};
+		};
+		int64_t fd;
+		uint64_t  mp;
+		uint64_t err;
+		int64_t number;
+		uint64_t boolean;
+		double float_num;
+	};
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;client端流程
+1. 在launchctl.c定义了各种的命令的对应运行函数,list的运行函数为list_cmd(..)
+2. 构造一个msg，其key为LAUNCH_KEY_GETJOB
+3. session相关
+4. launchd_msg -&amp;gt; launchd_msg_internal -&amp;gt;launchd_msg_send:pack成一个launch_t结构
+5. sendmsg通过socket发送命令结构体到server端
+6. recvmsg通过socket读取返回&lt;/p&gt;
+
+&lt;p&gt;server端流程
+1. 在ipc.c创建了server并且通过kevent监听
+2. kevent返回read事件,读取命令ipc_callback
+3. launch_msg_recv
+4. ipc_read_msg  -&amp;gt; ipc_read_msg2
+5. core.c:job_export_all -&amp;gt;job_export_all2
+6. 从rootmgr开始遍历，把所有job打包进一个dict并返回
+7. launch_msg_send返回给客户端数据&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-a-name-launchctlload-13-a-命令launchctl-load的运行流程&#34;&gt;2.3. &lt;a name=&#39;launchctlload-13&#39;&gt;&lt;/a&gt; 命令launchctl load的运行流程&lt;/h3&gt;
+
+&lt;p&gt;这里我们特别的分析一种类似1.5 例子的简单任务的处理流程&lt;/p&gt;
+
+&lt;p&gt;client端流程
+1. 在launchctl.c定义了各种的命令的对应运行函数,load的运行函数为load_and_unload_cmd(..)
+2. readfile：读取job配置的plist，检查几个必填key，读取到一个load_unload_state的结构体中
+3. distill_job：对于watchpath/pathstate/queuedirectories任务特别处理，加入在watch job中
+4. submit_job_pass,设置命令字为LAUNCH_KEY_SUBMIT_JOB
+5. launchd_msg -&amp;gt; launchd_msg_internal -&amp;gt;launchd_msg_send:pack成一个launch_t结构
+6. sendmsg通过socket发送命令结构体到server端
+7. recvmsg通过socket读取返回&lt;/p&gt;
+
+&lt;p&gt;server端流程
+1. 前面步骤略
+2. ipc_read_msg  -&amp;gt; ipc_read_msg2
+3. core.c:job_import -&amp;gt;job_import_2 : 检查关键字,session相关&amp;hellip;
+4. job_new:创建job,填充一个job_t结构,注意一些默认配置，设置callback
+5. job_dispatch-&amp;gt;job_start 注意并不是所有的任务都会立即dispatch,start的,对于我们的这个任务同时根据配置加入了一个timer到kqueue，timer回调之后会再次dispatch-&amp;gt;start
+6. job_start -&amp;gt; runtime_fork创建子进程,创建成功后父进程更新一些管理数据结构如actic_jobs等,并且把进程加入监听，监听进程的fork,exit等状态变化
+7. 子进程运行startchild-&amp;gt;jobsetupattribute提取命令参数等，调用posix_spawn命令执行命令&lt;/p&gt;
+
+&lt;h2 id=&#34;3-a-name-14-a-参考&#34;&gt;3. &lt;a name=&#39;-14&#39;&gt;&lt;/a&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://launchd.info/&#34;&gt;http://launchd.info/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://paul.annesley.cc/2012/09/mac-os-x-launchd-is-cool/&#34;&gt;http://paul.annesley.cc/2012/09/mac-os-x-launchd-is-cool/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Launchd&#34;&gt;https://en.wikipedia.org/wiki/Launchd&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://alvinalexander.com/mac-os-x/launchd-examples-launchd-plist-file-examples-mac&#34;&gt;http://alvinalexander.com/mac-os-x/launchd-examples-launchd-plist-file-examples-mac&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:footnote&#34;&gt;The Ubuntu Linux distribution considered using launchd in 2006. launchd was rejected as an option because it was released under the Apple Public Source License
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:footnote&#34;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:footnote1&#34;&gt;Ports, Port Rights, Port Sets, and Port NamespacesWith the exception of the task’s virtual address space, all other Mach resources are accessed through a level of indirection known as a port. A port is an endpoint of a unidirectional communication channel between a client who requests a service and a server who provides the service. If a reply is to be provided to such a service request, a second port must be used. This is comparable to a (unidirectional) pipe in UNIX parlance.In most cases, the resource that is accessed by the port (that is, named by it) is referred to as an object. Most objects named by a port have a single receiver and (potentially) multiple senders. That is, there is exactly one receive port, and at least one sending port, for a typical object such as a message queue.The service to be provided by an object is determined by the manager that receives the request sent to the object. It follows that the kernel is the receiver for ports associated with kernel-provided objects and that the receiver for ports associated with task-provided objects is the task providing those objects.For ports that name task-provided objects, it is possible to change the receiver of requests for that port to a different task, for example by passing the port to that task in a message. A single task may have multiple ports that refer to resources it supports. For that matter, any given entity can have multiple ports that represent it, each implying different sets of permissible operations. For example, many objects have a name port and a control port (sometimes called the privileged port). Access to the control port allows the object to be manipulated; access to the name port simply names the object so that you can obtain information about it or perform other non-privileged operations against it.Tasks have permissions to access ports in certain ways (send, receive, send-once); these are called port rights. A port can be accessed only via a right. Ports are often used to grant clients access to objects within Mach. Having the right to send to the object’s IPC port denotes the right to manipulate the object in prescribed ways. As such, port right ownership is the fundamental security mechanism within Mach. Having a right to an object is to have a capability to access or manipulate that object.Port rights can be copied and moved between tasks via IPC. Doing so, in effect, passes capabilities to some object or server.One type of object referred to by a port is a port set. As the name suggests, a port set is a set of port rights that can be treated as a single unit when receiving a message or event from any of the members of the set. Port sets permit one thread to wait on a number of message and event sources, for example in work loops.Traditionally in Mach, the communication channel denoted by a port was always a queue of messages. However, OS X supports additional types of communication channels, and these new types of IPC object are also represented by ports and port rights. See the section Interprocess Communication (IPC), for more details about messages and other IPC types.Ports and port rights do not have systemwide names that allow arbitrary ports or rights to be manipulated directly. Ports can be manipulated by a task only if the task has a port right in its port namespace. A port right is specified by a port name, an integer index into a 32-bit port namespace. Each task has associated with it a single port namespace.Tasks acquire port rights when another task explicitly inserts them into its namespace, when they receive rights in messages, by creating objects that return a right to the object, and via Mach calls for certain special ports (mach_thread_self, mach_task_self, and mach_reply_port.)
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:footnote1&#34;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>CoreData概要</title>
@@ -23,7 +447,50 @@
 &lt;li&gt;本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h1 id=&#34;一-入门-升职加薪&#34;&gt;一.入门（升职加薪）&lt;/h1&gt;
+&lt;hr /&gt;
+
+&lt;!-- vscode-markdown-toc --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#class-0&#34;&gt;一.入门&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#class-1&#34;&gt;1. 几个重要的概念/class&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#DatamodelManagedObjects-1&#34;&gt;2. 定义数据:Data model＝》Managed Objects&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#fetchManagedObjects.-2&#34;&gt;3.操作数据:添加、fetch、删除Managed Objects.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#class-2&#34;&gt;二.理解&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ManagedObjectModel-3&#34;&gt;1.理解 Managed Object Model&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ManagedObject-4&#34;&gt;2.理解 Managed Object&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ManagedObject2.3-5&#34;&gt;3.操作 Managed Object（2.3续）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Object:-6&#34;&gt;4.Object内存管理:&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#RelationshipAndfetchproperties-7&#34;&gt;5.Relationship And fetch properties&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#UsingPersistentStores-8&#34;&gt;6. Using Persistent Stores&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#HowToPreloadandImportExistingData-9&#34;&gt;7.How To Preload and Import Existing Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#FetchedResultsControllerUITableView-10&#34;&gt;8.Fetched Results Controller&amp;lt;=&amp;gt;UITableView&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#class-3&#34;&gt;三.深入（走上人生巅峰）&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Migrations-11&#34;&gt;1.Migrations&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Multiplecontext-12&#34;&gt;2. Multiple context&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ConcurrencywithCoreData-13&#34;&gt;3. Concurrency with Core Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#CoreDataPerformance-14&#34;&gt;4.Core Data Performance 提高效率的一些提示&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#MultiplePersistentStoreCustomPersistentStore-15&#34;&gt;5.Multiple Persistent Store &amp;amp; Custom Persistent Store&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#NSPredicateNSExpression-16&#34;&gt;6.补充NSPredicate和NSExpression入门&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#-17&#34;&gt;参考&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#-18&#34;&gt;资源&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#-19&#34;&gt;更新&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /vscode-markdown-toc --&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&#34;a-name-class-0-a-一-入门-升职加薪&#34;&gt;&lt;a name=&#39;class-0&#39;&gt;&lt;/a&gt;一.入门（升职加薪）&lt;/h1&gt;
 
 &lt;ol&gt;
 &lt;li&gt;coreData实现什么样的目的:类似archiving实现对象的保存和恢复&lt;/li&gt;
@@ -51,7 +518,7 @@
 &lt;p&gt;!!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。&lt;a href=&#34;http://support.microsoft.com/kb/283878/zh-cn&#34;&gt;一个简单的数据库标准化的参考&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&#34;1-几个重要的概念-class&#34;&gt;1. 几个重要的概念/class&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-class-1-a-1-几个重要的概念-class&#34;&gt;&lt;a name=&#39;class-1&#39;&gt;&lt;/a&gt;1. 几个重要的概念/class&lt;/h2&gt;
 
 &lt;h5 id=&#34;1-1-managed-object-model&#34;&gt;1.1 Managed Object Model:&lt;/h5&gt;
 
@@ -203,7 +670,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
 &lt;p&gt;Figure 1-3  Managed objects in a context, and a table in the persistent store&lt;/p&gt;
 
-&lt;h2 id=&#34;2-定义数据-data-model-managed-objects&#34;&gt;2. 定义数据:Data model＝》Managed Objects&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-datamodelmanagedobjects-1-a-2-定义数据-data-model-managed-objects&#34;&gt;&lt;a name=&#39;DatamodelManagedObjects-1&#39;&gt;&lt;/a&gt;2. 定义数据:Data model＝》Managed Objects&lt;/h2&gt;
 
 &lt;h5 id=&#34;2-1-subclass-of-nsmanagedobject-可以看成是数据表的一个record-a-record-in-a-table-in-a-database&#34;&gt;2.1. (Subclass of)NSManagedObject 可以看成是数据表的一个record。a record in a table in a database.&lt;/h5&gt;
 
@@ -435,7 +902,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
 &lt;p&gt;Figure 2-2  Entity description with two attributes and a relationship&lt;/p&gt;
 
-&lt;h2 id=&#34;3-操作数据-添加-fetch-删除managed-objects&#34;&gt;3.操作数据:添加、fetch、删除Managed Objects.&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-fetchmanagedobjects-2-a-3-操作数据-添加-fetch-删除managed-objects&#34;&gt;&lt;a name=&#39;fetchManagedObjects.-2&#39;&gt;&lt;/a&gt;3.操作数据:添加、fetch、删除Managed Objects.&lt;/h2&gt;
 
 &lt;h5 id=&#34;3-1-添加-insertnewobjectforentityforname-inmanagedobjectcontext-获得对应的managedobject-修改属性-save&#34;&gt;3.1 添加:insertNewObjectForEntityForName:inManagedObjectContext: 获得对应的ManagedObject-》修改属性 (-》save)&lt;/h5&gt;
 
@@ -635,9 +1102,9 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 
 
 
-&lt;h1 id=&#34;二-理解-迎娶白富美&#34;&gt;二.理解（迎娶白富美）&lt;/h1&gt;
+&lt;h1 id=&#34;a-name-class-2-a-二-理解-迎娶白富美&#34;&gt;&lt;a name=&#39;class-2&#39;&gt;&lt;/a&gt;二.理解（迎娶白富美）&lt;/h1&gt;
 
-&lt;h2 id=&#34;1-理解-managed-object-model&#34;&gt;1.理解 Managed Object Model&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-managedobjectmodel-3-a-1-理解-managed-object-model&#34;&gt;&lt;a name=&#39;ManagedObjectModel-3&#39;&gt;&lt;/a&gt;1.理解 Managed Object Model&lt;/h2&gt;
 
 &lt;h5 id=&#34;1-1-创建managed-object-model-可以使用xib或者完全使用code&#34;&gt;1.1 创建Managed Object Model:可以使用xib或者完全使用code&lt;/h5&gt;
 
@@ -722,7 +1189,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 
 &lt;/p&gt;
 
-&lt;h2 id=&#34;2-理解-managed-object&#34;&gt;2.理解 Managed Object&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-managedobject-4-a-2-理解-managed-object&#34;&gt;&lt;a name=&#39;ManagedObject-4&#39;&gt;&lt;/a&gt;2.理解 Managed Object&lt;/h2&gt;
 
 &lt;h5 id=&#34;2-1-概念-managed-object是nsmanagedobject的instance-associated-with-an-entity-description-an-instance-of-nsentitydescription-associated-with-a-managed-object-context-record-和-object是一对多的关系-因为可能有几个context等情况-几个object可能对应的是同一个数据&#34;&gt;2.1 概念:Managed Object是NSManagedObject的instance / associated with an entity description (an instance of NSEntityDescription)/ associated with a managed object context /record 和 object是一对多的关系,因为可能有几个context等情况,几个object可能对应的是同一个数据&lt;/h5&gt;
 
@@ -783,7 +1250,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;3-操作-managed-object-2-3续&#34;&gt;3.操作 Managed Object（2.3续）&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-managedobject2-3-5-a-3-操作-managed-object-2-3续&#34;&gt;&lt;a name=&#39;ManagedObject2.3-5&#39;&gt;&lt;/a&gt;3.操作 Managed Object（2.3续）&lt;/h2&gt;
 
 &lt;h5 id=&#34;3-1-managed-object-ids-and-uris&#34;&gt;3.1 Managed Object IDs and URIs&lt;/h5&gt;
 
@@ -824,7 +1291,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 NSManagedObject *copy = [context2 objectWithID:objectID];
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;4-object内存管理&#34;&gt;4.Object内存管理:&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-object-6-a-4-object内存管理&#34;&gt;&lt;a name=&#39;Object:-6&#39;&gt;&lt;/a&gt;4.Object内存管理:&lt;/h2&gt;
 
 &lt;h5 id=&#34;4-1-managed-object和context&#34;&gt;4.1 Managed Object和Context&lt;/h5&gt;
 
@@ -862,7 +1329,7 @@ NSManagedObject *copy = [context2 objectWithID:objectID];
 &lt;li&gt;Uniquing是保证an entry in a persistent store is associated with only one managed object的技术&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&#34;5-relationship-and-fetch-properties&#34;&gt;5.Relationship And fetch properties&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-relationshipandfetchproperties-7-a-5-relationship-and-fetch-properties&#34;&gt;&lt;a name=&#39;RelationshipAndfetchproperties-7&#39;&gt;&lt;/a&gt;5.Relationship And fetch properties&lt;/h2&gt;
 
 &lt;h5 id=&#34;5-1-relationship定义&#34;&gt;5.1 Relationship定义&lt;/h5&gt;
 
@@ -894,7 +1361,7 @@ NSManagedObject *copy = [context2 objectWithID:objectID];
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;方法3:使用Expression效率最高NSExpression＝＝》NSExpressionDescription＝》setPropertiesToFetch&lt;/p&gt;
 
-&lt;h2 id=&#34;6-using-persistent-stores&#34;&gt;6. Using Persistent Stores&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-usingpersistentstores-8-a-6-using-persistent-stores&#34;&gt;&lt;a name=&#39;UsingPersistentStores-8&#39;&gt;&lt;/a&gt;6. Using Persistent Stores&lt;/h2&gt;
 
 &lt;h5 id=&#34;6-1-创建一个store-nspersistentstore&#34;&gt;6.1 创建一个store:NSPersistentStore&lt;/h5&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -927,7 +1394,7 @@ NSPersistentStore *sqLiteStore = [psc migratePersistentStore:xmlStore
 &lt;li&gt;use: 一个使用场景是migration=&amp;gt;使用系统自动创建的metadata就可以了isConfiguration:compatibleWithStoreMetadata;metadata不同(如版本)就会返回NO&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;7-how-to-preload-and-import-existing-data&#34;&gt;7.How To Preload and Import Existing Data&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-howtopreloadandimportexistingdata-9-a-7-how-to-preload-and-import-existing-data&#34;&gt;&lt;a name=&#39;HowToPreloadandImportExistingData-9&#39;&gt;&lt;/a&gt;7.How To Preload and Import Existing Data&lt;/h2&gt;
 
 &lt;p&gt;两种解决方案&lt;/p&gt;
 
@@ -937,7 +1404,7 @@ NSPersistentStore *sqLiteStore = [psc migratePersistentStore:xmlStore
 &lt;li&gt;&lt;p&gt;&lt;code&gt;Provide pre-filled in SQLite database&lt;/code&gt;. For this we’ll let Core Data create the database structure for us based on the model, and then we populate the database with a utility app. The utility app could be a Mac or iPhone app that uses Core Data to populate the database via Core Data APIs, or some kind of program that fills in the SQLite database directly. Once the database is populated, just include it with the app and make the app use it as the default database if no database already exists. 就是代码里先生成sqlite文件,加入bundle,初始化的时候 copyItemAtURL 复制到本地目录.这是苹果文档官方推荐的方法,但是考虑到先创建数据库文件可能使得文件比较大,这个需要权衡.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&#34;8-fetched-results-controller-uitableview&#34;&gt;8.Fetched Results Controller&amp;lt;=&amp;gt;UITableView&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-fetchedresultscontrolleruitableview-10-a-8-fetched-results-controller-uitableview&#34;&gt;&lt;a name=&#39;FetchedResultsControllerUITableView-10&#39;&gt;&lt;/a&gt;8.Fetched Results Controller&amp;lt;=&amp;gt;UITableView&lt;/h2&gt;
 
 &lt;h5 id=&#34;8-1-简介&#34;&gt;8.1 简介&lt;/h5&gt;
 
@@ -953,9 +1420,9 @@ NSPersistentStore *sqLiteStore = [psc migratePersistentStore:xmlStore
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h1 id=&#34;三-深入-走上人生巅峰&#34;&gt;三.深入（走上人生巅峰）&lt;/h1&gt;
+&lt;h1 id=&#34;a-name-class-3-a-三-深入-走上人生巅峰&#34;&gt;&lt;a name=&#39;class-3&#39;&gt;&lt;/a&gt;三.深入（走上人生巅峰）&lt;/h1&gt;
 
-&lt;h2 id=&#34;1-migrations&#34;&gt;1.Migrations&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-migrations-11-a-1-migrations&#34;&gt;&lt;a name=&#39;Migrations-11&#39;&gt;&lt;/a&gt;1.Migrations&lt;/h2&gt;
 
 &lt;h5 id=&#34;1-1-lightweight-migrations&#34;&gt;1.1 Lightweight Migrations&lt;/h5&gt;
 
@@ -1138,7 +1605,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 
 &lt;h5 id=&#34;1-3-渐进式迁移-progressive-migrations-http-objccn-io-issue-4-7&#34;&gt;1.3 渐进式迁移 (Progressive Migrations)&lt;a href=&#34;http://objccn.io/issue-4-7/&#34;&gt;http://objccn.io/issue-4-7/&lt;/a&gt;&lt;/h5&gt;
 
-&lt;h2 id=&#34;2-multiple-context&#34;&gt;2. Multiple context&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-multiplecontext-12-a-2-multiple-context&#34;&gt;&lt;a name=&#39;Multiplecontext-12&#39;&gt;&lt;/a&gt;2. Multiple context&lt;/h2&gt;
 
 &lt;h5 id=&#34;2-1-如何处理冲突&#34;&gt;2.1 如何处理冲突&lt;/h5&gt;
 
@@ -1148,7 +1615,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 &lt;li&gt;Communicating Changes Between Contexts: NSManagedObjectContextDidSave&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&#34;3-concurrency-with-core-data&#34;&gt;3. Concurrency with Core Data&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-concurrencywithcoredata-13-a-3-concurrency-with-core-data&#34;&gt;&lt;a name=&#39;ConcurrencywithCoreData-13&#39;&gt;&lt;/a&gt;3. Concurrency with Core Data&lt;/h2&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;For the most part, AppKit and UIKit are not thread safe; in particular, on OS X Cocoa bindings and controllers are not thread safe—if you are using these technologies, multi-threading may be complex.&lt;/p&gt;
@@ -1182,7 +1649,7 @@ More rules:
 7.NSManagedObjectContext&#39;s -mergeChangesFromContextDidSaveNotification: is helpful.
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;4-core-data-performance-提高效率的一些提示&#34;&gt;4.Core Data Performance 提高效率的一些提示&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-coredataperformance-14-a-4-core-data-performance-提高效率的一些提示&#34;&gt;&lt;a name=&#39;CoreDataPerformance-14&#39;&gt;&lt;/a&gt;4.Core Data Performance 提高效率的一些提示&lt;/h2&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Predicates的使用有技巧:一个例子 (salary &amp;gt; 5000000) AND (lastName LIKE &amp;lsquo;Quincey&amp;rsquo;) 比 (lastName LIKE &amp;lsquo;Quincey&amp;rsquo;) AND (salary &amp;gt; 5000000) 好；&lt;code&gt;巧用subquery能极大的提高fetch效率&lt;/code&gt;&lt;/li&gt;
@@ -1208,7 +1675,7 @@ More rules:
 isEqual:, hash, superclass, class, self, zone, isProxy, isKindOfClass:, isMemberOfClass:, conformsToProtocol:, respondsToSelector:, description, managedObjectContext, entity, objectID, isInserted, isUpdated, isDeleted, and isFault.
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;5-multiple-persistent-store-custom-persistent-store&#34;&gt;5.Multiple Persistent Store &amp;amp; Custom Persistent Store&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-multiplepersistentstorecustompersistentstore-15-a-5-multiple-persistent-store-custom-persistent-store&#34;&gt;&lt;a name=&#39;MultiplePersistentStoreCustomPersistentStore-15&#39;&gt;&lt;/a&gt;5.Multiple Persistent Store &amp;amp; Custom Persistent Store&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Multiple Persistent Store可以使用configuration进行配置,这样可以split data 到不同的data store;[persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:@&amp;ldquo;Passwords&amp;rdquo; URL:passwordStoreURL options:nil error:&amp;amp;error]&lt;/li&gt;
@@ -1253,7 +1720,7 @@ isEqual:, hash, superclass, class, self, zone, isProxy, isKindOfClass:, isMember
 
 
 
-&lt;h2 id=&#34;6-补充nspredicate和nsexpression入门&#34;&gt;6.补充NSPredicate和NSExpression入门&lt;/h2&gt;
+&lt;h2 id=&#34;a-name-nspredicatensexpression-16-a-6-补充nspredicate和nsexpression入门&#34;&gt;&lt;a name=&#39;NSPredicateNSExpression-16&#39;&gt;&lt;/a&gt;6.补充NSPredicate和NSExpression入门&lt;/h2&gt;
 
 
 
@@ -1566,7 +2033,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
 &lt;/p&gt;
 
-&lt;h4 id=&#34;参考&#34;&gt;参考&lt;/h4&gt;
+&lt;h4 id=&#34;a-name-17-a-参考&#34;&gt;&lt;a name=&#39;-17&#39;&gt;&lt;/a&gt;参考&lt;/h4&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;注意:部分资料比较陈旧,请查看最新版&lt;/p&gt;
@@ -1593,13 +2060,13 @@ Second Edition】&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://nshipster.cn/nspredicate/&#34;&gt;NSPredicate&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h4 id=&#34;资源&#34;&gt;资源&lt;/h4&gt;
+&lt;h4 id=&#34;a-name-18-a-资源&#34;&gt;&lt;a name=&#39;-18&#39;&gt;&lt;/a&gt;资源&lt;/h4&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;a href=&#34;http://sourceforge.net/projects/sqlitebrowser/files/latest/download&#34;&gt;sqlitebrowser&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h4 id=&#34;更新&#34;&gt;更新&lt;/h4&gt;
+&lt;h4 id=&#34;a-name-19-a-更新&#34;&gt;&lt;a name=&#39;-19&#39;&gt;&lt;/a&gt;更新&lt;/h4&gt;
 
 &lt;ol&gt;
 &lt;li&gt;2014-8-3第一版&lt;/li&gt;

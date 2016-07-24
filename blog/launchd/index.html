@@ -1,0 +1,1203 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>Launchd Tutorial</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Launchd Tutorial"/>
+<meta name="twitter:description" content="1. Launchd Tutorial 1.1. 什么是launchd 1.2. 为什么要launchd 1.3. Daemons and Agents 1.4. 行为配置 1.5. 操作 1.6. recipes（例子） 1.6.1. 例1 app自动重启 1.6.2. 例2 一个crontab任务（同时监控文件state） 1.6.3. 例3 一个inetd任务 2. Launchd Sourcecode 2.1. 准备知识 2.2. 命令launchctl list的运行流程 2.3. 命令launchctl load的运行流程 3. 参考 1. Launchd Tutorial 1.1. 什么是launchd A unified, open-source service management framework for starting, stopping and managing daemons, applications, processes, and scripts. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License."/>
+
+
+
+        <meta property="og:title" content="Launchd Tutorial" />
+<meta property="og:description" content="1. Launchd Tutorial 1.1. 什么是launchd 1.2. 为什么要launchd 1.3. Daemons and Agents 1.4. 行为配置 1.5. 操作 1.6. recipes（例子） 1.6.1. 例1 app自动重启 1.6.2. 例2 一个crontab任务（同时监控文件state） 1.6.3. 例3 一个inetd任务 2. Launchd Sourcecode 2.1. 准备知识 2.2. 命令launchctl list的运行流程 2.3. 命令launchctl load的运行流程 3. 参考 1. Launchd Tutorial 1.1. 什么是launchd A unified, open-source service management framework for starting, stopping and managing daemons, applications, processes, and scripts. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://u2takey.github.io/blog/launchd/" />
+
+
+<meta property="og:updated_time" content="2016-04-01T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="Launchd Tutorial">
+<meta itemprop="description" content="1. Launchd Tutorial 1.1. 什么是launchd 1.2. 为什么要launchd 1.3. Daemons and Agents 1.4. 行为配置 1.5. 操作 1.6. recipes（例子） 1.6.1. 例1 app自动重启 1.6.2. 例2 一个crontab任务（同时监控文件state） 1.6.3. 例3 一个inetd任务 2. Launchd Sourcecode 2.1. 准备知识 2.2. 命令launchctl list的运行流程 2.3. 命令launchctl load的运行流程 3. 参考 1. Launchd Tutorial 1.1. 什么是launchd A unified, open-source service management framework for starting, stopping and managing daemons, applications, processes, and scripts. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License.">
+
+
+<meta itemprop="dateModified" content="2016-04-01T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1288">
+
+
+
+<meta itemprop="keywords" content="Golang,IOS &amp; MacOS,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/golang_faq/"><p>Golang笔记之常见问题</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/launchd/"><p>Launchd Tutorial</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"><p>对技术的态度</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&text=Launchd%20Tutorial&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&title=Launchd%20Tutorial" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&title=Launchd%20Tutorial" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&title=Launchd%20Tutorial" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-04-01'>
+            April 1, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&text=Launchd%20Tutorial&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&title=Launchd%20Tutorial" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&title=Launchd%20Tutorial" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f&title=Launchd%20Tutorial" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2flaunchd%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="http://u2takey.github.io/blog/launchd/" class="image featured">
+            <img src="/img/2016/04/sunset-1506365_960_720.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<hr />
+
+<!-- vscode-markdown-toc -->
+
+<ul>
+<li>1. <a href="#LaunchdTutorial-0"> Launchd Tutorial</a>
+
+<ul>
+<li>1.1. <a href="#launchd-1"> 什么是launchd</a></li>
+<li>1.2. <a href="#launchd-2">为什么要launchd</a></li>
+<li>1.3. <a href="#DaemonsandAgents-3">Daemons and Agents</a></li>
+<li>1.4. <a href="#-4">行为配置</a></li>
+<li>1.5. <a href="#-5"> 操作</a></li>
+<li>1.6. <a href="#recipes-6">recipes（例子）</a>
+
+<ul>
+<li>1.6.1. <a href="#1app-7">例1 app自动重启</a></li>
+<li>1.6.2. <a href="#2crontabstate-8">例2 一个crontab任务（同时监控文件state）</a></li>
+<li>1.6.3. <a href="#3inetd-9">例3 一个inetd任务</a></li>
+</ul></li>
+</ul></li>
+<li>2. <a href="#LaunchdSourcecode-10"> Launchd Sourcecode</a>
+
+<ul>
+<li>2.1. <a href="#-11"> 准备知识</a></li>
+<li>2.2. <a href="#launchctllist-12"> 命令launchctl list的运行流程</a></li>
+<li>2.3. <a href="#launchctlload-13"> 命令launchctl load的运行流程</a></li>
+</ul></li>
+<li>3. <a href="#-14">参考</a></li>
+</ul>
+
+<!-- /vscode-markdown-toc -->
+
+<hr />
+
+<h2 id="1-a-name-launchdtutorial-0-a-launchd-tutorial">1. <a name='LaunchdTutorial-0'></a> Launchd Tutorial</h2>
+
+<h3 id="1-1-a-name-launchd-1-a-什么是launchd">1.1. <a name='launchd-1'></a> 什么是launchd</h3>
+
+<blockquote>
+<p>A unified, open-source service management framework for <code>starting, stopping and managing daemons, applications, processes, and scripts</code>. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License.</p>
+</blockquote>
+
+<h3 id="1-2-a-name-launchd-2-a-为什么要launchd">1.2. <a name='launchd-2'></a>为什么要launchd</h3>
+
+<p>可以替代init，rc，init.d script，rc.d script，SystemStarter (OS X)，inetd / xinetd，crond / atd，watchdogd 而且使用更方便<sup class="footnote-ref" id="fnref:footnote"><a rel="footnote" href="#fn:footnote">1</a></sup>。</p>
+
+<h3 id="1-3-a-name-daemonsandagents-3-a-daemons-and-agents">1.3. <a name='DaemonsandAgents-3'></a>Daemons and Agents</h3>
+
+<p>launchd 根据运行权限的不同,区分daemons(rootor the user specified with the key User)和agent(user)。</p>
+
+<p>不同的级别的daemon/agent存放位置也不同,其中/System/Library/为系统目录，不应该在此创建任何daemon/agent。第三方Library的目录在/Library/。而某个特别用户的目录在~/Library/</p>
+
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Location</th>
+<th>Run on behalf of</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>User Agents</td>
+<td>~/Library/LaunchAgents</td>
+<td>Currently logged in user</td>
+</tr>
+
+<tr>
+<td>Global Agents</td>
+<td>/Library/LaunchAgents</td>
+<td>Currently logged in user</td>
+</tr>
+
+<tr>
+<td>Global Daemons</td>
+<td>/Library/LaunchDaemons</td>
+<td>root or the user specified with the key User</td>
+</tr>
+
+<tr>
+<td>System Agents</td>
+<td>/System/Library/LaunchAgents</td>
+<td>Currently logged in user</td>
+</tr>
+
+<tr>
+<td>System Daemons</td>
+<td>/System/Library/LaunchDaemons</td>
+<td>root or the user specified with the key User</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="1-4-a-name-4-a-行为配置">1.4. <a name='-4'></a>行为配置</h3>
+
+<p>daemon/agent的行为由一个property list定义。launchd提供了30多种配置项,full list请参考apple文档和 <a href="http://launchd.info/">http://launchd.info/</a> ，这里简单介绍其中的几个。（可以用一个第三方工具LaunchControl配置）</p>
+
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Label</td>
+<td>String</td>
+<td>job名字. 一般和plist名字相同,Required.</td>
+</tr>
+
+<tr>
+<td>Program</td>
+<td>String</td>
+<td>执行程序路径. 如/Users/Me/Scripts/cleanup.sh.</td>
+</tr>
+
+<tr>
+<td>ProgramArguments</td>
+<td>Array of strings</td>
+<td>Program 参数</td>
+</tr>
+
+<tr>
+<td>UserName</td>
+<td>String</td>
+<td>执行user名(defaults to root or current user)</td>
+</tr>
+
+<tr>
+<td>RunAtLoad</td>
+<td>Boolean</td>
+<td>(defaults to NO) 标志任务是否要load进launchd立即启动</td>
+</tr>
+
+<tr>
+<td>StartOnMount</td>
+<td>Boolean</td>
+<td>(defaults to NO)    标志任务是否要启动when a new filesystem is mounted.</td>
+</tr>
+
+<tr>
+<td>QueueDirectories</td>
+<td>Array of strings</td>
+<td>Watch a directory for new files</td>
+</tr>
+
+<tr>
+<td>WatchPaths</td>
+<td>Array of strings</td>
+<td>Watch a filesystem path for changes. Can be a file or folder.</td>
+</tr>
+
+<tr>
+<td>StartInterval</td>
+<td>Integer</td>
+<td>Schedules job to run on a repeating schedule. Indicates number of seconds to wait between runs.</td>
+</tr>
+
+<tr>
+<td>StartCalendarInterval</td>
+<td>Dictionary of integers or Array of dictionaries of integers</td>
+<td>Job scheduling. The syntax is similar to cron.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="1-5-a-name-5-a-操作">1.5. <a name='-5'></a> 操作</h3>
+
+<p>所有行为都可以用一个命令行工具launchctl操作, 但使用LaunchControl更简单.下面列出了几个常见的操作。
+####获取当前运行的所有demon/agent</p>
+
+<pre><code>host:~ user$ launchctl list 
+</code></pre>
+
+<p>####Loading a Job</p>
+
+<pre><code>launchctl load ~/Library/LaunchAgents/com.leiiwang.firsttest.plist
+</code></pre>
+
+<p>com.leiiwang.firsttest.plist的内容:一个crontab任务，每分钟执行一次crontab-test.s，这个脚本只有一句话date.</p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+        &lt;key&gt;Label&lt;/key&gt;
+        &lt;string&gt;com.leiiwang.firsttest&lt;/string&gt;
+
+        &lt;key&gt;ProgramArguments&lt;/key&gt;
+        &lt;array&gt;
+                &lt;string&gt;/Users/wangleo/bin/crontab-test.sh&lt;/string&gt;
+        &lt;/array&gt;
+
+        &lt;key&gt;KeepAlive&lt;/key&gt;
+        &lt;false/&gt;
+
+        &lt;key&gt;Nice&lt;/key&gt;
+        &lt;integer&gt;1&lt;/integer&gt;
+
+        &lt;key&gt;StartInterval&lt;/key&gt;
+        &lt;integer&gt;60&lt;/integer&gt;
+
+        &lt;key&gt;StandardErrorPath&lt;/key&gt;
+        &lt;string&gt;/tmp/leiiwang.firsttest.err&lt;/string&gt;
+
+        &lt;key&gt;StandardOutPath&lt;/key&gt;
+        &lt;string&gt;/tmp/leiiwang.firsttest.out&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<p>输出/tmp/leiiwang.firsttest.out</p>
+
+<pre><code>Sat Dec 12 16:58:02 CST 2015
+Sat Dec 12 16:59:02 CST 2015
+Sat Dec 12 17:00:02 CST 2015
+...
+</code></pre>
+
+<p>####Unloading a Job</p>
+
+<pre><code>launchctl unload ~/Library/LaunchAgents/com.leiiwang.firsttest.plist
+</code></pre>
+
+<h3 id="1-6-a-name-recipes-6-a-recipes-例子">1.6. <a name='recipes-6'></a>recipes（例子）</h3>
+
+<h4 id="1-6-1-a-name-1app-7-a-例1-app自动重启">1.6.1. <a name='1app-7'></a>例1 app自动重启</h4>
+
+<p>这里用了macos 的open -W 命令.</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+	&lt;dict&gt;
+		&lt;key&gt;KeepAlive&lt;/key&gt;
+		&lt;true/&gt;
+		&lt;key&gt;Label&lt;/key&gt;
+		&lt;string&gt;local.Safari.keepAlive&lt;/string&gt;
+		&lt;key&gt;ProgramArguments&lt;/key&gt;
+		&lt;array&gt;
+			&lt;string&gt;/usr/bin/open&lt;/string&gt;
+			&lt;string&gt;-W&lt;/string&gt;
+			&lt;string&gt;/Applications/Safari.app&lt;/string&gt;
+		&lt;/array&gt;
+	&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<h4 id="1-6-2-a-name-2crontabstate-8-a-例2-一个crontab任务-同时监控文件state">1.6.2. <a name='2crontabstate-8'></a>例2 一个crontab任务（同时监控文件state）</h4>
+
+<p>一个备份任务，在database运行的时候进行备份
+使用PathState检测PID file是否存在确定任务特定任务database是否在执行
+使用KeepAlive使得PID file存在时保持运行.
+使用ThrottleInterval，任务终止后多久后重启</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+	&lt;dict&gt;
+		&lt;key&gt;Label&lt;/key&gt;
+		&lt;string&gt;com.example.app&lt;/string&gt;
+		&lt;key&gt;Program&lt;/key&gt;
+		&lt;string&gt;/Users/Me/Scripts/backup.sh&lt;/string&gt;
+		&lt;key&gt;KeepAlive&lt;/key&gt;
+		&lt;dict&gt;
+			&lt;key&gt;PathState&lt;/key&gt;
+			&lt;dict&gt;
+				&lt;key&gt;/var/log/mysql.pid&lt;/key&gt;
+				&lt;true/&gt;
+			&lt;/dict&gt;
+		&lt;/dict&gt;
+		&lt;key&gt;ThrottleInterval&lt;/key&gt;
+		&lt;integer&gt;3600&lt;/integer&gt;
+	&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<h4 id="1-6-3-a-name-3inetd-9-a-例3-一个inetd任务">1.6.3. <a name='3inetd-9'></a>例3 一个inetd任务</h4>
+
+<p>使用Sockets创建一个server监听13117</p>
+
+<pre><code>&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+  &lt;key&gt;Label&lt;/key&gt;&lt;string&gt;my.greeter&lt;/string&gt;
+  &lt;key&gt;ProgramArguments&lt;/key&gt;
+  &lt;array&gt;
+    &lt;string&gt;/usr/bin/ruby&lt;/string&gt;
+    &lt;string&gt;-e&lt;/string&gt;
+    &lt;string&gt;puts &quot;Hi #{gets.match(/(\w+)\W*\z/)[1]}, happy #{Time.now.strftime(&quot;%A&quot;)}!&quot;&lt;/string&gt;
+  &lt;/array&gt;
+  &lt;key&gt;inetdCompatibility&lt;/key&gt;&lt;dict&gt;&lt;key&gt;Wait&lt;/key&gt;&lt;false/&gt;&lt;/dict&gt;
+  &lt;key&gt;Sockets&lt;/key&gt;
+  &lt;dict&gt;
+    &lt;key&gt;Listeners&lt;/key&gt;
+    &lt;dict&gt;
+      &lt;key&gt;SockServiceName&lt;/key&gt;&lt;string&gt;13117&lt;/string&gt;
+    &lt;/dict&gt;
+  &lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<p>测试</p>
+
+<pre><code>mac% launchctl load ~/Library/LaunchAgents/my.greeter.plist
+mac% echo &quot;My name is Leiiwang.&quot; | nc localhost 13117
+Hi Leiiwang, happy Saturday!
+</code></pre>
+
+<h2 id="2-a-name-launchdsourcecode-10-a-launchd-sourcecode">2. <a name='LaunchdSourcecode-10'></a> Launchd Sourcecode</h2>
+
+<p>整体感受是典型大公司代码，很多人修改的痕迹，各种bug修复和打补丁，搞得有点难看，但从整体上来看质量还算可以。</p>
+
+<h3 id="2-1-a-name-11-a-准备知识">2.1. <a name='-11'></a> 准备知识</h3>
+
+<p>mach port: macos 的一种ipc类似一种消息队列和单向pipe的结合（macos在大部分版本中并不支持消息队列,大都时候mach port已经够好用了）,参见Ports, Port Rights, Port Sets, and Port Namespaces<sup class="footnote-ref" id="fnref:footnote1"><a rel="footnote" href="#fn:footnote1">2</a></sup>
+kqueue: free bsd版本的epoll</p>
+
+<h3 id="2-2-a-name-launchctllist-12-a-命令launchctl-list的运行流程">2.2. <a name='launchctllist-12'></a> 命令launchctl list的运行流程</h3>
+
+<p>launchctl是launchd提供的命令行工具,和其他类似的工具一样，launchctl作为一个server-client模式的client运行，client和server直接使用unix域套接字进行通信</p>
+
+<p>launchd中数据传输几乎只依赖一种数据结构_launch_data这种数据做array，dict,string&hellip;作用,效率是很低的,但是也可以满足launchd的业务需求了.</p>
+
+<pre><code>struct _launch_data {
+	uint64_t type;
+	union {
+		struct {
+			union {
+				launch_data_t *_array;
+				char *string;
+				void *opaque;
+				int64_t __junk;
+			};
+			union {
+				uint64_t _array_cnt;
+				uint64_t string_len;
+				uint64_t opaque_size;
+			};
+		};
+		int64_t fd;
+		uint64_t  mp;
+		uint64_t err;
+		int64_t number;
+		uint64_t boolean;
+		double float_num;
+	};
+};
+</code></pre>
+
+<p>client端流程
+1. 在launchctl.c定义了各种的命令的对应运行函数,list的运行函数为list_cmd(..)
+2. 构造一个msg，其key为LAUNCH_KEY_GETJOB
+3. session相关
+4. launchd_msg -&gt; launchd_msg_internal -&gt;launchd_msg_send:pack成一个launch_t结构
+5. sendmsg通过socket发送命令结构体到server端
+6. recvmsg通过socket读取返回</p>
+
+<p>server端流程
+1. 在ipc.c创建了server并且通过kevent监听
+2. kevent返回read事件,读取命令ipc_callback
+3. launch_msg_recv
+4. ipc_read_msg  -&gt; ipc_read_msg2
+5. core.c:job_export_all -&gt;job_export_all2
+6. 从rootmgr开始遍历，把所有job打包进一个dict并返回
+7. launch_msg_send返回给客户端数据</p>
+
+<h3 id="2-3-a-name-launchctlload-13-a-命令launchctl-load的运行流程">2.3. <a name='launchctlload-13'></a> 命令launchctl load的运行流程</h3>
+
+<p>这里我们特别的分析一种类似1.5 例子的简单任务的处理流程</p>
+
+<p>client端流程
+1. 在launchctl.c定义了各种的命令的对应运行函数,load的运行函数为load_and_unload_cmd(..)
+2. readfile：读取job配置的plist，检查几个必填key，读取到一个load_unload_state的结构体中
+3. distill_job：对于watchpath/pathstate/queuedirectories任务特别处理，加入在watch job中
+4. submit_job_pass,设置命令字为LAUNCH_KEY_SUBMIT_JOB
+5. launchd_msg -&gt; launchd_msg_internal -&gt;launchd_msg_send:pack成一个launch_t结构
+6. sendmsg通过socket发送命令结构体到server端
+7. recvmsg通过socket读取返回</p>
+
+<p>server端流程
+1. 前面步骤略
+2. ipc_read_msg  -&gt; ipc_read_msg2
+3. core.c:job_import -&gt;job_import_2 : 检查关键字,session相关&hellip;
+4. job_new:创建job,填充一个job_t结构,注意一些默认配置，设置callback
+5. job_dispatch-&gt;job_start 注意并不是所有的任务都会立即dispatch,start的,对于我们的这个任务同时根据配置加入了一个timer到kqueue，timer回调之后会再次dispatch-&gt;start
+6. job_start -&gt; runtime_fork创建子进程,创建成功后父进程更新一些管理数据结构如actic_jobs等,并且把进程加入监听，监听进程的fork,exit等状态变化
+7. 子进程运行startchild-&gt;jobsetupattribute提取命令参数等，调用posix_spawn命令执行命令</p>
+
+<h2 id="3-a-name-14-a-参考">3. <a name='-14'></a>参考</h2>
+
+<ul>
+<li><a href="http://launchd.info/">http://launchd.info/</a></li>
+<li><a href="http://paul.annesley.cc/2012/09/mac-os-x-launchd-is-cool/">http://paul.annesley.cc/2012/09/mac-os-x-launchd-is-cool/</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Launchd">https://en.wikipedia.org/wiki/Launchd</a></li>
+<li><a href="http://alvinalexander.com/mac-os-x/launchd-examples-launchd-plist-file-examples-mac">http://alvinalexander.com/mac-os-x/launchd-examples-launchd-plist-file-examples-mac</a></li>
+</ul>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:footnote">The Ubuntu Linux distribution considered using launchd in 2006. launchd was rejected as an option because it was released under the Apple Public Source License
+ <a class="footnote-return" href="#fnref:footnote"><sup>[return]</sup></a></li>
+<li id="fn:footnote1">Ports, Port Rights, Port Sets, and Port NamespacesWith the exception of the task’s virtual address space, all other Mach resources are accessed through a level of indirection known as a port. A port is an endpoint of a unidirectional communication channel between a client who requests a service and a server who provides the service. If a reply is to be provided to such a service request, a second port must be used. This is comparable to a (unidirectional) pipe in UNIX parlance.In most cases, the resource that is accessed by the port (that is, named by it) is referred to as an object. Most objects named by a port have a single receiver and (potentially) multiple senders. That is, there is exactly one receive port, and at least one sending port, for a typical object such as a message queue.The service to be provided by an object is determined by the manager that receives the request sent to the object. It follows that the kernel is the receiver for ports associated with kernel-provided objects and that the receiver for ports associated with task-provided objects is the task providing those objects.For ports that name task-provided objects, it is possible to change the receiver of requests for that port to a different task, for example by passing the port to that task in a message. A single task may have multiple ports that refer to resources it supports. For that matter, any given entity can have multiple ports that represent it, each implying different sets of permissible operations. For example, many objects have a name port and a control port (sometimes called the privileged port). Access to the control port allows the object to be manipulated; access to the name port simply names the object so that you can obtain information about it or perform other non-privileged operations against it.Tasks have permissions to access ports in certain ways (send, receive, send-once); these are called port rights. A port can be accessed only via a right. Ports are often used to grant clients access to objects within Mach. Having the right to send to the object’s IPC port denotes the right to manipulate the object in prescribed ways. As such, port right ownership is the fundamental security mechanism within Mach. Having a right to an object is to have a capability to access or manipulate that object.Port rights can be copied and moved between tasks via IPC. Doing so, in effect, passes capabilities to some object or server.One type of object referred to by a port is a port set. As the name suggests, a port set is a set of port rights that can be treated as a single unit when receiving a message or event from any of the members of the set. Port sets permit one thread to wait on a number of message and event sources, for example in work loops.Traditionally in Mach, the communication channel denoted by a port was always a queue of messages. However, OS X supports additional types of communication channels, and these new types of IPC object are also represented by ports and port rights. See the section Interprocess Communication (IPC), for more details about messages and other IPC types.Ports and port rights do not have systemwide names that allow arbitrary ports or rights to be manipulated directly. Ports can be manipulated by a task only if the task has a port right in its port namespace. A port right is specified by a port name, an integer index into a 32-bit port namespace. Each task has associated with it a single port namespace.Tasks acquire port rights when another task explicitly inserts them into its namespace, when they receive rights in messages, by creating objects that return a right to the object, and via Mach calls for certain special ports (mach_thread_self, mach_task_self, and mach_reply_port.)
+ <a class="footnote-return" href="#fnref:footnote1"><sup>[return]</sup></a></li>
+</ol>
+</div>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesios--macos'>IOS &amp; MacOS</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="http://u2takey.github.io/blog/coredata/"
+                class="button big previous">CoreData概要</a></li>
+    
+
+    
+        <li><a href="http://u2takey.github.io/blog/golang_faq/"
+                class="button big next">Golang笔记之常见问题</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'http:\/\/u2takey.github.io\/blog\/launchd\/';
+    var disqus_title = 'Launchd Tutorial';
+    var disqus_url = 'http:\/\/u2takey.github.io\/blog\/launchd\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-07-24'>
+                                    July 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2015-02-01'>
+                                    February 1, 2015</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2012-10-14'>
+                                    October 14, 2012</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/golang/">Golang</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+

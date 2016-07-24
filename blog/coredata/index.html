@@ -30,12 +30,12 @@
 
 
 <meta name="twitter:title" content="CoreData概要"/>
-<meta name="twitter:description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1."/>
+<meta name="twitter:description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门 1. 几个重要的概念/class 2. 定义数据:Data model＝》Managed Objects 3.操作数据:添加、fetch、删除Managed Objects. 二.理解 1.理解 Managed Object Model 2.理解 Managed Object 3.操作 Managed Object（2.3续） 4.Object内存管理: 5.Relationship And fetch properties 6. Using Persistent Stores 7.How To Preload and Import Existing Data 8.Fetched Results Controller&lt;=&gt;UITableView 三.深入（走上人生巅峰） 1.Migrations 2. Multiple context 3. Concurrency with Core Data 4.Core Data Performance 提高效率的一些提示 5.Multiple Persistent Store &amp; Custom Persistent Store 6.补充NSPredicate和NSExpression入门 参考 资源 更新 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理."/>
 
 
 
         <meta property="og:title" content="CoreData概要" />
-<meta property="og:description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1." />
+<meta property="og:description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门 1. 几个重要的概念/class 2. 定义数据:Data model＝》Managed Objects 3.操作数据:添加、fetch、删除Managed Objects. 二.理解 1.理解 Managed Object Model 2.理解 Managed Object 3.操作 Managed Object（2.3续） 4.Object内存管理: 5.Relationship And fetch properties 6. Using Persistent Stores 7.How To Preload and Import Existing Data 8.Fetched Results Controller&lt;=&gt;UITableView 三.深入（走上人生巅峰） 1.Migrations 2. Multiple context 3. Concurrency with Core Data 4.Core Data Performance 提高效率的一些提示 5.Multiple Persistent Store &amp; Custom Persistent Store 6.补充NSPredicate和NSExpression入门 参考 资源 更新 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://u2takey.github.io/blog/coredata/" />
 
@@ -53,15 +53,15 @@
 
         
 <meta itemprop="name" content="CoreData概要">
-<meta itemprop="description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1.">
+<meta itemprop="description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门 1. 几个重要的概念/class 2. 定义数据:Data model＝》Managed Objects 3.操作数据:添加、fetch、删除Managed Objects. 二.理解 1.理解 Managed Object Model 2.理解 Managed Object 3.操作 Managed Object（2.3续） 4.Object内存管理: 5.Relationship And fetch properties 6. Using Persistent Stores 7.How To Preload and Import Existing Data 8.Fetched Results Controller&lt;=&gt;UITableView 三.深入（走上人生巅峰） 1.Migrations 2. Multiple context 3. Concurrency with Core Data 4.Core Data Performance 提高效率的一些提示 5.Multiple Persistent Store &amp; Custom Persistent Store 6.补充NSPredicate和NSExpression入门 参考 资源 更新 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理.">
 
 
 <meta itemprop="dateModified" content="2015-02-01T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2367">
+<meta itemprop="wordCount" content="2431">
 
 
 
-<meta itemprop="keywords" content="IOS &amp; MacOS,随感," />
+<meta itemprop="keywords" content="Golang,IOS &amp; MacOS,随感," />
 
         
 
@@ -98,7 +98,7 @@
     
 <header id="header">
     
-        <h2><a href="/">Future Imperfect</i></a></h2>
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
     
 
     <nav class="links">
@@ -209,6 +209,14 @@
                     </li>
                 
                     <li>
+                        <a href="http://u2takey.github.io/blog/golang_faq/"><p>Golang笔记之常见问题</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/launchd/"><p>Launchd Tutorial</p></a>
+                    </li>
+                
+                    <li>
                         <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
                     </li>
                 
@@ -300,8 +308,6 @@
             February 1, 2015</time>
         <span class="author">leiiwang</span>
         
-            <p>12 minute read</p>
-        
         
     </div>
 </header>
@@ -388,7 +394,50 @@
 <li>本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。</li>
 </ol>
 
-<h1 id="一-入门-升职加薪">一.入门（升职加薪）</h1>
+<hr />
+
+<!-- vscode-markdown-toc -->
+
+<ul>
+<li><a href="#class-0">一.入门</a>
+
+<ul>
+<li><a href="#class-1">1. 几个重要的概念/class</a></li>
+<li><a href="#DatamodelManagedObjects-1">2. 定义数据:Data model＝》Managed Objects</a></li>
+<li><a href="#fetchManagedObjects.-2">3.操作数据:添加、fetch、删除Managed Objects.</a></li>
+</ul></li>
+<li><a href="#class-2">二.理解</a>
+
+<ul>
+<li><a href="#ManagedObjectModel-3">1.理解 Managed Object Model</a></li>
+<li><a href="#ManagedObject-4">2.理解 Managed Object</a></li>
+<li><a href="#ManagedObject2.3-5">3.操作 Managed Object（2.3续）</a></li>
+<li><a href="#Object:-6">4.Object内存管理:</a></li>
+<li><a href="#RelationshipAndfetchproperties-7">5.Relationship And fetch properties</a></li>
+<li><a href="#UsingPersistentStores-8">6. Using Persistent Stores</a></li>
+<li><a href="#HowToPreloadandImportExistingData-9">7.How To Preload and Import Existing Data</a></li>
+<li><a href="#FetchedResultsControllerUITableView-10">8.Fetched Results Controller&lt;=&gt;UITableView</a></li>
+</ul></li>
+<li><a href="#class-3">三.深入（走上人生巅峰）</a>
+
+<ul>
+<li><a href="#Migrations-11">1.Migrations</a></li>
+<li><a href="#Multiplecontext-12">2. Multiple context</a></li>
+<li><a href="#ConcurrencywithCoreData-13">3. Concurrency with Core Data</a></li>
+<li><a href="#CoreDataPerformance-14">4.Core Data Performance 提高效率的一些提示</a></li>
+<li><a href="#MultiplePersistentStoreCustomPersistentStore-15">5.Multiple Persistent Store &amp; Custom Persistent Store</a></li>
+<li><a href="#NSPredicateNSExpression-16">6.补充NSPredicate和NSExpression入门</a></li>
+</ul></li>
+<li><a href="#-17">参考</a></li>
+<li><a href="#-18">资源</a></li>
+<li><a href="#-19">更新</a></li>
+</ul>
+
+<!-- /vscode-markdown-toc -->
+
+<hr />
+
+<h1 id="a-name-class-0-a-一-入门-升职加薪"><a name='class-0'></a>一.入门（升职加薪）</h1>
 
 <ol>
 <li>coreData实现什么样的目的:类似archiving实现对象的保存和恢复</li>
@@ -416,7 +465,7 @@
 <p>!!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。<a href="http://support.microsoft.com/kb/283878/zh-cn">一个简单的数据库标准化的参考</a></p>
 </blockquote>
 
-<h2 id="1-几个重要的概念-class">1. 几个重要的概念/class</h2>
+<h2 id="a-name-class-1-a-1-几个重要的概念-class"><a name='class-1'></a>1. 几个重要的概念/class</h2>
 
 <h5 id="1-1-managed-object-model">1.1 Managed Object Model:</h5>
 
@@ -568,7 +617,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&quot;
 
 <p>Figure 1-3  Managed objects in a context, and a table in the persistent store</p>
 
-<h2 id="2-定义数据-data-model-managed-objects">2. 定义数据:Data model＝》Managed Objects</h2>
+<h2 id="a-name-datamodelmanagedobjects-1-a-2-定义数据-data-model-managed-objects"><a name='DatamodelManagedObjects-1'></a>2. 定义数据:Data model＝》Managed Objects</h2>
 
 <h5 id="2-1-subclass-of-nsmanagedobject-可以看成是数据表的一个record-a-record-in-a-table-in-a-database">2.1. (Subclass of)NSManagedObject 可以看成是数据表的一个record。a record in a table in a database.</h5>
 
@@ -800,7 +849,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&quot;
 
 <p>Figure 2-2  Entity description with two attributes and a relationship</p>
 
-<h2 id="3-操作数据-添加-fetch-删除managed-objects">3.操作数据:添加、fetch、删除Managed Objects.</h2>
+<h2 id="a-name-fetchmanagedobjects-2-a-3-操作数据-添加-fetch-删除managed-objects"><a name='fetchManagedObjects.-2'></a>3.操作数据:添加、fetch、删除Managed Objects.</h2>
 
 <h5 id="3-1-添加-insertnewobjectforentityforname-inmanagedobjectcontext-获得对应的managedobject-修改属性-save">3.1 添加:insertNewObjectForEntityForName:inManagedObjectContext: 获得对应的ManagedObject-》修改属性 (-》save)</h5>
 
@@ -1000,9 +1049,9 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&quot;employees&qu
 
 
 
-<h1 id="二-理解-迎娶白富美">二.理解（迎娶白富美）</h1>
+<h1 id="a-name-class-2-a-二-理解-迎娶白富美"><a name='class-2'></a>二.理解（迎娶白富美）</h1>
 
-<h2 id="1-理解-managed-object-model">1.理解 Managed Object Model</h2>
+<h2 id="a-name-managedobjectmodel-3-a-1-理解-managed-object-model"><a name='ManagedObjectModel-3'></a>1.理解 Managed Object Model</h2>
 
 <h5 id="1-1-创建managed-object-model-可以使用xib或者完全使用code">1.1 创建Managed Object Model:可以使用xib或者完全使用code</h5>
 
@@ -1087,7 +1136,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&quot;employees&qu
 
 </p>
 
-<h2 id="2-理解-managed-object">2.理解 Managed Object</h2>
+<h2 id="a-name-managedobject-4-a-2-理解-managed-object"><a name='ManagedObject-4'></a>2.理解 Managed Object</h2>
 
 <h5 id="2-1-概念-managed-object是nsmanagedobject的instance-associated-with-an-entity-description-an-instance-of-nsentitydescription-associated-with-a-managed-object-context-record-和-object是一对多的关系-因为可能有几个context等情况-几个object可能对应的是同一个数据">2.1 概念:Managed Object是NSManagedObject的instance / associated with an entity description (an instance of NSEntityDescription)/ associated with a managed object context /record 和 object是一对多的关系,因为可能有几个context等情况,几个object可能对应的是同一个数据</h5>
 
@@ -1148,7 +1197,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&quot;employees&qu
 }
 </code></pre>
 
-<h2 id="3-操作-managed-object-2-3续">3.操作 Managed Object（2.3续）</h2>
+<h2 id="a-name-managedobject2-3-5-a-3-操作-managed-object-2-3续"><a name='ManagedObject2.3-5'></a>3.操作 Managed Object（2.3续）</h2>
 
 <h5 id="3-1-managed-object-ids-and-uris">3.1 Managed Object IDs and URIs</h5>
 
@@ -1189,7 +1238,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&quot;employees&qu
 NSManagedObject *copy = [context2 objectWithID:objectID];
 </code></pre>
 
-<h2 id="4-object内存管理">4.Object内存管理:</h2>
+<h2 id="a-name-object-6-a-4-object内存管理"><a name='Object:-6'></a>4.Object内存管理:</h2>
 
 <h5 id="4-1-managed-object和context">4.1 Managed Object和Context</h5>
 
@@ -1227,7 +1276,7 @@ NSManagedObject *copy = [context2 objectWithID:objectID];
 <li>Uniquing是保证an entry in a persistent store is associated with only one managed object的技术</li>
 </ol>
 
-<h2 id="5-relationship-and-fetch-properties">5.Relationship And fetch properties</h2>
+<h2 id="a-name-relationshipandfetchproperties-7-a-5-relationship-and-fetch-properties"><a name='RelationshipAndfetchproperties-7'></a>5.Relationship And fetch properties</h2>
 
 <h5 id="5-1-relationship定义">5.1 Relationship定义</h5>
 
@@ -1259,7 +1308,7 @@ NSManagedObject *copy = [context2 objectWithID:objectID];
 <ul>
 <li><p>方法3:使用Expression效率最高NSExpression＝＝》NSExpressionDescription＝》setPropertiesToFetch</p>
 
-<h2 id="6-using-persistent-stores">6. Using Persistent Stores</h2>
+<h2 id="a-name-usingpersistentstores-8-a-6-using-persistent-stores"><a name='UsingPersistentStores-8'></a>6. Using Persistent Stores</h2>
 
 <h5 id="6-1-创建一个store-nspersistentstore">6.1 创建一个store:NSPersistentStore</h5></li>
 </ul>
@@ -1292,7 +1341,7 @@ NSPersistentStore *sqLiteStore = [psc migratePersistentStore:xmlStore
 <li>use: 一个使用场景是migration=&gt;使用系统自动创建的metadata就可以了isConfiguration:compatibleWithStoreMetadata;metadata不同(如版本)就会返回NO</li>
 </ul>
 
-<h2 id="7-how-to-preload-and-import-existing-data">7.How To Preload and Import Existing Data</h2>
+<h2 id="a-name-howtopreloadandimportexistingdata-9-a-7-how-to-preload-and-import-existing-data"><a name='HowToPreloadandImportExistingData-9'></a>7.How To Preload and Import Existing Data</h2>
 
 <p>两种解决方案</p>
 
@@ -1302,7 +1351,7 @@ NSPersistentStore *sqLiteStore = [psc migratePersistentStore:xmlStore
 <li><p><code>Provide pre-filled in SQLite database</code>. For this we’ll let Core Data create the database structure for us based on the model, and then we populate the database with a utility app. The utility app could be a Mac or iPhone app that uses Core Data to populate the database via Core Data APIs, or some kind of program that fills in the SQLite database directly. Once the database is populated, just include it with the app and make the app use it as the default database if no database already exists. 就是代码里先生成sqlite文件,加入bundle,初始化的时候 copyItemAtURL 复制到本地目录.这是苹果文档官方推荐的方法,但是考虑到先创建数据库文件可能使得文件比较大,这个需要权衡.</p></li>
 </ol>
 
-<h2 id="8-fetched-results-controller-uitableview">8.Fetched Results Controller&lt;=&gt;UITableView</h2>
+<h2 id="a-name-fetchedresultscontrolleruitableview-10-a-8-fetched-results-controller-uitableview"><a name='FetchedResultsControllerUITableView-10'></a>8.Fetched Results Controller&lt;=&gt;UITableView</h2>
 
 <h5 id="8-1-简介">8.1 简介</h5>
 
@@ -1318,9 +1367,9 @@ NSPersistentStore *sqLiteStore = [psc migratePersistentStore:xmlStore
 </ul></li>
 </ol>
 
-<h1 id="三-深入-走上人生巅峰">三.深入（走上人生巅峰）</h1>
+<h1 id="a-name-class-3-a-三-深入-走上人生巅峰"><a name='class-3'></a>三.深入（走上人生巅峰）</h1>
 
-<h2 id="1-migrations">1.Migrations</h2>
+<h2 id="a-name-migrations-11-a-1-migrations"><a name='Migrations-11'></a>1.Migrations</h2>
 
 <h5 id="1-1-lightweight-migrations">1.1 Lightweight Migrations</h5>
 
@@ -1503,7 +1552,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 
 <h5 id="1-3-渐进式迁移-progressive-migrations-http-objccn-io-issue-4-7">1.3 渐进式迁移 (Progressive Migrations)<a href="http://objccn.io/issue-4-7/">http://objccn.io/issue-4-7/</a></h5>
 
-<h2 id="2-multiple-context">2. Multiple context</h2>
+<h2 id="a-name-multiplecontext-12-a-2-multiple-context"><a name='Multiplecontext-12'></a>2. Multiple context</h2>
 
 <h5 id="2-1-如何处理冲突">2.1 如何处理冲突</h5>
 
@@ -1513,7 +1562,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 <li>Communicating Changes Between Contexts: NSManagedObjectContextDidSave</li>
 </ol>
 
-<h2 id="3-concurrency-with-core-data">3. Concurrency with Core Data</h2>
+<h2 id="a-name-concurrencywithcoredata-13-a-3-concurrency-with-core-data"><a name='ConcurrencywithCoreData-13'></a>3. Concurrency with Core Data</h2>
 
 <blockquote>
 <p>For the most part, AppKit and UIKit are not thread safe; in particular, on OS X Cocoa bindings and controllers are not thread safe—if you are using these technologies, multi-threading may be complex.</p>
@@ -1547,7 +1596,7 @@ More rules:
 7.NSManagedObjectContext's -mergeChangesFromContextDidSaveNotification: is helpful.
 </code></pre>
 
-<h2 id="4-core-data-performance-提高效率的一些提示">4.Core Data Performance 提高效率的一些提示</h2>
+<h2 id="a-name-coredataperformance-14-a-4-core-data-performance-提高效率的一些提示"><a name='CoreDataPerformance-14'></a>4.Core Data Performance 提高效率的一些提示</h2>
 
 <ol>
 <li>Predicates的使用有技巧:一个例子 (salary &gt; 5000000) AND (lastName LIKE &lsquo;Quincey&rsquo;) 比 (lastName LIKE &lsquo;Quincey&rsquo;) AND (salary &gt; 5000000) 好；<code>巧用subquery能极大的提高fetch效率</code></li>
@@ -1573,7 +1622,7 @@ More rules:
 isEqual:, hash, superclass, class, self, zone, isProxy, isKindOfClass:, isMemberOfClass:, conformsToProtocol:, respondsToSelector:, description, managedObjectContext, entity, objectID, isInserted, isUpdated, isDeleted, and isFault.
 </code></pre>
 
-<h2 id="5-multiple-persistent-store-custom-persistent-store">5.Multiple Persistent Store &amp; Custom Persistent Store</h2>
+<h2 id="a-name-multiplepersistentstorecustompersistentstore-15-a-5-multiple-persistent-store-custom-persistent-store"><a name='MultiplePersistentStoreCustomPersistentStore-15'></a>5.Multiple Persistent Store &amp; Custom Persistent Store</h2>
 
 <ul>
 <li>Multiple Persistent Store可以使用configuration进行配置,这样可以split data 到不同的data store;[persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:@&ldquo;Passwords&rdquo; URL:passwordStoreURL options:nil error:&amp;error]</li>
@@ -1618,7 +1667,7 @@ isEqual:, hash, superclass, class, self, zone, isProxy, isKindOfClass:, isMember
 
 
 
-<h2 id="6-补充nspredicate和nsexpression入门">6.补充NSPredicate和NSExpression入门</h2>
+<h2 id="a-name-nspredicatensexpression-16-a-6-补充nspredicate和nsexpression入门"><a name='NSPredicateNSExpression-16'></a>6.补充NSPredicate和NSExpression入门</h2>
 
 
 
@@ -1931,7 +1980,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&quot;name BEGINSWITH
 
 </p>
 
-<h4 id="参考">参考</h4>
+<h4 id="a-name-17-a-参考"><a name='-17'></a>参考</h4>
 
 <blockquote>
 <p>注意:部分资料比较陈旧,请查看最新版</p>
@@ -1958,13 +2007,13 @@ Second Edition】</li>
 <li><a href="http://nshipster.cn/nspredicate/">NSPredicate</a></li>
 </ol>
 
-<h4 id="资源">资源</h4>
+<h4 id="a-name-18-a-资源"><a name='-18'></a>资源</h4>
 
 <ol>
 <li><a href="http://sourceforge.net/projects/sqlitebrowser/files/latest/download">sqlitebrowser</a></li>
 </ol>
 
-<h4 id="更新">更新</h4>
+<h4 id="a-name-19-a-更新"><a name='-19'></a>更新</h4>
 
 <ol>
 <li>2014-8-3第一版</li>
@@ -2012,8 +2061,8 @@ Second Edition】</li>
     
 
     
-        <li><a href="http://u2takey.github.io/blog/first/"
-                class="button big next">first blog</a></li>
+        <li><a href="http://u2takey.github.io/blog/launchd/"
+                class="button big next">Launchd Tutorial</a></li>
     
 </ul>
 
@@ -2151,6 +2200,34 @@ Second Edition】</li>
                     <li>
                         <article>
                             <header>
+                                <h3><a href="http://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
                                 
                                     
@@ -2178,6 +2255,16 @@ Second Edition】</li>
                 
 
                 
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
             </ul>
         </section>
 
@@ -2199,6 +2286,15 @@ Second Edition】</li>
                     <li>
                         <article>
                             <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
                                 <span style="float:right;">2</span>
                             </header>
@@ -2208,7 +2304,7 @@ Second Edition】</li>
                     <li>
                         <article>
                             <header>
-                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <a href="/categories/golang/">Golang</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -2292,7 +2388,7 @@ Second Edition】</li>
                 
             </ul>
 
-            <p class="copyright">&copy; Hugo Future Imperfect. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
         </section>
 
 </section>

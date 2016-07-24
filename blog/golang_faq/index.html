@@ -1,0 +1,988 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>Golang笔记之常见问题</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Golang笔记之常见问题"/>
+<meta name="twitter:description" content="参考GolangFrequently Asked Questions ，很好的参考文档，理解Golang必读。 1. Golang的特点和发起目的 2. Golang设计原则 3. 为什么没有泛型 4. 为什么没有exceptions 5. 为什么没有assertion 6. 为什么build concurrency on the ideas of CSP 7. Why goroutines instead of threads 8. 为什么map非线程安全 9. Golang是面对对象语言吗 10. 为什么Golang没有运算符或者方法重载 11. interface的一个有疑问的例子Why doesn&rsquo;t type T satisfy the Equal interface 12. Error和nil的一个例子 13. go不支持tagged or untagged union 14. 1为什么没有隐式类型转换 15. Why are maps, slices, and channels references while arrays are values? 16. When should I use a pointer to an interface 17."/>
+
+
+
+        <meta property="og:title" content="Golang笔记之常见问题" />
+<meta property="og:description" content="参考GolangFrequently Asked Questions ，很好的参考文档，理解Golang必读。 1. Golang的特点和发起目的 2. Golang设计原则 3. 为什么没有泛型 4. 为什么没有exceptions 5. 为什么没有assertion 6. 为什么build concurrency on the ideas of CSP 7. Why goroutines instead of threads 8. 为什么map非线程安全 9. Golang是面对对象语言吗 10. 为什么Golang没有运算符或者方法重载 11. interface的一个有疑问的例子Why doesn&rsquo;t type T satisfy the Equal interface 12. Error和nil的一个例子 13. go不支持tagged or untagged union 14. 1为什么没有隐式类型转换 15. Why are maps, slices, and channels references while arrays are values? 16. When should I use a pointer to an interface 17." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://u2takey.github.io/blog/golang_faq/" />
+
+
+<meta property="og:updated_time" content="2016-04-01T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="Golang笔记之常见问题">
+<meta itemprop="description" content="参考GolangFrequently Asked Questions ，很好的参考文档，理解Golang必读。 1. Golang的特点和发起目的 2. Golang设计原则 3. 为什么没有泛型 4. 为什么没有exceptions 5. 为什么没有assertion 6. 为什么build concurrency on the ideas of CSP 7. Why goroutines instead of threads 8. 为什么map非线程安全 9. Golang是面对对象语言吗 10. 为什么Golang没有运算符或者方法重载 11. interface的一个有疑问的例子Why doesn&rsquo;t type T satisfy the Equal interface 12. Error和nil的一个例子 13. go不支持tagged or untagged union 14. 1为什么没有隐式类型转换 15. Why are maps, slices, and channels references while arrays are values? 16. When should I use a pointer to an interface 17.">
+
+
+<meta itemprop="dateModified" content="2016-04-01T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="742">
+
+
+
+<meta itemprop="keywords" content="Golang,IOS &amp; MacOS,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/golang_faq/"><p>Golang笔记之常见问题</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/launchd/"><p>Launchd Tutorial</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"><p>对技术的态度</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&text=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&title=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&title=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&title=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="http://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-04-01'>
+            April 1, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&text=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&title=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&title=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f&title=Golang%e7%ac%94%e8%ae%b0%e4%b9%8b%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2fgolang_faq%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="http://u2takey.github.io/blog/golang_faq/" class="image featured">
+            <img src="/img/2016/04/sunset-1506365_960_720.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<blockquote>
+<p>参考Golang<a href="http://godoc.golangtc.com/doc/faq#Origins">Frequently Asked Questions </a>，很好的参考文档，理解Golang必读。</p>
+</blockquote>
+
+<hr />
+
+<!-- vscode-markdown-toc -->
+
+<ul>
+<li>1. <a href="#Golang-0"> Golang的特点和发起目的</a></li>
+<li>2. <a href="#Golang-1">Golang设计原则</a></li>
+<li>3. <a href="#-2">为什么没有泛型</a></li>
+<li>4. <a href="#exceptions-3"> 为什么没有exceptions</a></li>
+<li>5. <a href="#assertion-4">为什么没有assertion</a></li>
+<li>6. <a href="#buildconcurrencyontheideasofCSP-5">为什么build concurrency on the ideas of CSP</a></li>
+<li>7. <a href="#Whygoroutinesinsteadofthreads-6">Why goroutines instead of threads</a></li>
+<li>8. <a href="#map-7">为什么map非线程安全</a></li>
+<li>9. <a href="#Golang-8"> Golang是面对对象语言吗</a></li>
+<li>10. <a href="#Golang-9">为什么Golang没有运算符或者方法重载</a></li>
+<li>11. <a href="#interfaceWhydoesnttypeTsatisfytheEqualinterface-10"> interface的一个有疑问的例子Why doesn&rsquo;t type T satisfy the Equal interface</a></li>
+<li>12. <a href="#Errornil-11">Error和nil的一个例子</a></li>
+<li>13. <a href="#gotaggedoruntaggedunion-12">go不支持tagged or untagged union</a></li>
+<li>14. <a href="#-13">1为什么没有隐式类型转换</a></li>
+<li>15. <a href="#Whyaremapsslicesandchannelsreferenceswhilearraysarevalues-14"> Why are maps, slices, and channels references while arrays are values?</a></li>
+<li>16. <a href="#WhenshouldIuseapointertoaninterface-15">When should I use a pointer to an interface</a></li>
+<li>17. <a href="#-16"> 关于闭包的一个例子</a></li>
+<li>18. <a href="#:-17">没有？:操作符</a></li>
+</ul>
+
+<!-- /vscode-markdown-toc -->
+
+<hr />
+
+<h2 id="1-a-name-golang-0-a-golang的特点和发起目的">1. <a name='Golang-0'></a> Golang的特点和发起目的</h2>
+
+<p>Golang的特点以及要解决的问题概括起来就是三点:
+1. concurrent : 多核 解决方式-&gt; 语言层级并发, goroutine
+2. garbage-collected language : c/c++的不足
+3. fast compilation : c/c++等的不足, 依赖简单，类型系统简单，非传统OO。开发更简单快捷。
+这种<code>简单设计</code>的特点很容易让人和C++对比，对比C++就是砍了90%特性，减少90%的麻烦。更好的对比可能是C，better c with goroutine and garbage-collection。</p>
+
+<h2 id="2-a-name-golang-1-a-golang设计原则">2. <a name='Golang-1'></a>Golang设计原则</h2>
+
+<ol>
+<li>felicity of programming ：  尽可能的简化代码编写规则，这点在各种解释语言，c++11等里面都可以体现一部分了，在golang上的体现就是如包的定义，编译安装，没有头文件，no forward declarations，:= 类型推断等等</li>
+<li>orthogonality of concepts ： 另一个原则是概念设计尽可能正交orthogonal，这样理解使用会更简单。 Methods can be implemented for any type; structures represent data while interfaces represent abstraction; and so on. Orthogonality makes it easier to understand what happens when things combine.当然一旦设计正交，需要的概念也变得很少。</li>
+<li>speed of compilation</li>
+</ol>
+
+<h2 id="3-a-name-2-a-为什么没有泛型">3. <a name='-2'></a>为什么没有泛型</h2>
+
+<p>Generics may well be added at some point. We don&rsquo;t feel an urgency for them。为什么需要泛型可以参考<a href="https://www.ibm.com/developerworks/cn/java/j-lo-gj/">这篇文章</a>，但是泛型可以带来好处也会增加复杂度，golang可能以后会添加泛型支持，目前是一个open issue。</p>
+
+<h2 id="4-a-name-exceptions-3-a-为什么没有exceptions">4. <a name='exceptions-3'></a> 为什么没有exceptions</h2>
+
+<p>这点是golang遭受用户(尤其是c++，java用户)诟病的重要原因，实际上Golang提供了panic,recover语法类似try catch。但是个人理解为什么没有只是一个选择问题，而不是技术问题。在很多语言的编码风格里尤其是Objective-C，一般都是使用Error Object来传递错误，虽然现在try catch的性能损失可以忽略不计，但是try catch的坏处是容易滥用，导致用户忽略error和exception的区别，另外Golang提供的多返回值也方便了error传递这种风格的使用，我个人对这种设计并不反感。</p>
+
+<h2 id="5-a-name-assertion-4-a-为什么没有assertion">5. <a name='assertion-4'></a>为什么没有assertion</h2>
+
+<p>和没有exceptions有点类似： programmers use them as a crutch to avoid thinking about proper error handling and reporting，当然这种牵强的说法作者自己也有点没底气：We understand that this is a point of contention. There are many things in the Go language and libraries that differ from modern practices, simply because we feel it&rsquo;s sometimes worth trying a different approach。</p>
+
+<h2 id="6-a-name-buildconcurrencyontheideasofcsp-5-a-为什么build-concurrency-on-the-ideas-of-csp">6. <a name='buildconcurrencyontheideasofCSP-5'></a>为什么build concurrency on the ideas of CSP</h2>
+
+<p>（Communicating Sequential Processes）
+一是Erlang，Occam 等的经验，二是便于语言层面构建。</p>
+
+<h2 id="7-a-name-whygoroutinesinsteadofthreads-6-a-why-goroutines-instead-of-threads">7. <a name='Whygoroutinesinsteadofthreads-6'></a>Why goroutines instead of threads</h2>
+
+<p>把线程控制的复杂度从用户空间转移到语言层面（用户层面不需要关系协程还是线程，让并发的使用简单和高效是其设计目的）。<a href="https://www.zhihu.com/question/20862617">The Go scheduler</a></p>
+
+<h2 id="8-a-name-map-7-a-为什么map非线程安全">8. <a name='map-7'></a>为什么map非线程安全</h2>
+
+<p>知道map非线程安全就行了，这种设计大都是一个trade off</p>
+
+<h2 id="9-a-name-golang-8-a-golang是面对对象语言吗">9. <a name='Golang-8'></a> Golang是面对对象语言吗</h2>
+
+<p>这个问题不太对，面对对象更多的是一种设计，而非语言特性，只是不同语言的实现和支持有所不同。在Golang里面的方式是interface，无type hierarchy, subclass的方式有点类似C，比C++等更general。同时Golang里面的Method也更general，可以给任何类型添加方法，总的来说的就是轻量级，更简单却能做更多事。个人觉得是Golang里最美的设计，面试官再问你会不会面对对象编程，你就打他脸。</p>
+
+<h2 id="10-a-name-golang-9-a-为什么golang没有运算符或者方法重载">10. <a name='Golang-9'></a>为什么Golang没有运算符或者方法重载</h2>
+
+<p>没什么好说的，运算符和方法重载没什么用。即使在提供这类功能的语言里面也不要使用（除非一些极端场合如数据处理框架重载+*符号用于运算矩阵，这个场合非常少，更多时候这种功能大概会带来1%的便利和1000%的代码混乱和可读性降低）。</p>
+
+<h2 id="11-a-name-interfacewhydoesnttypetsatisfytheequalinterface-10-a-interface的一个有疑问的例子why-doesn-t-type-t-satisfy-the-equal-interface">11. <a name='interfaceWhydoesnttypeTsatisfytheEqualinterface-10'></a> interface的一个有疑问的例子Why doesn&rsquo;t type T satisfy the Equal interface</h2>
+
+<pre><code>type Equaler interface {
+    Equal(Equaler) bool
+}
+type T int
+func (t T) Equal(u T) bool { return t == u } // does not satisfy Equaler
+</code></pre>
+
+<p>因为Equaler的Equal函数需要的类型不同，正确的实现方式为</p>
+
+<pre><code>type T2 int
+func (t T2) Equal(u Equaler) bool { return t == u.(T2) }  // satisfies Equaler
+
+另一个例子
+type Opener interface {
+   Open() Reader
+}
+
+func (t T3) Open() *os.File
+//T3 does not satisfy Opener, although it might in another language.
+</code></pre>
+
+<p>Golang没有自动类型转换，也没有多态（类之间），这也是作者的trade off</p>
+
+<h2 id="12-a-name-errornil-11-a-error和nil的一个例子">12. <a name='Errornil-11'></a>Error和nil的一个例子</h2>
+
+<pre><code>func returnsError() error {
+	var p *MyError = nil
+	if bad() {
+		p = ErrBad
+	}
+	return p // Will always return a non-nil error.
+}
+</code></pre>
+
+<p>这和interface的实现有关:</p>
+
+<blockquote>
+<p>Under the covers, interfaces are implemented as two elements, a type and a value. The value, called the interface&rsquo;s dynamic value, is an arbitrary concrete value and the type is that of the value. For the int value 3, an interface value contains, schematically, (int, 3).
+An interface value is nil only if the inner value and type are both unset, (nil, nil). In particular, a nil interface will always hold a nil type. If we store a nil pointer of type *int inside an interface value, the inner type will be *int regardless of the value of the pointer: (*int, nil). Such an interface value will therefore be non-nil even when the pointer inside is nil.</p>
+</blockquote>
+
+<pre><code>一个更直观点的例子
+type myError struct{}
+func (this *myError) Error() string { return &quot;&quot; }
+var error1 *myError = nil
+var error2 error = error1// to interface =&gt; error2 != nil
+</code></pre>
+
+<h2 id="13-a-name-gotaggedoruntaggedunion-12-a-go不支持tagged-or-untagged-union">13. <a name='gotaggedoruntaggedunion-12'></a>go不支持tagged or untagged union</h2>
+
+<p>untagged union不安全，tagged union或者Variant types, algebraic type则和interface有重合</p>
+
+<h2 id="14-a-name-13-a-1为什么没有隐式类型转换">14. <a name='-13'></a>1为什么没有隐式类型转换</h2>
+
+<p>作者认为这种功能带来的隐患比便利要多，Golang中Int和int64都不是一个类型，不能隐式转换。</p>
+
+<h2 id="15-a-name-whyaremapsslicesandchannelsreferenceswhilearraysarevalues-14-a-why-are-maps-slices-and-channels-references-while-arrays-are-values">15. <a name='Whyaremapsslicesandchannelsreferenceswhilearraysarevalues-14'></a> Why are maps, slices, and channels references while arrays are values?</h2>
+
+<p>知道这回事就行了slices的实现方式是对底层array的引用(见下图), <a href="http://research.swtch.com/godata">参考</a>
+<img src="https://raw.githubusercontent.com/astaxie/build-web-application-with-golang/master/zh/images/2.2.slice2.png" alt="此处输入图片的描述" /></p>
+
+<pre><code>理解了上图再看这个例子就明白了
+sa := make([]int, 10)
+fmt.Println(&quot;sa:&quot;, saa)//saa: [0 0 0 0 0 0 0 0 0 0]
+sb := saa[1:8]
+sb[2] = 2
+sb = append(sbb, 8) 
+//sa 也被修改了
+fmt.Println(&quot;sa:&quot;, sa, &quot;sb:&quot;, sb)// saa: [0 0 0 2 0 0 0 0 8 0] sbb: [0 0 2 0 0 0 0 8]
+</code></pre>
+
+<h2 id="16-a-name-whenshouldiuseapointertoaninterface-15-a-when-should-i-use-a-pointer-to-an-interface">16. <a name='WhenshouldIuseapointertoaninterface-15'></a>When should I use a pointer to an interface</h2>
+
+<p>Almost never.传一个指针指向interface大都数时候都是错误。另：The insight is that although a pointer to a concrete type can satisfy an interface, with one exception a pointer to an interface can never satisfy an interface.</p>
+
+<h2 id="17-a-name-16-a-关于闭包的一个例子">17. <a name='-16'></a> 关于闭包的一个例子</h2>
+
+<pre><code>func main() {
+    done := make(chan bool)
+
+    values := []string{&quot;a&quot;, &quot;b&quot;, &quot;c&quot;}
+    for _, v := range values {
+        go func() {
+            fmt.Println(v)
+            done &lt;- true
+        }()
+    }
+
+    // wait for all goroutines to complete before exiting
+    for _ = range values {
+        &lt;-done
+    }
+}
+// 输出是c c c 因为v共用一个变量 而输出取决于fmt.Println调用的时候v存储的数值
+    // 正确的写法为
+    for _, v := range values {
+        go func(u string) {
+            fmt.Println(u)
+            done &lt;- true
+        }(v)
+    }
+    // 或者做一个本地拷贝
+    for _, v := range values {
+        v := v // create a new 'v'. 注意位置 写在func里面还是不对
+        go func() {
+            fmt.Println(v)
+            done &lt;- true
+        }()
+    }
+</code></pre>
+
+<h2 id="18-a-name-17-a-没有-操作符">18. <a name=':-17'></a>没有？:操作符</h2>
+
+<p>差评</p>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesgolang'>Golang</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="http://u2takey.github.io/blog/launchd/"
+                class="button big previous">Launchd Tutorial</a></li>
+    
+
+    
+        <li><a href="http://u2takey.github.io/blog/first/"
+                class="button big next">first blog</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'http:\/\/u2takey.github.io\/blog\/golang_faq\/';
+    var disqus_title = 'Golang笔记之常见问题';
+    var disqus_url = 'http:\/\/u2takey.github.io\/blog\/golang_faq\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-07-24'>
+                                    July 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-04-01'>
+                                    April 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2015-02-01'>
+                                    February 1, 2015</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2012-10-14'>
+                                    October 14, 2012</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/golang/">Golang</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+

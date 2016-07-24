@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on LeiiWang&#39;s Blog</title>
+    <link>http://u2takey.github.io/categories/golang/</link>
+    <description>Recent content in Golang on LeiiWang&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Apr 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://u2takey.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Golang笔记之常见问题</title>
+      <link>http://u2takey.github.io/blog/golang_faq/</link>
+      <pubDate>Fri, 01 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://u2takey.github.io/blog/golang_faq/</guid>
+      <description>
+
+&lt;blockquote&gt;
+&lt;p&gt;参考Golang&lt;a href=&#34;http://godoc.golangtc.com/doc/faq#Origins&#34;&gt;Frequently Asked Questions &lt;/a&gt;，很好的参考文档，理解Golang必读。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;!-- vscode-markdown-toc --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1. &lt;a href=&#34;#Golang-0&#34;&gt; Golang的特点和发起目的&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2. &lt;a href=&#34;#Golang-1&#34;&gt;Golang设计原则&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;3. &lt;a href=&#34;#-2&#34;&gt;为什么没有泛型&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;4. &lt;a href=&#34;#exceptions-3&#34;&gt; 为什么没有exceptions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;5. &lt;a href=&#34;#assertion-4&#34;&gt;为什么没有assertion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;6. &lt;a href=&#34;#buildconcurrencyontheideasofCSP-5&#34;&gt;为什么build concurrency on the ideas of CSP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;7. &lt;a href=&#34;#Whygoroutinesinsteadofthreads-6&#34;&gt;Why goroutines instead of threads&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;8. &lt;a href=&#34;#map-7&#34;&gt;为什么map非线程安全&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;9. &lt;a href=&#34;#Golang-8&#34;&gt; Golang是面对对象语言吗&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;10. &lt;a href=&#34;#Golang-9&#34;&gt;为什么Golang没有运算符或者方法重载&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;11. &lt;a href=&#34;#interfaceWhydoesnttypeTsatisfytheEqualinterface-10&#34;&gt; interface的一个有疑问的例子Why doesn&amp;rsquo;t type T satisfy the Equal interface&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;12. &lt;a href=&#34;#Errornil-11&#34;&gt;Error和nil的一个例子&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;13. &lt;a href=&#34;#gotaggedoruntaggedunion-12&#34;&gt;go不支持tagged or untagged union&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;14. &lt;a href=&#34;#-13&#34;&gt;1为什么没有隐式类型转换&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;15. &lt;a href=&#34;#Whyaremapsslicesandchannelsreferenceswhilearraysarevalues-14&#34;&gt; Why are maps, slices, and channels references while arrays are values?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;16. &lt;a href=&#34;#WhenshouldIuseapointertoaninterface-15&#34;&gt;When should I use a pointer to an interface&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;17. &lt;a href=&#34;#-16&#34;&gt; 关于闭包的一个例子&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;18. &lt;a href=&#34;#:-17&#34;&gt;没有？:操作符&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /vscode-markdown-toc --&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;1-a-name-golang-0-a-golang的特点和发起目的&#34;&gt;1. &lt;a name=&#39;Golang-0&#39;&gt;&lt;/a&gt; Golang的特点和发起目的&lt;/h2&gt;
+
+&lt;p&gt;Golang的特点以及要解决的问题概括起来就是三点:
+1. concurrent : 多核 解决方式-&amp;gt; 语言层级并发, goroutine
+2. garbage-collected language : c/c++的不足
+3. fast compilation : c/c++等的不足, 依赖简单，类型系统简单，非传统OO。开发更简单快捷。
+这种&lt;code&gt;简单设计&lt;/code&gt;的特点很容易让人和C++对比，对比C++就是砍了90%特性，减少90%的麻烦。更好的对比可能是C，better c with goroutine and garbage-collection。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-a-name-golang-1-a-golang设计原则&#34;&gt;2. &lt;a name=&#39;Golang-1&#39;&gt;&lt;/a&gt;Golang设计原则&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;felicity of programming ：  尽可能的简化代码编写规则，这点在各种解释语言，c++11等里面都可以体现一部分了，在golang上的体现就是如包的定义，编译安装，没有头文件，no forward declarations，:= 类型推断等等&lt;/li&gt;
+&lt;li&gt;orthogonality of concepts ： 另一个原则是概念设计尽可能正交orthogonal，这样理解使用会更简单。 Methods can be implemented for any type; structures represent data while interfaces represent abstraction; and so on. Orthogonality makes it easier to understand what happens when things combine.当然一旦设计正交，需要的概念也变得很少。&lt;/li&gt;
+&lt;li&gt;speed of compilation&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;3-a-name-2-a-为什么没有泛型&#34;&gt;3. &lt;a name=&#39;-2&#39;&gt;&lt;/a&gt;为什么没有泛型&lt;/h2&gt;
+
+&lt;p&gt;Generics may well be added at some point. We don&amp;rsquo;t feel an urgency for them。为什么需要泛型可以参考&lt;a href=&#34;https://www.ibm.com/developerworks/cn/java/j-lo-gj/&#34;&gt;这篇文章&lt;/a&gt;，但是泛型可以带来好处也会增加复杂度，golang可能以后会添加泛型支持，目前是一个open issue。&lt;/p&gt;
+
+&lt;h2 id=&#34;4-a-name-exceptions-3-a-为什么没有exceptions&#34;&gt;4. &lt;a name=&#39;exceptions-3&#39;&gt;&lt;/a&gt; 为什么没有exceptions&lt;/h2&gt;
+
+&lt;p&gt;这点是golang遭受用户(尤其是c++，java用户)诟病的重要原因，实际上Golang提供了panic,recover语法类似try catch。但是个人理解为什么没有只是一个选择问题，而不是技术问题。在很多语言的编码风格里尤其是Objective-C，一般都是使用Error Object来传递错误，虽然现在try catch的性能损失可以忽略不计，但是try catch的坏处是容易滥用，导致用户忽略error和exception的区别，另外Golang提供的多返回值也方便了error传递这种风格的使用，我个人对这种设计并不反感。&lt;/p&gt;
+
+&lt;h2 id=&#34;5-a-name-assertion-4-a-为什么没有assertion&#34;&gt;5. &lt;a name=&#39;assertion-4&#39;&gt;&lt;/a&gt;为什么没有assertion&lt;/h2&gt;
+
+&lt;p&gt;和没有exceptions有点类似： programmers use them as a crutch to avoid thinking about proper error handling and reporting，当然这种牵强的说法作者自己也有点没底气：We understand that this is a point of contention. There are many things in the Go language and libraries that differ from modern practices, simply because we feel it&amp;rsquo;s sometimes worth trying a different approach。&lt;/p&gt;
+
+&lt;h2 id=&#34;6-a-name-buildconcurrencyontheideasofcsp-5-a-为什么build-concurrency-on-the-ideas-of-csp&#34;&gt;6. &lt;a name=&#39;buildconcurrencyontheideasofCSP-5&#39;&gt;&lt;/a&gt;为什么build concurrency on the ideas of CSP&lt;/h2&gt;
+
+&lt;p&gt;（Communicating Sequential Processes）
+一是Erlang，Occam 等的经验，二是便于语言层面构建。&lt;/p&gt;
+
+&lt;h2 id=&#34;7-a-name-whygoroutinesinsteadofthreads-6-a-why-goroutines-instead-of-threads&#34;&gt;7. &lt;a name=&#39;Whygoroutinesinsteadofthreads-6&#39;&gt;&lt;/a&gt;Why goroutines instead of threads&lt;/h2&gt;
+
+&lt;p&gt;把线程控制的复杂度从用户空间转移到语言层面（用户层面不需要关系协程还是线程，让并发的使用简单和高效是其设计目的）。&lt;a href=&#34;https://www.zhihu.com/question/20862617&#34;&gt;The Go scheduler&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;8-a-name-map-7-a-为什么map非线程安全&#34;&gt;8. &lt;a name=&#39;map-7&#39;&gt;&lt;/a&gt;为什么map非线程安全&lt;/h2&gt;
+
+&lt;p&gt;知道map非线程安全就行了，这种设计大都是一个trade off&lt;/p&gt;
+
+&lt;h2 id=&#34;9-a-name-golang-8-a-golang是面对对象语言吗&#34;&gt;9. &lt;a name=&#39;Golang-8&#39;&gt;&lt;/a&gt; Golang是面对对象语言吗&lt;/h2&gt;
+
+&lt;p&gt;这个问题不太对，面对对象更多的是一种设计，而非语言特性，只是不同语言的实现和支持有所不同。在Golang里面的方式是interface，无type hierarchy, subclass的方式有点类似C，比C++等更general。同时Golang里面的Method也更general，可以给任何类型添加方法，总的来说的就是轻量级，更简单却能做更多事。个人觉得是Golang里最美的设计，面试官再问你会不会面对对象编程，你就打他脸。&lt;/p&gt;
+
+&lt;h2 id=&#34;10-a-name-golang-9-a-为什么golang没有运算符或者方法重载&#34;&gt;10. &lt;a name=&#39;Golang-9&#39;&gt;&lt;/a&gt;为什么Golang没有运算符或者方法重载&lt;/h2&gt;
+
+&lt;p&gt;没什么好说的，运算符和方法重载没什么用。即使在提供这类功能的语言里面也不要使用（除非一些极端场合如数据处理框架重载+*符号用于运算矩阵，这个场合非常少，更多时候这种功能大概会带来1%的便利和1000%的代码混乱和可读性降低）。&lt;/p&gt;
+
+&lt;h2 id=&#34;11-a-name-interfacewhydoesnttypetsatisfytheequalinterface-10-a-interface的一个有疑问的例子why-doesn-t-type-t-satisfy-the-equal-interface&#34;&gt;11. &lt;a name=&#39;interfaceWhydoesnttypeTsatisfytheEqualinterface-10&#39;&gt;&lt;/a&gt; interface的一个有疑问的例子Why doesn&amp;rsquo;t type T satisfy the Equal interface&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;type Equaler interface {
+    Equal(Equaler) bool
+}
+type T int
+func (t T) Equal(u T) bool { return t == u } // does not satisfy Equaler
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为Equaler的Equal函数需要的类型不同，正确的实现方式为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type T2 int
+func (t T2) Equal(u Equaler) bool { return t == u.(T2) }  // satisfies Equaler
+
+另一个例子
+type Opener interface {
+   Open() Reader
+}
+
+func (t T3) Open() *os.File
+//T3 does not satisfy Opener, although it might in another language.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Golang没有自动类型转换，也没有多态（类之间），这也是作者的trade off&lt;/p&gt;
+
+&lt;h2 id=&#34;12-a-name-errornil-11-a-error和nil的一个例子&#34;&gt;12. &lt;a name=&#39;Errornil-11&#39;&gt;&lt;/a&gt;Error和nil的一个例子&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;func returnsError() error {
+	var p *MyError = nil
+	if bad() {
+		p = ErrBad
+	}
+	return p // Will always return a non-nil error.
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这和interface的实现有关:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Under the covers, interfaces are implemented as two elements, a type and a value. The value, called the interface&amp;rsquo;s dynamic value, is an arbitrary concrete value and the type is that of the value. For the int value 3, an interface value contains, schematically, (int, 3).
+An interface value is nil only if the inner value and type are both unset, (nil, nil). In particular, a nil interface will always hold a nil type. If we store a nil pointer of type *int inside an interface value, the inner type will be *int regardless of the value of the pointer: (*int, nil). Such an interface value will therefore be non-nil even when the pointer inside is nil.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;一个更直观点的例子
+type myError struct{}
+func (this *myError) Error() string { return &amp;quot;&amp;quot; }
+var error1 *myError = nil
+var error2 error = error1// to interface =&amp;gt; error2 != nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;13-a-name-gotaggedoruntaggedunion-12-a-go不支持tagged-or-untagged-union&#34;&gt;13. &lt;a name=&#39;gotaggedoruntaggedunion-12&#39;&gt;&lt;/a&gt;go不支持tagged or untagged union&lt;/h2&gt;
+
+&lt;p&gt;untagged union不安全，tagged union或者Variant types, algebraic type则和interface有重合&lt;/p&gt;
+
+&lt;h2 id=&#34;14-a-name-13-a-1为什么没有隐式类型转换&#34;&gt;14. &lt;a name=&#39;-13&#39;&gt;&lt;/a&gt;1为什么没有隐式类型转换&lt;/h2&gt;
+
+&lt;p&gt;作者认为这种功能带来的隐患比便利要多，Golang中Int和int64都不是一个类型，不能隐式转换。&lt;/p&gt;
+
+&lt;h2 id=&#34;15-a-name-whyaremapsslicesandchannelsreferenceswhilearraysarevalues-14-a-why-are-maps-slices-and-channels-references-while-arrays-are-values&#34;&gt;15. &lt;a name=&#39;Whyaremapsslicesandchannelsreferenceswhilearraysarevalues-14&#39;&gt;&lt;/a&gt; Why are maps, slices, and channels references while arrays are values?&lt;/h2&gt;
+
+&lt;p&gt;知道这回事就行了slices的实现方式是对底层array的引用(见下图), &lt;a href=&#34;http://research.swtch.com/godata&#34;&gt;参考&lt;/a&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/astaxie/build-web-application-with-golang/master/zh/images/2.2.slice2.png&#34; alt=&#34;此处输入图片的描述&#34; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;理解了上图再看这个例子就明白了
+sa := make([]int, 10)
+fmt.Println(&amp;quot;sa:&amp;quot;, saa)//saa: [0 0 0 0 0 0 0 0 0 0]
+sb := saa[1:8]
+sb[2] = 2
+sb = append(sbb, 8) 
+//sa 也被修改了
+fmt.Println(&amp;quot;sa:&amp;quot;, sa, &amp;quot;sb:&amp;quot;, sb)// saa: [0 0 0 2 0 0 0 0 8 0] sbb: [0 0 2 0 0 0 0 8]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;16-a-name-whenshouldiuseapointertoaninterface-15-a-when-should-i-use-a-pointer-to-an-interface&#34;&gt;16. &lt;a name=&#39;WhenshouldIuseapointertoaninterface-15&#39;&gt;&lt;/a&gt;When should I use a pointer to an interface&lt;/h2&gt;
+
+&lt;p&gt;Almost never.传一个指针指向interface大都数时候都是错误。另：The insight is that although a pointer to a concrete type can satisfy an interface, with one exception a pointer to an interface can never satisfy an interface.&lt;/p&gt;
+
+&lt;h2 id=&#34;17-a-name-16-a-关于闭包的一个例子&#34;&gt;17. &lt;a name=&#39;-16&#39;&gt;&lt;/a&gt; 关于闭包的一个例子&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;func main() {
+    done := make(chan bool)
+
+    values := []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;}
+    for _, v := range values {
+        go func() {
+            fmt.Println(v)
+            done &amp;lt;- true
+        }()
+    }
+
+    // wait for all goroutines to complete before exiting
+    for _ = range values {
+        &amp;lt;-done
+    }
+}
+// 输出是c c c 因为v共用一个变量 而输出取决于fmt.Println调用的时候v存储的数值
+    // 正确的写法为
+    for _, v := range values {
+        go func(u string) {
+            fmt.Println(u)
+            done &amp;lt;- true
+        }(v)
+    }
+    // 或者做一个本地拷贝
+    for _, v := range values {
+        v := v // create a new &#39;v&#39;. 注意位置 写在func里面还是不对
+        go func() {
+            fmt.Println(v)
+            done &amp;lt;- true
+        }()
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;18-a-name-17-a-没有-操作符&#34;&gt;18. &lt;a name=&#39;:-17&#39;&gt;&lt;/a&gt;没有？:操作符&lt;/h2&gt;
+
+&lt;p&gt;差评&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
