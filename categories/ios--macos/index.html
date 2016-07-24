@@ -1,0 +1,601 @@
+
+
+
+    
+        
+    
+
+
+
+
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            <title>IOS &amp; MacOS Posts - Hugo Future Imperfect</title>
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+        <meta property="og:title" content="IOS &amp; MacOS" />
+<meta property="og:description" content="Theme ported by Julio Pescador. Powered by Hugo" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://u2takey.github.io/categories/ios--macos/" />
+
+
+<meta property="og:updated_time" content="2015-02-01T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="IOS &amp; MacOS">
+<meta itemprop="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+<header id="header">
+    
+        <h2><a href="/">Future Imperfect</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"><p>对技术的态度</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    
+    <div id="main">
+        <h1>IOS &amp; MacOS</h1>
+        
+        
+            <article class="post">
+    <header>
+    <div class="title">
+        
+            <h2><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h2>
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2015-02-01'>
+            February 1, 2015</time>
+        <span class="author">leiiwang</span>
+        
+            <p>12 minute read</p>
+        
+        
+    </div>
+</header>
+
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="http://u2takey.github.io/blog/coredata/" class="image featured">
+            <img src="/img/2015/02/winter.jpg" alt="" />
+        </a>
+    
+
+
+    <p>注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1.</p>
+
+    <footer>
+        <ul class="actions">
+            <li><a href="http://u2takey.github.io/blog/coredata/" class="button big">Continue Reading</a></li>
+        </ul>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesios--macos'>IOS &amp; MacOS</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+
+        
+
+        
+<ul class="actions pagination">
+    
+        <li><a href="#" class="disabled button big previous">Previous Page</a></li>
+    
+
+    
+        <li><a href="#" class="disabled button big next">Next Page</a></li>
+    
+</ul>
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                    <li><a href="http://u2takey.github.io/categories/ios--macos/index.xml" type="application/rss+xml"
+                        target="_blank" title="RSS" class="fa fa-rss"></a></li>
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-07-24'>
+                                    July 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2015-02-01'>
+                                    February 1, 2015</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2012-10-14'>
+                                    October 14, 2012</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                    <li><a href="http://u2takey.github.io/categories/ios--macos/index.xml" type="application/rss+xml"
+                        target="_blank" title="RSS" class="fa fa-rss"></a></li>
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; Hugo Future Imperfect. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+

@@ -1,0 +1,2325 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>CoreData概要</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="CoreData概要"/>
+<meta name="twitter:description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1."/>
+
+
+
+        <meta property="og:title" content="CoreData概要" />
+<meta property="og:description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://u2takey.github.io/blog/coredata/" />
+
+
+<meta property="og:updated_time" content="2015-02-01T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="CoreData概要">
+<meta itemprop="description" content="注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1.">
+
+
+<meta itemprop="dateModified" content="2015-02-01T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2367">
+
+
+
+<meta itemprop="keywords" content="IOS &amp; MacOS,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">Future Imperfect</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"><p>对技术的态度</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&text=CoreData%e6%a6%82%e8%a6%81&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&title=CoreData%e6%a6%82%e8%a6%81" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&title=CoreData%e6%a6%82%e8%a6%81" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&title=CoreData%e6%a6%82%e8%a6%81" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2015-02-01'>
+            February 1, 2015</time>
+        <span class="author">leiiwang</span>
+        
+            <p>12 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&text=CoreData%e6%a6%82%e8%a6%81&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&title=CoreData%e6%a6%82%e8%a6%81" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&title=CoreData%e6%a6%82%e8%a6%81" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f&title=CoreData%e6%a6%82%e8%a6%81" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2fcoredata%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="http://u2takey.github.io/blog/coredata/" class="image featured">
+            <img src="/img/2015/02/winter.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<h1 id="注">注</h1>
+
+<ol>
+<li>本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。</li>
+</ol>
+
+<h1 id="一-入门-升职加薪">一.入门（升职加薪）</h1>
+
+<ol>
+<li>coreData实现什么样的目的:类似archiving实现对象的保存和恢复</li>
+<li>coreData相比archiving等有什么样的优势:
+
+<ul>
+<li>managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理.</li>
+<li>节约内存,取一部分对象subset</li>
+<li>gui-based editor / setting of default values and attribute value validation</li>
+<li>disjoint sets of edits of your objects.-&gt;不save 改变就是discard</li>
+<li>easy upgrade/migration.<br /></li>
+</ul></li>
+<li>和<code>直接使用</code>sqlite的不同
+
+<ul>
+<li>No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you.</li>
+<li>core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件</li>
+<li>方便支持undo,redo</li>
+<li>你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建)
+<br /></li>
+</ul></li>
+</ol>
+
+<blockquote>
+<p>!!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。<a href="http://support.microsoft.com/kb/283878/zh-cn">一个简单的数据库标准化的参考</a></p>
+</blockquote>
+
+<h2 id="1-几个重要的概念-class">1. 几个重要的概念/class</h2>
+
+<h5 id="1-1-managed-object-model">1.1 Managed Object Model:</h5>
+
+<p>You can think of this as the <code>database schema</code>. It is a class that contains definitions for each of the objects (also called “Entities”) that you are storing in the database是描述应用程序的数据模型，这个模型包含实体（Entity），特性（Property），读取请求（Fetch Request）等. Usually, you will use the visual editor you just peeked at to set up what objects are in the database, what their attributes, and how they relate to each other. However, you can do this with code too!</p>
+
+<h5 id="1-2-persistent-store-coordinator">1.2 Persistent Store Coordinator:</h5>
+
+<p>You can think of this as the <code>database connection</code>. Here’s where you set up the actual names and locations of what databases will be used to store the objects, and any time a managed object context needs to save something it goes through this single coordinator,处理底层的对数据文件的读取与写入。一般我们无需与它打交道.</p>
+
+<h5 id="1-3-managed-object-context">1.3 Managed Object Context:</h5>
+
+<p>You can think of this as a <code>“scratch pad”</code>(object space) for objects that come from the database. It’s also the most important of the three for us, because we’ll be working with this the most. Basically, whenever you need to get objects, insert objects, or delete objects, you call methods on the managed object context (or at least most of the time!);Managed Object Context是Managed Object和其他CoreData模块的桥梁因此你应该总希望keep reference to it.</p>
+
+<h5 id="1-4-managed-object">1.4 Managed Object</h5>
+
+<p>代表一个Entity的类;</p>
+
+<h5 id="1-5-entity-description">1.5 Entity Description</h5>
+
+<p>注意理解这样的概念Entity是数据,但是它同时又是一个抽象的概念,他必须有实体的类来描述和代表他.一个Entity Description就是用来描述这个Entity的,描述的目的可能是为了对Entity进行fetch等相关操作等;而Entity取出来了之后又需要一个实体类来代表它,这个类就是一个managed object类.</p>
+
+<pre><code>//Managed Object Model--包含-》Entity Description&lt;---Entity---&gt;managed object;
+//见图1.2,1.3.managed object和Entity Description
+
+//你可以从datamodel获取Entity Description
+NSEntityDescription *employeeEntity = [[managedObjectModel entitiesByName] objectForKey:@&quot;Employee&quot;];
+
+//也可以从context直接获取
+NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&quot;Employee&quot; inManagedObjectContext:context];
+
+// Entity Description 和managed object是彼此关联的 可以通过Entity Description得到managed object
+// 也可以
+</code></pre>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/24752_1314847532b1OE.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<p>Figure 1-1  A simple Core Data stack—1</p>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/2000.jpg" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<p>Figure 1-2  A simple Core Data stack-2</p>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20001.jpg" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<p>Figure 1-3  Managed objects in a context, and a table in the persistent store</p>
+
+<h2 id="2-定义数据-data-model-managed-objects">2. 定义数据:Data model＝》Managed Objects</h2>
+
+<h5 id="2-1-subclass-of-nsmanagedobject-可以看成是数据表的一个record-a-record-in-a-table-in-a-database">2.1. (Subclass of)NSManagedObject 可以看成是数据表的一个record。a record in a table in a database.</h5>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20002.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<h5 id="2-2-nsmanagedobjectmodel和-nsmanagedobject的关系-model是描述数据模型的schema-是一组entity-description-objects-instances-of-nsentitydescription-的集合-一个entity-description描述一个entity-a-table-in-a-database">2.2. NSManagedObjectModel和 NSManagedObject的关系:model是描述数据模型的schema,是一组entity description objects (instances of NSEntityDescription)的集合; 一个entity description描述一个entity (a table in a database).</h5>
+
+<blockquote>
+<p>当datamodel变化的时候core data不能读取数据-&gt;类似的存储方式都有类似问题,coredata提供了管理这种变化的方法&ndash;<a href="http://genekc07.stowers.org/Users/mec/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_1.iOSLibrary.docset/Contents/Resources/Documents/documentation/Cocoa/Conceptual/CoreDataVersioning/Articles/Introduction.html#//apple_ref/doc/uid/TP40004399">Core Data Model Versioning and Data Migration Programming Guide</a></p>
+</blockquote>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20003.jpg" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<p>Figure 2-1 illustrates the relationship between an entity description in a model, a table in the database, and a managed object corresponding to a single record in the table.</p>
+
+<h5 id="2-3-with-core-data-you-cannot-retrieve-only-certain-attributes-of-an-object-you-have-to-retrieve-the-entire-object-也就是说不能像数据库一样只拿出一项中的部分列出来-如果要实现这样的功能需要-factor-the-objects-into-serverral-pieces-把对象分成几部分">2.3. With Core data you cannot retrieve only certain attributes of an object – you have to retrieve the entire object. 也就是说不能像数据库一样只拿出一项中的部分列出来,如果要实现这样的功能需要 factor the objects into serverral pieces 把对象分成几部分.</h5>
+
+<h5 id="2-4-auto-generating-model-files-自动生成数据object的oc文件-也可以不使用-用setvalueforkey解决">2.4. Auto Generating Model Files:自动生成数据object的oc文件(也可以不使用 用setvalueforkey解决)</h5>
+
+<p>使用自动生成的subclass of NSManagedObject有什么好处:</p>
+
+<ol>
+<li>Better support from the development tools.(You get code completion for property accessor methods, and compile-time type- and symbol-checking;这就是为什么在自动生成的class里头属性都声明为dynamic,coredate自动runtime生成accessor;同时也没有delloc因为生命周期由coredata管理&ndash;自己新建要自己管理)</li>
+<li>Support for custom methods for the entity.(In many situations, you want to provide special logic for the entity, such as validation methods or derived properties)</li>
+</ol>
+
+<blockquote>
+<p>生成完成之后你会发现datamodel里的entity class也被自动更新了.</p>
+</blockquote>
+
+<h5 id="2-5-managed-objects-entity-的一些属性">2.5.Managed Objects / Entity 的一些属性</h5>
+
+<ul>
+<li>NSEntityDescription:是一个Entity的描述,而Entity是一个抽象的概念,并没有Entity这样一个类,Entity代表了<code>数据</code>,可以继承Entity,使用abstract entity;Entity是与NSManagedObject这个<code>class</code>对应的(但是并不完全等同),一个Entity由NSManagedObject代表;而一个Entity的<code>instance</code>由一个NSManagedObject的实例代表,实际理解中可以把Entity等同于代表其的NSManagedObject class。Abstract Entities - you will not create any instances of that entity.</li>
+<li>NSEntityDescription 有属性 NSAttributeDescription 和 NSRelationshipDescription,NSFetchedPropertyDescription 用于描述Entity在schema中的特点.</li>
+<li>Properties:对象的属性,包括Attribute,Relationship,Fetched Property</li>
+<li>Attribute可以是transient说明实际不会被保存,一般是runtime的时候生成的.Index/optional类似数据库中的概念类似.可以设置类型和validation。但是不建议设置optinal,尤其是数值类型的,尽量不设置optinal并设置default value因为数据库中的NULL不同于0或者@&ldquo;&rdquo; (数据库中的NULL取出来对应nil并没有问题,predicate也可以设置nil,但是nil = 0这样会造成混淆&ndash;nil=NULL=Nil=0,[NSNull null]!=0);另:保存为transformable是用二进制/nsdata/BLOB来保存数据,通常来说不是一个好的选择,和binary data类型区别仅仅是多了一个转换过程(比如nscolor可以转成字符串或16进制数而不是nsdata,二进制不易于查询)</li>
+<li>fetch property:Relationship 在对象中变成对应关系的指针,使用时load对应的数据.Fetched properties represent weak, one-way relationships.</li>
+<li>Fetch Request Templates:是常用的Fetch Request,用的时候从datamodel获取即可直接使用 managedObjectModel.fetchRequestTemplatesByName[@&ldquo;FetchRequestName&rdquo;]</li>
+<li>User Info Dictionaries:和datamode绑定的其他任意信息.</li>
+<li>Configurations:一般用于多个数据store（详解见第二部分）。</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>Managed Object Model 抽象</th>
+<th>NSManagedObjectModel</th>
+<th>数据模型</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Entity</td>
+<td>NSEntityDescription</td>
+<td>抽象数据类型，相当于数据库中的表</td>
+</tr>
+
+<tr>
+<td>Property</td>
+<td>NSPropertyDescription Entity</td>
+<td>特性，相当于数据库表中的一列</td>
+</tr>
+
+<tr>
+<td>&gt; Attribute</td>
+<td>NSAttributeDescription</td>
+<td>基本数值型属性（如Int16,BOOL,Date等类型的属性）非标准Transformable&hellip;</td>
+</tr>
+
+<tr>
+<td>&gt; Relationship</td>
+<td>NSRelationshipDescription</td>
+<td>属性之间的关系</td>
+</tr>
+
+<tr>
+<td>&gt; Fetched Property</td>
+<td>NSFetchedPropertyDescription</td>
+<td>查询属性（类似一种单向关系，易用查询）</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20004.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20005.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<p>Figure 2-2  Entity description with two attributes and a relationship</p>
+
+<h2 id="3-操作数据-添加-fetch-删除managed-objects">3.操作数据:添加、fetch、删除Managed Objects.</h2>
+
+<h5 id="3-1-添加-insertnewobjectforentityforname-inmanagedobjectcontext-获得对应的managedobject-修改属性-save">3.1 添加:insertNewObjectForEntityForName:inManagedObjectContext: 获得对应的ManagedObject-》修改属性 (-》save)</h5>
+
+<h5 id="3-2-fetch-需要一个fetch-request-设置其nsentitydescription-predicate-sort-descriptor-类似一个select语句-open-the-scheme-drop-down-in-xcode-and-select-edit-scheme-select-the-run-scheme-and-select-the-arguments-tab-add-the-following-argument-com-apple-coredata-sqldebug-1-这样可以让你看到原始的select语句">3.2 Fetch:需要一个fetch request,设置其NSEntityDescription,predicate,sort descriptor＝》类似一个select语句(Open the Scheme drop-down in Xcode and select ‘Edit Scheme…’. Select the ‘Run’ scheme and select the ‘Arguments’ tab. Add the following argument: “-com.apple.CoreData.SQLDebug 1”.这样可以让你看到原始的select语句)</h5>
+
+<ul>
+<li>NSFetchedResultsController用于为tableviewfetch数据,经过了优化可以节约大量代码以及保证效率和内存上的优化.</li>
+<li>You cannot fetch using a predicate based on transient properties</li>
+<li>可以fetch特定的object用来检查是不是被删掉了 感觉使用场景不是很高[NSPredicate predicateWithFormat:@&ldquo;self == %@&rdquo;, targetObject];也可以使用@&ldquo;self IN %@&rdquo;,arrayOfManagedObjectIDs</li>
+<li>如果要fetch一个特定的比如value是最大值的可以使用 NSExpression(详见programing guide)</li>
+<li>fetch 设置成 super-entity 的时候会得到满足要求的所有sub-entities和super-entity(如果不是abstract的)</li>
+</ul>
+
+<h5 id="3-3-删除-managedobjectcontext-deleteobject-save-删除的时候需要考虑relationship不同的relationship删除策略不一样">3.3 删除: managedObjectContext deleteObject: (-》save)(删除的时候需要考虑relationship不同的relationship删除策略不一样)</h5>
+
+<ul>
+<li>删除会发送 NSManagedObjectContextObjectsDidChangeNotification</li>
+</ul>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20006.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<h5 id="3-4-操作关系属性-得到关系属性的时候获得的是一个fault-object">3.4 操作关系属性:得到关系属性的时候获得的是一个fault object</h5>
+
+<ul>
+<li>一对一关系:</li>
+<li>一(多)对多关系:</li>
+<li>一个隐含的知识点:当你取得一个关系的object的时候没有必要设置一个fetch,会自动帮你取得(开始是个fault)
+<br /></li>
+</ul>
+
+<pre><code>// 使用KVC
+NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&quot;employees&quot;];
+[employees addObject:newEmployee];
+[employees removeObject:firedEmployee];
+
+
+// or 使用自动生成的关系操作方法
+[aDepartment addEmployeesObject:newEmployee];
+[aDepartment removeEmployeesObject:firedEmployee];
+
+//1.是.employees返回的是set 和 mutableSetValueForKey 返回的有所不同 操作这个set
+// KVO change notifications are not emitted and the inverse relationship is not updated correctly.
+[aDepartment.employees addObject:newEmployee]; // do not do this!
+</code></pre>
+
+<blockquote>
+<p>值得注意的是:无论是添加 还是 删除 对managedObjectContext 操作的同时还需要对你用于缓存的datasource进行同样的操作.managedObjectContext 会缓存object 必要的时候 可以 managedObjectContext refreshObject:mergeChanges/reset可以清空缓存以节约内存,同时可用[[context registeredObjects] count]查看.</p>
+</blockquote>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20007.gif" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<p>Figure 3-1 fetch request 示意</p>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20008.jpg" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<p>Figure 3-2 fetch 流程</p>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/20009.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<h1 id="二-理解-迎娶白富美">二.理解（迎娶白富美）</h1>
+
+<h2 id="1-理解-managed-object-model">1.理解 Managed Object Model</h2>
+
+<h5 id="1-1-创建managed-object-model-可以使用xib或者完全使用code">1.1 创建Managed Object Model:可以使用xib或者完全使用code</h5>
+
+<h5 id="1-2-compiling-model-xcdatamodeld是-deployment-resource-经过特殊的编译器-momc-编译-成为-mom文件-momd是文件夹">1.2 Compiling Model:xcdatamodeld是 deployment resource 经过特殊的编译器 momc 编译 成为 mom文件(momd是文件夹)</h5>
+
+<h5 id="1-3-loading-model-两种方法initwithcontentsofurl-指定url-preferred-mergedmodelfrombundles-如果不需要分开model的时候">1.3 Loading Model:两种方法initWithContentsOfURL (指定url,preferred)/ mergedModelFromBundles (如果不需要分开model的时候)</h5>
+
+<h5 id="1-4-change-model-如果还需要访问existing-stores中的数据就不能直接修改model-而是应该-have-a-versioned-model-修改时创建一个新的version-model旧的不动">1.4 Change Model:如果还需要访问existing stores中的数据就不能直接修改Model，而是应该 have a versioned model;修改时创建一个新的version model旧的不动</h5>
+
+<h5 id="1-5-localizing-model-providing-localizationdictionary">1.5 Localizing Model:providing localizationDictionary</h5>
+
+<p>
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200010.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200011.png" alt="Alt Text" />
+        </span></p>
+    
+
+</p>
+
+<h2 id="2-理解-managed-object">2.理解 Managed Object</h2>
+
+<h5 id="2-1-概念-managed-object是nsmanagedobject的instance-associated-with-an-entity-description-an-instance-of-nsentitydescription-associated-with-a-managed-object-context-record-和-object是一对多的关系-因为可能有几个context等情况-几个object可能对应的是同一个数据">2.1 概念:Managed Object是NSManagedObject的instance / associated with an entity description (an instance of NSEntityDescription)/ associated with a managed object context /record 和 object是一对多的关系,因为可能有几个context等情况,几个object可能对应的是同一个数据</h5>
+
+<h5 id="2-2-object-accessor">2.2 Object Accessor:</h5>
+
+<ul>
+<li>自动生成Accessor(注:如果你自己写Accessor, dynamically-generated method snever replace your own code.);</li>
+<li>基于KVO;</li>
+<li>没有执行NSCopying协议</li>
+<li>weak会被当成strong,只能用strong和copy</li>
+<li>To Many Relation会变成NSSet;同样自动生成catgory方法;</li>
+<li>dynamic的方法子类不能super</li>
+<li>如果要自定义accessor方法需要符合特定的规则:按照顺序调用<code>relevant access and KVO change notification methods</code>(Important: You are strongly encouraged to use dynamic properties)见下面的代码示例.</li>
+</ul>
+
+<h5 id="2-3-managed-object-和其他对象有三点主要不同">2.3 Managed Object 和其他对象有三点主要不同:</h5>
+
+<ul>
+<li>instance of (subclass of) NSManagedObject</li>
+<li>Exists in an environment defined by its <code>managed object context</code></li>
+<li>Has an associated <code>entity description</code> that describes the properties of the object</li>
+<li>(核心元素是一个context一个entity description)</li>
+<li>(创建不用alloc;初始化不重载init见3.1)
+<br /></li>
+</ul>
+
+<pre><code> @interface Department (PrimitiveAccessors)
+  - (NSString *)primitiveName;
+  - (void)setPrimitiveName:(NSString *)newName;
+  @end
+
+ 
+- (NSString *)name
+{
+      [self willAccessValueForKey:@&quot;name&quot;];
+      NSString *myName = [self primitiveName];
+      [self didAccessValueForKey:@&quot;name&quot;];
+      return myName;
+}
+- (void)setName:(NSString *)newName
+{
+      [self willChangeValueForKey:@&quot;name&quot;];
+      [self setPrimitiveName:newName];
+      [self didChangeValueForKey:@&quot;name&quot;];
+}
+
+
+//类似的当你想实现一个scalar type (NSInteger or CGFloat), or one supported by NSKeyValueCoding (NSRect, NSPoint, NSSize, NSRange),
+
+@property CGFloat radius;
+
+- (CGFloat)radius
+  {
+      [self willAccessValueForKey:@&quot;radius&quot;];
+      float f = _radius;//数据库取出存在_radius =&gt; 转换成 float
+      [self didAccessValueForKey:@&quot;radius&quot;];
+      return f;
+}
+</code></pre>
+
+<h2 id="3-操作-managed-object-2-3续">3.操作 Managed Object（2.3续）</h2>
+
+<h5 id="3-1-managed-object-ids-and-uris">3.1 Managed Object IDs and URIs</h5>
+
+<p>A managed object ID uniquely identifies the same managed object both between managed object contexts in a single application, and in multiple applications (as in distributed systems);创建的时候是temporary的可以用isTemporaryID测试.类似表里的primary key但是范围更大.可以转换成url的形式URIRepresentation通过他们可以直接获取对应的object;甚至可以在不同的store里传递</p>
+
+<h5 id="3-2-validation">3.2 Validation</h5>
+
+<p>需要指出的是，<code>KVC是不会自动调用键值验证方法的</code>，就是说我们需要手动验证。<code>但是有些技术，比如CoreData会自动调用</code>。</p>
+
+<ol>
+<li>Property-Level Validation：下面的第一个方法</li>
+<li>Inter-Property validation: 下面的第2-4个方法;提供了更多validation;和Property-Level Validation不同的是,validation的关注点在于不同的combination是不是符合要求;注意要类似[super validateForInsert:error]先运行父类的方法to ensure that individual property validation methods are also invoked</li>
+</ol>
+
+<pre><code>//如下的4个方法在Managed Object的生命周期会自动触发 
+// validateValue 会自动调用- (BOOL)validate&lt;Key&gt;:error: (可以重载他而不要直接重载validateValue)
+- (BOOL)validateValue:(id *)value forKey:(NSString *)key error:(NSError **)error;    // KVC
+
+// 下面三个是Inter-Property validation 提供了更多的validate的机会
+- (BOOL)validateForDelete:(NSError **)error;
+- (BOOL)validateForInsert:(NSError **)error;
+- (BOOL)validateForUpdate:(NSError **)error;
+// 要注意的一个问题是:对于error的处理,error可能是已经存在的,这时候需要添加error信息而不是重新赋值
+//be sure to combine errors and not overwrite them
+</code></pre>
+
+<h5 id="3-3-faults">3.3 Faults</h5>
+
+<p>In some situations a managed object may be a “fault”—an object whose property values have not yet been loaded from the external store. When you access persistent property values, a fault “fires” and its persistent data is retrieved automatically from the store.可以手动把一个方法变成fault:NSManagedObjectContext&rsquo;s refreshObject:mergeChanges:.比方说object的一个关系属性在没使用的时候就是一个fault。</p>
+
+<h5 id="3-4-ensuring-data-is-up-to-date">3.4 Ensuring Data Is Up-to-Date</h5>
+
+<p>refreshObject:mergeChanges:根据mergeChanges的flag操作是merge还是变成fault;注意transient的属性刷新之后会变成pre-refresh value after awakeFromFetch is invoked；为了保证transient的属性是最新的可以设置**IsValiddid属性并在TurnIntoFault方法里写成NO</p>
+
+<h5 id="3-5-不同context-copy-and-paste">3.5 不同context copy and paste</h5>
+
+<pre><code>NSManagedObjectID *objectID = [managedObject objectID];
+NSManagedObject *copy = [context2 objectWithID:objectID];
+</code></pre>
+
+<h2 id="4-object内存管理">4.Object内存管理:</h2>
+
+<h5 id="4-1-managed-object和context">4.1 Managed Object和Context</h5>
+
+<ul>
+<li>两者是关联的,但是关系是weak的。不过context在其中的Managed Object的pending transaction/reset/rollback之前是有strong reference的(undomanager在之后都有strong reference);</li>
+<li>设置setRetainsRegisteredObjects可以是使得Managed Object依赖与context(但是一般不会这么做,因为你自己可以设置一个NSArray之类的集合来管理你的数据的生命周期)</li>
+<li>使用上面讲过的refreshObject:mergeChanges也可以用来打破object之间的retain cycle</li>
+</ul>
+
+<h5 id="4-2-object-life-cycle">4.2  Object Life-Cycle</h5>
+
+<ul>
+<li>init:three different ways you can customize initialization —by overriding initWithEntity: insertIntoManagedObjectContext:, awakeFromInsert, or awakeFromFetch 不要override init ;推荐使用awakeFromInsert, or awakeFromFetch分别在insetNew和fetch方法之后被执行</li>
+<li>validate:not override validateValue:forKey:error: ; override validate<Key>:error:. If you want to validate inter-property values, you can override validateForUpdate: and/or related validation methods; validateValue:forKey:error: 内部会自动调用 validate<Key>:error:</li>
+<li>delloc:不要重载delloc;core data负责释放资源,释放之前调用didTurnIntoFault;可以重载didTurnIntoFault</li>
+<li>fault:an object whose property values have not yet been loaded from the external data store
+1.你的datasource何时被释放
+2.context的cache何时释放</li>
+</ul>
+
+<h5 id="4-3-faulting-and-uniquing">4.3  Faulting and Uniquing</h5>
+
+<ol>
+<li>A fault is a placeholder object that represents 1)<code>a managed object that has not yet been fully realized</code>, or 2)<code>a collection object that represents a relationship</code>.</li>
+<li>fault的使用相当于lazy loading除非使用否则不需要真正的fetch,这样就减少了内存使用.fetch的动作叫做fire the fault.如果是fault那么可能是下面说的情况2)在缓存中，3)不在缓存中,需要fetch 可以用isFault测试,如果是NO那么肯定是情况1)
+
+<ul>
+<li>1)对象已经在 context 中，这种操作基本上是没有任何代价的。</li>
+<li>2)对象不在 context 中，但是因为你最近从 store 中取出过对象，所以持久化存储协调器缓存了对象的值。这个操作还算廉价（但是，一些操作会被锁住）。操作耗费最昂贵的情况是</li>
+<li>3)当 context 和持久化存储协调器都是第一次访问这个对象，这种情况必须通过 store 从 SQLite 数据库取回。</li>
+<li>注意区别fault和cache的区别,变成fault还是占内存的,只是变成一个类似指针的占位符,然后fault
+之后可能会释放所有对它的reference,这时会将其清除出cache,不占任何内存;(分别用refeash和reset强制控制)。</li>
+</ul></li>
+<li>refreshObject:mergeChanges:可以手动把一个object变成fault=&gt;会发出 didTurnIntoFault 的message;可以重载做&rdquo;housekeeping&rdquo;类的一些操作; key-value observing (KVO) change notifications也会被sent</li>
+<li>Uniquing是保证an entry in a persistent store is associated with only one managed object的技术</li>
+</ol>
+
+<h2 id="5-relationship-and-fetch-properties">5.Relationship And fetch properties</h2>
+
+<h5 id="5-1-relationship定义">5.1 Relationship定义</h5>
+
+<ul>
+<li>Relationship可以同时是optional的又设置上下限,意思是可以不存在,但是如果存在那么就要满足上下限要求</li>
+<li>Relationship Delete Rules:Deny;Nullify;Cascade;No Action几种rule觉得delete对象时的操作(很好理解详见programming guide -p84)。当你移动,删除一个带有关系的object的时候,coredata 会自动为你检查规则和更新关系.</li>
+<li>programming guide -p84有一个many to many的例子,大多时候数据库效率不高或者难于使用并不是framework的问题,而是设计不合理。</li>
+<li>Relationship一般都是双向的,创建一个单向的relationship基本没什么好处.</li>
+</ul>
+
+<h5 id="5-2-fetched-properties">5.2 Fetched Properties</h5>
+
+<ul>
+<li>Fetched properties represent weak, one-way relationships但是不同的是fetch语句实现的,因此是array，evaluated lazily;</li>
+<li>Fetched properties和fetch request template都是fetch语句,不同的是Fetched properties会cache fetch的object（这里要注意keep data up-to-date）;同时Fetched properties一般用在fetch 不同的table之间的元素;fetch request template;fetch的是一个table里的元素 两者都可以在代码里通过一个fetch语句实现</li>
+</ul>
+
+<h5 id="5-3-例子-获得一组数据中创建日期最早的那个的日期">5.3 例子 获得一组数据中创建日期最早的那个的日期</h5>
+
+<ul>
+<li>方法1:fetch所有的排序,取第一个;===&gt;设置fetch limit只取一个</li>
+<li>方法2:fetch所有的排序,取第一个;和1不同的是只fetch日期这个字段</li>
+</ul>
+
+<pre><code>[fetchRequest setResultType:NSDictionaryResultType]; 
+[fetchRequest setPropertiesToFetch:[NSArray arrayWithObject:@&quot;createdAt&quot;]];
+</code></pre>
+
+<ul>
+<li><p>方法3:使用Expression效率最高NSExpression＝＝》NSExpressionDescription＝》setPropertiesToFetch</p>
+
+<h2 id="6-using-persistent-stores">6. Using Persistent Stores</h2>
+
+<h5 id="6-1-创建一个store-nspersistentstore">6.1 创建一个store:NSPersistentStore</h5></li>
+</ul>
+
+<pre><code>//使用这个函数会创建一个NSPersistentStore代表了你的存储文件,一个隐含的操作是,如果存储文件不存在,就会先创建它
+NSPersistentStoreCoordinator *psc = [moc persistentStoreCoordinator];
+NSPersistentStore *roStore = [psc addPersistentStoreWithType:NSXMLStoreType
+                                configuration:nil URL:url options:options error:&amp;error];
+
+//你不会直接使用NSPersistentStore;而是应该通过NSPersistentStoreCoordinator
+</code></pre>
+
+<h5 id="6-2-changing-a-store-s-type-and-location">6.2 Changing a Store’s Type and Location</h5>
+
+<pre><code>NSPersistentStoreCoordinator *psc = [aManagedObjectContext
+persistentStoreCoordinator];
+NSURL *oldURL = &lt;#URL identifying the location of the current store#&gt;;
+NSURL *newURL = &lt;#URL identifying the location of the new store#&gt;;
+NSError *error = nil;
+NSPersistentStore *xmlStore = [psc persistentStoreForURL:oldURL];
+NSPersistentStore *sqLiteStore = [psc migratePersistentStore:xmlStore
+									   toURL:newURL options:nil withType:NSSQLiteStoreType error:&amp;error];									   									   
+</code></pre>
+
+<h5 id="6-3-associate-metadata-with-a-store">6.3 Associate Metadata With a Store</h5>
+
+<ul>
+<li>get： metadataForPersistentStore:/ metadataForPersistentStoreOfType:URL:error:.</li>
+<li>set: setMetadata:forPersistentStore:/setMetadata:forPersistentStoreOfType:URL:error:.</li>
+<li>use: 一个使用场景是migration=&gt;使用系统自动创建的metadata就可以了isConfiguration:compatibleWithStoreMetadata;metadata不同(如版本)就会返回NO</li>
+</ul>
+
+<h2 id="7-how-to-preload-and-import-existing-data">7.How To Preload and Import Existing Data</h2>
+
+<p>两种解决方案</p>
+
+<ol>
+<li><p><code>Fill in Core Data on startup from external source</code>. For this the app can start up, notice that the database hasn’t been imported yet, and start reading in data from an external source (such as an SQLite database or XML file) and then start inserting the data into Core Data.</p></li>
+
+<li><p><code>Provide pre-filled in SQLite database</code>. For this we’ll let Core Data create the database structure for us based on the model, and then we populate the database with a utility app. The utility app could be a Mac or iPhone app that uses Core Data to populate the database via Core Data APIs, or some kind of program that fills in the SQLite database directly. Once the database is populated, just include it with the app and make the app use it as the default database if no database already exists. 就是代码里先生成sqlite文件,加入bundle,初始化的时候 copyItemAtURL 复制到本地目录.这是苹果文档官方推荐的方法,但是考虑到先创建数据库文件可能使得文件比较大,这个需要权衡.</p></li>
+</ol>
+
+<h2 id="8-fetched-results-controller-uitableview">8.Fetched Results Controller&lt;=&gt;UITableView</h2>
+
+<h5 id="8-1-简介">8.1 简介</h5>
+
+<ol>
+<li>ee</li>
+<li>组成
+
+<ul>
+<li>A fetch request (NSFetchRequest instance):The one difference in this fetch request is that it must have at least one sort descriptor</li>
+<li>A managed object context</li>
+<li>A section name key path:用于coredata自动根据keypathname分割成几个section</li>
+<li>A cache name</li>
+</ul></li>
+</ol>
+
+<h1 id="三-深入-走上人生巅峰">三.深入（走上人生巅峰）</h1>
+
+<h2 id="1-migrations">1.Migrations</h2>
+
+<h5 id="1-1-lightweight-migrations">1.1 Lightweight Migrations</h5>
+
+<p>一类比较小的迁移,不需要创建mapping model;coredata会自动使用sql语句进行迁移，不需要load data或者转移整个store所以效率一般很高.(迁移之后iOS 5 keeps only the post-migration version)</p>
+
+<pre><code>//1.1
+NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+				[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, //tells the persistent store coordinator to automatically migrate the data.
+				[NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];//tells the persistent store coordinator to infer 推断 the mapping model.
+				
+//对于1,2 设置 NSInferMappingModelAutomaticallyOption为NO!!!
+
+</code></pre>
+
+<p>
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200012.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200013.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200014.png" alt="Alt Text" />
+        </span></p>
+    
+
+</p>
+
+<h5 id="1-2-migrate-with-mapping-model">1.2 Migrate With Mapping Model</h5>
+
+<p>当改变不限于1.1所述的轻度迁移的时候，需要创建mappging model-》tell Core Data how to execute the migration</p>
+
+<ul>
+<li>NSAddEntityMappingType;NSRemoveEntityMappingType;NSCopyEntityMappingType lightweight migrations就可以处理</li>
+<li>NSTransformEntityMappingType可以用 value expression 来描述</li>
+<li>NSCustomEntityMappingType 则需要创建一个 NSEntityMigrationPolicy 的子类来描述;</li>
+</ul>
+
+<p>处理步骤
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200015.png" alt="Alt Text" />
+        </span></p>
+    
+
+</p>
+
+<pre><code>//Core Data runs your migration in three stages.这个步骤细节可以由NSEntityMigrationPolicy来描述
+1. It creates the objects in the destination model, including their attributes, based on the objects in the source model. ==&gt;createDestinationInstancesForSourceInstance
+2. It creates the relationships among the objects in the destination model.=&gt;createRelationshipsForDestinationInstance
+3. It validates the data in the destination model and saves it.=&gt;performCustomValidationForEntityMapping
+
+//2 example use expression: FUNCTION($manager, &quot;destinationInstancesForEntityMappingNamed:sourceInstances:&quot; , &quot;CanvasToCanvas&quot;, $source.canvases)
+//caveat:createDestinationInstancesForSourceInstance的时候如果不super那么需要associateSourceInstance: withDestinationInstance: forEntityMapping: 
+</code></pre>
+
+<h5 id="1-3-渐进式迁移-progressive-migrations-http-objccn-io-issue-4-7">1.3 渐进式迁移 (Progressive Migrations)<a href="http://objccn.io/issue-4-7/">http://objccn.io/issue-4-7/</a></h5>
+
+<h2 id="2-multiple-context">2. Multiple context</h2>
+
+<h5 id="2-1-如何处理冲突">2.1 如何处理冲突</h5>
+
+<ol>
+<li>Conflict Detection and Optimistic Locking:Optimistic Locking的原理When Core Data fetches an object from a persistent store, it takes a snapshot of its state,保存的时候要比较这个数据库里的对象和它的snapshot,如果不同说明这个对象在fetch之后被别人改过了=&gt;Optimistic Locking(snapshot也会占用内存,它通过叫snapshot reference counting的机制管理)</li>
+<li>如何处理冲突由NSErrorMergePolicy(默认)/NSMergeByPropertyStoreTrumpMergePolicy/NSMergeByPropertyObjectTrumpMergePolicy/NSOverwriteMergePolicy指定</li>
+<li>Communicating Changes Between Contexts: NSManagedObjectContextDidSave</li>
+</ol>
+
+<h2 id="3-concurrency-with-core-data">3. Concurrency with Core Data</h2>
+
+<blockquote>
+<p>For the most part, AppKit and UIKit are not thread safe; in particular, on OS X Cocoa bindings and controllers are not thread safe—if you are using these technologies, multi-threading may be complex.</p>
+</blockquote>
+
+<h5 id="3-1-typically-recommended-approach">3.1 typically-recommended approach</h5>
+
+<ul>
+<li>Create a separate managed object context for each thread and share a single persistent store coordinator.不应该在不同thread传递Managed Object;如果要访问同一个entity,可以使用objectID或者构建同样的fetch;</li>
+<li>一般没有必要给Managed Object或者contexts lock(programming guide p137描述了需要lock the persistent store coordinator的情况)</li>
+</ul>
+
+<h5 id="3-2-track-changes-in-other-threads-using-notifications">3.2 Track Changes in Other Threads Using Notifications</h5>
+
+<ul>
+<li>没错,Notifications..需要注意的是哪个线程post的Notifications那个线程才能收到,因此你需要在你save的contex所在的线程使用,比如使用performselector [mergeChangesFromContextDidSaveNotification] on Thread(你想通知的context所在的线程)</li>
+<li>你希望收到通知的线程注册NSManagedObjectContextDidSaveNotification;(再把他作为参数发给mergeChangesFromContextDidSaveNotification.这样 the context is able to safely merge the changes.);由于不同object和不同context关联,所以不改直接传递。可以传递objectid</li>
+<li>Fetch in the Background for UI Responsiveness;<code>fetch操作是经过内部优化的,如果需要coredata会自己新建线程来加快操作</code>.但是如果还是需要在子线程fetch来防止UI阻塞,你可以新建background thread 以及对应的context,在其中fetch然后传递object ID;另一个线程通过object ID获取已经cache了object</li>
+<li>在后台线程保存:If you need to save on a background thread, you must write additional code such that the main thread prevents the application from quitting until all the save operation is complete.</li>
+</ul>
+
+<pre><code>注意点
+1.Use one NSPersistentStoreCoordinator per program. You don't need them per thread.
+2.Create one NSManagedObjectContext per thread.
+3.Never pass an NSManagedObject on a thread to the other thread.
+4.Instead, get the object IDs via -objectID and pass it to the other thread.
+More rules:
+
+5.Make sure you save the object into the store before getting the object ID. Until saved, they're temporary, .and you can't access them from another thread.
+6.And beware of the merge policies if you make changes to the managed objects from more than one thread.
+7.NSManagedObjectContext's -mergeChangesFromContextDidSaveNotification: is helpful.
+</code></pre>
+
+<h2 id="4-core-data-performance-提高效率的一些提示">4.Core Data Performance 提高效率的一些提示</h2>
+
+<ol>
+<li>Predicates的使用有技巧:一个例子 (salary &gt; 5000000) AND (lastName LIKE &lsquo;Quincey&rsquo;) 比 (lastName LIKE &lsquo;Quincey&rsquo;) AND (salary &gt; 5000000) 好；<code>巧用subquery能极大的提高fetch效率</code></li>
+<li>fetchLimit:如果数据很多需要设置它,一次拉一部分数据;fetch某个需要的属性其他不要。</li>
+<li>不要fire 一个 fault的时候,不要fire</li>
+<li>Batch Faulting and Pre-fetching with the SQLite Store:有些情况下一个个的fire fault反而效率很低,这时候可以<code>batch fault</code>（fetch request using a predicate with an IN operator或者use the NSFetchRequest method setReturnsObjectsAsFaults）<code>Pre-fetching</code>（use the NSFetchRequest method setRelationshipKeyPathsForPrefetching）【p145】</li>
+
+<li><p>节约内存</p>
+
+<ul>
+<li>re-fault an individual managed object using NSManagedObjectContext’s refreshObject:mergeChanges: method</li>
+<li>create a fetch request you can set includesPropertyValues to NO 当你确定不需要使用这个property的时候</li>
+<li>reset method of NSManagedObjectContext to remove all managed objects associated with a context</li>
+<li>If you iterate over a lot of objects, you may need to use local autorelease pool block</li>
+<li>If you do not intend to use Core Data’s undo functionality, you can reduce your application&rsquo;s resource requirements by setting the context’s undo manager to nil.</li>
+<li>break cycles by re-faulting objects (again by using the refreshObject:mergeChanges</li>
+</ul></li>
+
+<li><p><code>使用instrument中的coredata工具</code></p></li>
+</ol>
+
+<pre><code>//不会fire fault的方法
+isEqual:, hash, superclass, class, self, zone, isProxy, isKindOfClass:, isMemberOfClass:, conformsToProtocol:, respondsToSelector:, description, managedObjectContext, entity, objectID, isInserted, isUpdated, isDeleted, and isFault.
+</code></pre>
+
+<h2 id="5-multiple-persistent-store-custom-persistent-store">5.Multiple Persistent Store &amp; Custom Persistent Store</h2>
+
+<ul>
+<li>Multiple Persistent Store可以使用configuration进行配置,这样可以split data 到不同的data store;[persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:@&ldquo;Passwords&rdquo; URL:passwordStoreURL options:nil error:&amp;error]</li>
+<li>coredata允许创建custom的存储方式,但是这种方式只能是atomic store types（An atomic store is a store that writes its entire content all at once every time a save operation is executed）.比如可以创建类似CSV file的保存格式.</li>
+<li>需继承NSAtomicStore:在NSAtomicStore重载load和save等方法.比方说对于一个CSV文件,就是对文本的解析和保存,类似json的解析和序列化.而使用NSAtomicStore的好处是底层保存格式发生改变的时候上层代码不需要改变.</li>
+</ul>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200016.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<h2 id="6-补充nspredicate和nsexpression入门">6.补充NSPredicate和NSExpression入门</h2>
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200017.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+<h5 id="6-1-nsexpression是nspredicate的内部实现方式">6.1 NSExpression是NSPredicate的内部实现方式</h5>
+
+<p><code>NSPredicate是非常有用的，是Cocoa的优势之一。</code>在<code>处理数据</code>的时候要善于使用NSPredicate可以使代码清楚简介。(比如当你在filter一个array的时候不要再使用遍历了)</p>
+
+<pre><code>//用NSExpression实现
+NSExpression *exprName = [NSExpression expressionForKeyPath:@&quot;name&quot;];
+ NSExpression *exprJ = [NSExpression expressionForConstantValue:@&quot;J&quot;];
+NSPredicate *p1 = [NSComparisonPredicate predicateWithLeftExpression:exprName rightExpression:exprJ modifier:NSDirectPredicateModifier type:NSBeginsWithPredicateOperatorType options:0];
+NSExpression *exprAge = [NSExpression expressionForKeyPath:@&quot;age&quot;];
+NSExpression *lower = [NSExpression expressionForConstantValue:[NSNumber numberWithInt:20]];
+NSExpression *upper = [NSExpression expressionForConstantValue:[NSNumber numberWithInt:35]];
+NSExpression *exprRange = [NSExpression expressionForAggregate:[NSArray arrayWithObjects:lower, upper, nil]];
+NSPredicate *p2 = [NSComparisonPredicate predicateWithLeftExpression:exprAge rightExpression:exprRange modifier:NSDirectPredicateModifier type:NSBetweenPredicateOperatorType options:0];
+NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:p1, p2, nil]];
+
+//改写成NSPredicate+query language
+NSPredicate *predicate = [NSPredicate predicateWithFormat:@&quot;name BEGINSWITH %@ AND age BETWEEN {%d, %d}&quot;, @&quot;J&quot;, 20, 35];
+</code></pre>
+
+<h5 id="6-2-nspredicate相关">6.2 NSPredicate相关</h5>
+
+<p>
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200018.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200019.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200020.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200021.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200022.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200023.png" alt="Alt Text" />
+        </span></p>
+    
+
+
+
+
+
+    
+    
+        
+        
+        
+        
+    
+
+    
+    
+    
+
+    
+    
+
+
+
+
+    
+    
+        
+    
+
+
+    
+
+    
+        <p><span class="image center-image">
+            <img src="/img/2015/02/200024.png" alt="Alt Text" />
+        </span></p>
+    
+
+</p>
+
+<h4 id="参考">参考</h4>
+
+<blockquote>
+<p>注意:部分资料比较陈旧,请查看最新版</p>
+</blockquote>
+
+<ol>
+<li><a href="http://www.cnblogs.com/mapleyuan/p/3355615.html">coredata 学习指南</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/cdProgrammingGuide.html">Core Data Tutorial for iOS</a></li>
+<li><a href="https://developer.apple.com/library/ios/samplecode/CoreDataUtility/Introduction/Intro.html">Core Data Utility Tutorial</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/cdProgrammingGuide.html">Core Data Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Predicates/predicates.html">Predicate Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/DataManagement/Conceptual/CoreDataSnippets/Introduction/Introduction.html">Core Data Snippets</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreDataVersioning/Articles/Introduction.html">Core Data Model Versioning and Data Migration Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/AtomicStore_Concepts/Introduction/Introduction.html">Atomic Store Programming Topics</a></li>
+<li><a href="https://developer.apple.com/Library/ios/documentation/DataManagement/Conceptual/IncrementalStorePG/Introduction/Introduction.html">Incremental Store Programming Guide</a></li>
+<li><a href="http://www.informit.com/articles/article.aspx?p=2160906">Avoiding Ten Big Mistakes iOS Developers Make with Core Data</a></li>
+<li><a href="http://blog.csdn.net/kesalin/article/details/6739319">深入浅出 Cocoa 之 Core Data</a></li>
+<li><a href="http://objccn.io/">objccn.io有8篇翻译的coredata介绍的文章</a></li>
+<li><a href="http://useyourloaf.com/blog/2012/01/19/core-data-queries-using-expressions.html">Core Data Queries Using Expressions</a></li>
+<li><a href="http://www.raywenderlich.com/14742/core-data-on-ios-5-tutorial-how-to-work-with-relations-and-predicates">How To Work with Relations and Predicates</a></li>
+<li><a href="http://www.nsguy.com/blog/2014/02/09/learning-core-data/">CoreData并发处理</a></li>
+<li>Pro Core Data for iOS【Data Access and Persistence Engine for iPhone, iPad, and iPod touch
+Second Edition】</li>
+<li><a href="http://nshipster.cn/nspredicate/">NSPredicate</a></li>
+</ol>
+
+<h4 id="资源">资源</h4>
+
+<ol>
+<li><a href="http://sourceforge.net/projects/sqlitebrowser/files/latest/download">sqlitebrowser</a></li>
+</ol>
+
+<h4 id="更新">更新</h4>
+
+<ol>
+<li>2014-8-3第一版</li>
+<li>2014-8-11增加了来自Pro Core Data for iOS的内容</li>
+</ol>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesios--macos'>IOS &amp; MacOS</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"
+                class="button big previous">对技术的态度</a></li>
+    
+
+    
+        <li><a href="http://u2takey.github.io/blog/first/"
+                class="button big next">first blog</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'http:\/\/u2takey.github.io\/blog\/coredata\/';
+    var disqus_title = 'CoreData概要';
+    var disqus_url = 'http:\/\/u2takey.github.io\/blog\/coredata\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-07-24'>
+                                    July 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2015-02-01'>
+                                    February 1, 2015</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2012-10-14'>
+                                    October 14, 2012</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; Hugo Future Imperfect. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+
