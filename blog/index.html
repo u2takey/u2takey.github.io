@@ -25,18 +25,18 @@
         
         
             
-                <meta name="description" content="HTML5 UP theme, Future Imperfect with some extra goodies, ported by Julio Pescador. Powered by Hugo">
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
             
         
 
         
         <meta property="og:title" content="Blogs" />
-<meta property="og:description" content="HTML5 UP theme, Future Imperfect with some extra goodies, ported by Julio Pescador. Powered by Hugo" />
+<meta property="og:description" content="Theme ported by Julio Pescador. Powered by Hugo" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="http://u2takey.github.io/blog/" />
 
 
-<meta property="og:updated_time" content="2016-07-02T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-07-24T00:00:00&#43;00:00"/>
 
 
 
@@ -48,7 +48,7 @@
 
         
 <meta itemprop="name" content="Blogs">
-<meta itemprop="description" content="HTML5 UP theme, Future Imperfect with some extra goodies, ported by Julio Pescador. Powered by Hugo">
+<meta itemprop="description" content="Theme ported by Julio Pescador. Powered by Hugo">
 
 
         
@@ -188,11 +188,15 @@
 
                 
                     <li>
-                        <a href="http://u2takey.github.io/blog/first/"><p>First</p></a>
+                        <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
                     </li>
                 
                     <li>
-                        <a href="http://u2takey.github.io/blog/creating-a-new-theme/"><p>Creating a New Theme</p></a>
+                        <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"><p>对技术的态度</p></a>
                     </li>
                 
             </ul>
@@ -214,7 +218,7 @@
     <header>
     <div class="title">
         
-            <h2><a href="http://u2takey.github.io/blog/first/">First</a></h2>
+            <h2><a href="http://u2takey.github.io/blog/first/">first blog</a></h2>
         
         
     </div>
@@ -224,8 +228,8 @@
         
 
         <time class="published"
-            datetime='2016-07-02'>
-            July 2, 2016</time>
+            datetime='2016-07-24'>
+            July 24, 2016</time>
         <span class="author">leiiwang</span>
         
             <p>1 minute read</p>
@@ -253,12 +257,12 @@
         
 
         <a href="http://u2takey.github.io/blog/first/" class="image featured">
-            <img src="/img/2016/07/pic02.jpg" alt="" />
+            <img src="/img/2016/07/sun-1520452_960_720.jpg" alt="" />
         </a>
     
 
 
-    <p>没错，智慧在这里安家了。</p>
+    <p>过去也写过一些博客，大都散落在各个平台，许多地方，有些遗失不见了。 从今天开始它们会在这儿安家。</p>
 
     <footer>
         <ul class="actions">
@@ -289,7 +293,7 @@
 
     
     
-        <li><a href='/categoriesother'>Other</a></li>
+        <li><a href='/categories%E9%9A%8F%E6%84%9F'>随感</a></li>
     
 </ul>
 
@@ -301,10 +305,8 @@
     <header>
     <div class="title">
         
-            <h2><a href="http://u2takey.github.io/blog/creating-a-new-theme/">Creating a New Theme</a></h2>
+            <h2><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h2>
         
-        
-            <p>Learn how to create a theme on Hugo</p>
         
     </div>
     <div class="meta">
@@ -313,11 +315,11 @@
         
 
         <time class="published"
-            datetime='2014-09-28'>
-            September 28, 2014</time>
-        <span class="author">Theme author</span>
+            datetime='2015-02-01'>
+            February 1, 2015</time>
+        <span class="author">leiiwang</span>
         
-            <p>35 minute read</p>
+            <p>12 minute read</p>
         
         
     </div>
@@ -341,17 +343,17 @@
 
         
 
-        <a href="http://u2takey.github.io/blog/creating-a-new-theme/" class="image featured">
-            <img src="/img/2014/09/pic01.jpg" alt="" />
+        <a href="http://u2takey.github.io/blog/coredata/" class="image featured">
+            <img src="/img/2015/02/winter.jpg" alt="" />
         </a>
     
 
 
-    <p>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&rsquo;t cover using CSS to style your theme. We&rsquo;ll start with creating a new site with a very basic template.</p>
+    <p>注 本文是学习中觉得比较重要的知识点的摘录,需要系统的学习请查看manual,需要速成教程本文的参考部分提供的几篇不错的文章。 一.入门（升职加薪） coreData实现什么样的目的:类似archiving实现对象的保存和恢复 coreData相比archiving等有什么样的优势: managing changes of your model objects==&gt;支持redo undo;支持对象之间的关系管理. 节约内存,取一部分对象subset gui-based editor / setting of default values and attribute value validation disjoint sets of edits of your objects.-&gt;不save 改变就是discard easy upgrade/migration. 和直接使用sqlite的不同 No primary keys means no foreign keys, either; Core Data manages the relationships between entities, or tables, and performs any necessary joins for you. core data本身不是ORM,是object graph management framework，它可以选择sqlite，xml，plist或是其他方式作为持久化方案;不能读取任意的sqlite文件 方便支持undo,redo 你只需要worry about data,而不是data storage mechanisms.(举个例子many to many的关系会导致core data自动创建一个关系表,如果直接使用sqlte你需要自己考虑并创建) !!!注意:尽管不需要考虑存储机制,但是data model的设计还是需要深思熟虑的.Relational Database Normalization的规则在设计datamodel的时候同样需要被考虑。一个简单的数据库标准化的参考 1.</p>
 
     <footer>
         <ul class="actions">
-            <li><a href="http://u2takey.github.io/blog/creating-a-new-theme/" class="button big">Continue Reading</a></li>
+            <li><a href="http://u2takey.github.io/blog/coredata/" class="button big">Continue Reading</a></li>
         </ul>
         <ul class="stats">
     
@@ -378,7 +380,7 @@
 
     
     
-        <li><a href='/categorieshugo'>Hugo</a></li>
+        <li><a href='/categoriesios--macos'>IOS &amp; MacOS</a></li>
     
 </ul>
 
@@ -390,7 +392,7 @@
     <header>
     <div class="title">
         
-            <h2><a href="http://u2takey.github.io/blog/goisforlovers/">(Hu)go Template Primer</a></h2>
+            <h2><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h2>
         
         
     </div>
@@ -400,11 +402,11 @@
         
 
         <time class="published"
-            datetime='2014-04-02'>
-            April 2, 2014</time>
-        <span class="author">Unknown Author</span>
+            datetime='2012-10-14'>
+            October 14, 2012</time>
+        <span class="author">leiiwang</span>
         
-            <p>7 minute read</p>
+            <p>1 minute read</p>
         
         
     </div>
@@ -428,17 +430,17 @@
 
         
 
-        <a href="http://u2takey.github.io/blog/goisforlovers/" class="image featured">
-            <img src="/img/2014/04/pic02.jpg" alt="" />
+        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/" class="image featured">
+            <img src="/img/2012/10/lake-scenery-1365288_960_720.jpg" alt="" />
         </a>
     
 
 
-    <p>Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates. This document is a brief primer on using go templates.</p>
+    <p>这是12年我写在新浪博客的文章，现在看起来觉得&hellip;.我为什么会写这么奇怪的东西&hellip;那时候我一定不太正常。 知名的技术博客酷壳上有一篇文章，谈到对技术的态度，但大都是从技术角度谈技术，并没有真正谈到，面对日新月异的技术，一个人应该拥有的生活态度和哲学态度。 相比之下，《禅与摩托车维修艺术》则给出了一些很具体的思考和答案，也解决了我的一些困惑。 我出生在80年代，那时候技术革命开始在中国发生，在我的童年里经历了收音机，黑白电视机，彩色电视机，电脑等等变化，应接不暇。 和每个孩子一样，我起初对这些东西充满好奇，也对这些东西的神奇魔力无比困惑，我拆过随身听，电脑，电视机，当看到那些小小的元 件拼接在一起就可以实现那么多不可思议的事。可是后来我的态度却从好奇渐渐变成了麻木，以致厌恶。为什么会这样呢，这一点不难解释， 这件事也随时在发生。技术日新月异，各种革命性的东西不断出现，即使是一个精力充沛的智商超群的成年人一辈子也无法了解其中的千万 分之一，这些技术被人们使用，接受，然而却不在人们的控制，了解之中。这是一件令人苦恼的事。想象一下，一个人因为在使用电视机的时 候，却在苦恼于不能明白其实现原理，这时候他的好奇心对他来说反倒是一种折磨。这种情况逐渐发展，许多时候人们开始拒绝接受新技术， 他们习惯与那些了解的东西，认为那才是原始的。对于不断变化的时代，仿佛自己受到背叛，也因为无法控制而缺乏安全感。 他们眼中世界的本来面目是自己了解的一面，技术的变化没有使人人兴奋，反倒使人疲惫，因为他感到即使了解了那些新的东西，他们也还是很快会被背叛。 这就是现实。尽管他们不曾放弃科技带来的好处，却时常宣称：原始的才是最好的，上帝的世界是几千年前的世界，他们甚至认为，对技术的贪婪会导致人类的灭亡。 这或许是一种反智主义在这个技术时代的体现。 有这种思想的人随处可见，每天都可以见到拒绝服用医药，拒绝手术，拒绝使用电脑，手机，拒绝生物技术，拒绝基因产品和各种新科技的人们。 甚至，他们有时候在这个世界的力量强大得能够影响到许多技术的发展（尽管是暂时的）。 可是。这是世界的本来面目，也是自我的本来面目。 技术与原始，并没有多少矛盾，这些矛盾只是理智的产物罢了。这里说的理智并不是我们在研究技术时所用的智力因素， 而是那种存在于这个世界，在人们心中，总试图分析这个世界，把这个世界分解成一个个矛盾体的分别心。从这点来说， 技术的使用和发展并不需要理智，技术只是工具，是人们的本性。技术的就是原始的，当人们第一次试图用石头制造一个工具的时候，技术就开始发展，他是人类的一部分。 承认了这些，你才能树立好正确对待技术的态度，因为在这个时代，对待技术的态度，就是对待生活的态度。</p>
 
     <footer>
         <ul class="actions">
-            <li><a href="http://u2takey.github.io/blog/goisforlovers/" class="button big">Continue Reading</a></li>
+            <li><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/" class="button big">Continue Reading</a></li>
         </ul>
         <ul class="stats">
     
@@ -465,7 +467,7 @@
 
     
     
-        <li><a href='/categoriesgo'>Go</a></li>
+        <li><a href='/categories%E9%9A%8F%E6%84%9F'>随感</a></li>
     
 </ul>
 
@@ -481,8 +483,7 @@
     
 
     
-        <li><a href="/blog/page/2/"
-                class="button big next">Next Page</a></li>
+        <li><a href="#" class="disabled button big next">Next Page</a></li>
     
 </ul>
 
@@ -495,13 +496,13 @@
             
             
                 
-                    <a href="/" class="logo"><img src="/img/main/logo.jpg" alt="Hugo Future Imperfect" /></a>
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
                 
             
             
                 <header>
                     <h2>LeiiWang&#39;s Blog</h2>
-                    <p>大部分时光如河水流过，剩一些沙子在这里沉淀。</p>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
                 </header>
             
             <ul class="icons">
@@ -586,13 +587,13 @@
                     <li>
                         <article>
                             <header>
-                                <h3><a href="http://u2takey.github.io/blog/first/">First</a></h3>
+                                <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
                                 
                                     
                                 
                                 <time class="published" datetime=
-                                    '2016-07-02'>
-                                    July 2, 2016</time>
+                                    '2016-07-24'>
+                                    July 24, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -600,28 +601,32 @@
                     <li>
                         <article>
                             <header>
-                                <h3><a href="http://u2takey.github.io/blog/creating-a-new-theme/">Creating a New Theme</a></h3>
+                                <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
                                 
                                     
                                 
                                 <time class="published" datetime=
-                                    '2014-09-28'>
-                                    September 28, 2014</time>
+                                    '2015-02-01'>
+                                    February 1, 2015</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2012-10-14'>
+                                    October 14, 2012</time>
                             </header>
                         </article>
                     </li>
                 
 
-                
-                    <li>
-                        <ul class="actions">
-                            <li><a href=
-                            
-                                /blog/
-                            
-                            class="button">View more posts</a></li>
-                        </ul>
-                    </li>
                 
             </ul>
         </section>
@@ -644,8 +649,8 @@
                     <li>
                         <article>
                             <header>
-                                <a href="/categories/hugo/">Hugo</a>
-                                <span style="float:right;">3</span>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
                             </header>
                         </article>
                     </li>
@@ -653,25 +658,7 @@
                     <li>
                         <article>
                             <header>
-                                <a href="/categories/go/">Go</a>
-                                <span style="float:right;">1</span>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <a href="/categories/jekyll/">Jekyll</a>
-                                <span style="float:right;">1</span>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <a href="/categories/other/">Other</a>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -685,7 +672,7 @@
         
         <section class="blurb">
             <h2>About</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tellus lacus, auctor vehicula molestie quis, tempor quis velit. Quisque in quam ac leo efficitur vulputate. Phasellus ullamcorper aliquam sodales. Maecenas sit amet condimentum ipsum. Proin sit amet ligula elit. Mauris.</p>
+            <p>又一个博客.</p>
 
             <ul class="actions">
                 <li><a href="/about/" class="button">Learn More</a></li>
