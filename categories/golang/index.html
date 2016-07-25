@@ -260,7 +260,7 @@
         
 
         <a href="http://u2takey.github.io/blog/golang_faq/" class="image featured">
-            <img src="/img/2016/04/sunset-1506365_960_720.jpg" alt="" />
+            <img src="/img/2016/04/decay-1209997_960_720.jpg" alt="" />
         </a>
     
 
@@ -644,10 +644,30 @@
                     <script src="/js/main.min.js"></script>
                 
             
+                
+                    <script src="/js/autohidingnavbar.js"></script>
+                
+            
         
 
             
             <script>hljs.initHighlightingOnLoad();</script>
+            <script>(function($){
+  $(function(){ 
+    var scroll = $(document).scrollTop();
+    var headerHeight = $('.header').outerHeight();
+    $(window).scroll(function() {
+      var scrolled = $(document).scrollTop();
+      if (scrolled > scroll && scrolled > headerHeight){
+         $('#header').hide();
+      } else {
+         $('#header').show();
+      }           
+      scroll = $(document).scrollTop(); 
+     });
+
+   });
+})(jQuery);;</script>
             
     </body>
 </html>
