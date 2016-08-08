@@ -82,17 +82,20 @@ influxdb目前更新很快，不同版本之间概念差异很大，阅读时请
 
 &lt;p&gt;InfluxDB是一个时间序列数据库，支持高效的写入和查询。 InfluxDB被设计来存储开发监控，应用指标，物联网传感数据，实时分析等产生的大量的时间序列数据。&lt;/p&gt;
 
-&lt;p&gt;为什么选择InfluxDB？
-- 为高性能数据存储的时间序列数据而编写。使用TSM引擎支持高存取速度和数据压缩。
-- go语言编写，无外部依赖。
-- 简单高效的HTTP（S）的API。
-- 支持Graphite，collectd和OpenTSDB插件。
-- 高可用性设置（基于Relay）。
-- 类SQL的查询语言，轻松查询汇总数据。
-- tags支持建立索引，以便快速，高效的查询。
-- 保留策略（Retention policies）有效地自动清理过期数据。
-- 连续查询（Continuous queries）自动汇总数据以提高查询效率。
-- 内置Web管理界面。&lt;/p&gt;
+&lt;p&gt;为什么选择InfluxDB？&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;为高性能数据存储的时间序列数据而编写。使用TSM引擎支持高存取速度和数据压缩。&lt;/li&gt;
+&lt;li&gt;go语言编写，无外部依赖。&lt;/li&gt;
+&lt;li&gt;简单高效的HTTP（S）的API。&lt;/li&gt;
+&lt;li&gt;支持Graphite，collectd和OpenTSDB插件。&lt;/li&gt;
+&lt;li&gt;高可用性设置（基于Relay）。&lt;/li&gt;
+&lt;li&gt;类SQL的查询语言，轻松查询汇总数据。&lt;/li&gt;
+&lt;li&gt;tags支持建立索引，以便快速，高效的查询。&lt;/li&gt;
+&lt;li&gt;保留策略（Retention policies）有效地自动清理过期数据。&lt;/li&gt;
+&lt;li&gt;连续查询（Continuous queries）自动汇总数据以提高查询效率。&lt;/li&gt;
+&lt;li&gt;内置Web管理界面。&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h3 id=&#34;1-2-a-name-2-a-下载和安装&#34;&gt;1.2. &lt;a name=&#39;-2&#39;&gt;&lt;/a&gt;下载和安装&lt;/h3&gt;
 
