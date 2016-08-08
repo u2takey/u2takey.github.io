@@ -37,7 +37,7 @@
         <meta property="og:title" content="influxdb中文精简文档" />
 <meta property="og:description" content="参考https://docs.influxdata.com/influxdb/v0.13/, 当前版本0.13, 这是一个简化版的文档，摘录文档中我认为比较重要的概念内容, influxdb目前更新很快，不同版本之间概念差异很大，阅读时请注意当前最新版本。 1. 概要 1.1. 简介 1.2. 下载和安装 1.3. 入门 1.3.1. 创建数据库 1.3.2. 读写数据 2. 指南 2.1. 写数据 2.1.1. 使用HTTP API创建数据库 2.1.2. 使用HTTP API写入数据 2.1.3. 写多个点数据 2.1.4. 从文件中写入点 2.1.5. Schemaless Design 2.1.6. 关于REST&hellip; 2.1.7. HTTP响应概要 2.2. 查询数据 2.2.1. 使用 HTTP API查询数据 2.2.2. 多个查询 2.2.3. 查询数据的其他选项 2.3. 缩减采样和数据保留（Downsampling and Data Retention） 2.3.1. 保留策略retention policies 2.3.2. 连续查询 2.3.3. 结合 RPs and CQs - 一个案例研究 2.4. 硬件指南 3. 概念 1. 概要 1.1." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/" />
+<meta property="og:url" content="https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/" />
 
 
 <meta property="og:updated_time" content="2016-07-31T00:00:00&#43;00:00"/>
@@ -136,7 +136,7 @@
                 <a class="fa-search" href="#search">Search</a>
                 <form id="search" method="get" action="//google.com/search">
                     <input type="text" name="q" placeholder="Search" />
-                    <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+                    <input type="hidden" name="q" value="site:https://u2takey.github.io/">
                 </form>
             </li>
             <li class="menu">
@@ -153,7 +153,7 @@
         <section>
             <form class="search" method="get" action="//google.com/search">
                 <input type="text" name="q" placeholder="Search" />
-                <input type="hidden" name="q" value="site:http://u2takey.github.io/">
+                <input type="hidden" name="q" value="site:https://u2takey.github.io/">
             </form>
         </section>
 
@@ -205,23 +205,23 @@
 
                 
                     <li>
-                        <a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/"><p>influxdb中文精简文档</p></a>
+                        <a href="https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/"><p>influxdb中文精简文档</p></a>
                     </li>
                 
                     <li>
-                        <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
+                        <a href="https://u2takey.github.io/blog/first/"><p>first blog</p></a>
                     </li>
                 
                     <li>
-                        <a href="http://u2takey.github.io/blog/golang_faq/"><p>Golang笔记之常见问题</p></a>
+                        <a href="https://u2takey.github.io/blog/golang_faq/"><p>Golang笔记之常见问题</p></a>
                     </li>
                 
                     <li>
-                        <a href="http://u2takey.github.io/blog/launchd/"><p>Launchd Tutorial</p></a>
+                        <a href="https://u2takey.github.io/blog/launchd/"><p>Launchd Tutorial</p></a>
                     </li>
                 
                     <li>
-                        <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
+                        <a href="https://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
                     </li>
                 
             </ul>
@@ -240,43 +240,43 @@
             
 
 
-<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&text=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3&via=" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&text=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3&via=" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -293,7 +293,7 @@
     <header>
     <div class="title">
         
-            <h1><a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/">influxdb中文精简文档</a></h1>
+            <h1><a href="https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/">influxdb中文精简文档</a></h1>
             
         
         
@@ -318,43 +318,43 @@
             
 
 
-<li><a href="//twitter.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&text=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3&via=" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&text=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3&via=" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f&title=influxdb%e4%b8%ad%e6%96%87%e7%b2%be%e7%ae%80%e6%96%87%e6%a1%a3" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by leiiwang&body=http%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2finfluxdb%25E4%25B8%25AD%25E6%2596%2587%25E7%25B2%25BE%25E7%25AE%2580%25E6%2596%2587%25E6%25A1%25A3%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -379,7 +379,7 @@
 
         
 
-        <a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/" class="image featured">
+        <a href="https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/" class="image featured">
             <img src="/img/2016/07/bagan-1137015_960_720.jpg" alt="" />
         </a>
     
@@ -997,7 +997,7 @@ time			               mean_phone		       mean_website
 </article>
 <ul class="actions pagination">
     
-        <li><a href="http://u2takey.github.io/blog/first/"
+        <li><a href="https://u2takey.github.io/blog/first/"
                 class="button big previous">first blog</a></li>
     
 
@@ -1011,9 +1011,9 @@ time			               mean_phone		       mean_website
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'shortname';
-    var disqus_identifier = 'http:\/\/u2takey.github.io\/blog\/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3\/';
+    var disqus_identifier = 'https:\/\/u2takey.github.io\/blog\/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3\/';
     var disqus_title = 'influxdb中文精简文档';
-    var disqus_url = 'http:\/\/u2takey.github.io\/blog\/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3\/';
+    var disqus_url = 'https:\/\/u2takey.github.io\/blog\/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -1124,7 +1124,7 @@ time			               mean_phone		       mean_website
                     <li>
                         <article>
                             <header>
-                                <h3><a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/">influxdb中文精简文档</a></h3>
+                                <h3><a href="https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/">influxdb中文精简文档</a></h3>
                                 
                                     
                                 
@@ -1138,7 +1138,7 @@ time			               mean_phone		       mean_website
                     <li>
                         <article>
                             <header>
-                                <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
+                                <h3><a href="https://u2takey.github.io/blog/first/">first blog</a></h3>
                                 
                                     
                                 
@@ -1152,7 +1152,7 @@ time			               mean_phone		       mean_website
                     <li>
                         <article>
                             <header>
-                                <h3><a href="http://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h3>
+                                <h3><a href="https://u2takey.github.io/blog/golang_faq/">Golang笔记之常见问题</a></h3>
                                 
                                     
                                 
@@ -1166,7 +1166,7 @@ time			               mean_phone		       mean_website
                     <li>
                         <article>
                             <header>
-                                <h3><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h3>
+                                <h3><a href="https://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h3>
                                 
                                     
                                 
@@ -1180,7 +1180,7 @@ time			               mean_phone		       mean_website
                     <li>
                         <article>
                             <header>
-                                <h3><a href="http://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
+                                <h3><a href="https://u2takey.github.io/blog/coredata/">CoreData概要</a></h3>
                                 
                                     
                                 

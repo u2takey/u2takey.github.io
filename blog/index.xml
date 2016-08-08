@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blogs on LeiiWang&#39;s Blog</title>
-    <link>http://u2takey.github.io/blog/</link>
+    <link>https://u2takey.github.io/blog/</link>
     <description>Recent content in Blogs on LeiiWang&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 31 Jul 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://u2takey.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://u2takey.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>influxdb中文精简文档</title>
-      <link>http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</link>
+      <link>https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</link>
       <pubDate>Sun, 31 Jul 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</guid>
+      <guid>https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</guid>
       <description>
 
 &lt;blockquote&gt;
@@ -594,10 +594,10 @@ time			               mean_phone		       mean_website
     
     <item>
       <title>first blog</title>
-      <link>http://u2takey.github.io/blog/first/</link>
+      <link>https://u2takey.github.io/blog/first/</link>
       <pubDate>Sun, 24 Jul 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://u2takey.github.io/blog/first/</guid>
+      <guid>https://u2takey.github.io/blog/first/</guid>
       <description>
 
 &lt;h1 id=&#34;过去也写过一些博客-大都散落在各个平台-许多地方-有些遗失不见了&#34;&gt;过去也写过一些博客，大都散落在各个平台，许多地方，有些遗失不见了。&lt;/h1&gt;
@@ -608,10 +608,10 @@ time			               mean_phone		       mean_website
     
     <item>
       <title>Golang笔记之常见问题</title>
-      <link>http://u2takey.github.io/blog/golang_faq/</link>
+      <link>https://u2takey.github.io/blog/golang_faq/</link>
       <pubDate>Fri, 01 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://u2takey.github.io/blog/golang_faq/</guid>
+      <guid>https://u2takey.github.io/blog/golang_faq/</guid>
       <description>
 
 &lt;blockquote&gt;
@@ -817,10 +817,10 @@ fmt.Println(&amp;quot;sa:&amp;quot;, sa, &amp;quot;sb:&amp;quot;, sb)// saa: [0 
     
     <item>
       <title>Launchd Tutorial</title>
-      <link>http://u2takey.github.io/blog/launchd/</link>
+      <link>https://u2takey.github.io/blog/launchd/</link>
       <pubDate>Fri, 01 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://u2takey.github.io/blog/launchd/</guid>
+      <guid>https://u2takey.github.io/blog/launchd/</guid>
       <description>
 
 &lt;hr /&gt;
@@ -1241,10 +1241,10 @@ kqueue: free bsd版本的epoll&lt;/p&gt;
     
     <item>
       <title>CoreData概要</title>
-      <link>http://u2takey.github.io/blog/coredata/</link>
+      <link>https://u2takey.github.io/blog/coredata/</link>
       <pubDate>Sun, 01 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://u2takey.github.io/blog/coredata/</guid>
+      <guid>https://u2takey.github.io/blog/coredata/</guid>
       <description>
 
 &lt;h1 id=&#34;注&#34;&gt;注&lt;/h1&gt;
@@ -1390,7 +1390,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/24752_1314847532b1OE.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/24752_1314847532b1OE.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1429,7 +1429,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/2000.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/2000.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1468,7 +1468,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20001.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20001.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1511,7 +1511,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20002.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20002.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1554,7 +1554,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20003.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20003.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1663,7 +1663,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20004.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20004.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1700,7 +1700,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20005.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20005.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1759,7 +1759,7 @@ NSEntityDescription *employeeEntity = [NSEntityDescription entityForName:@&amp;q
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20006.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20006.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1824,7 +1824,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20007.gif&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20007.gif&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1863,7 +1863,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20008.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20008.jpg&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1902,7 +1902,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/20009.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/20009.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1953,7 +1953,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200010.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200010.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -1989,7 +1989,7 @@ NSMutableSet *employees = [aDepartment mutableSetValueForKey:@&amp;quot;employee
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200011.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200011.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2274,7 +2274,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200012.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200012.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2310,7 +2310,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200013.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200013.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2346,7 +2346,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200014.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200014.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2394,7 +2394,7 @@ NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200015.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200015.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2520,7 +2520,7 @@ isEqual:, hash, superclass, class, self, zone, isProxy, isKindOfClass:, isMember
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200016.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200016.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2559,7 +2559,7 @@ isEqual:, hash, superclass, class, self, zone, isProxy, isKindOfClass:, isMember
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200017.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200017.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2617,7 +2617,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200018.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200018.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2653,7 +2653,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200019.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200019.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2689,7 +2689,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200020.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200020.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2725,7 +2725,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200021.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200021.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2761,7 +2761,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200022.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200022.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2797,7 +2797,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200023.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200023.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2833,7 +2833,7 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@&amp;quot;name BEGINS
 
     
         &lt;p&gt;&lt;span class=&#34;image center-image&#34;&gt;
-            &lt;img src=&#34;http://u2takey.github.io/img/2015/02/200024.png&#34; alt=&#34;Alt Text&#34; /&gt;
+            &lt;img src=&#34;https://u2takey.github.io/img/2015/02/200024.png&#34; alt=&#34;Alt Text&#34; /&gt;
         &lt;/span&gt;&lt;/p&gt;
     
 
@@ -2883,10 +2883,10 @@ Second Edition】&lt;/li&gt;
     
     <item>
       <title>对技术的态度</title>
-      <link>http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/</link>
+      <link>https://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/</link>
       <pubDate>Sun, 14 Oct 2012 00:00:00 +0000</pubDate>
       
-      <guid>http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/</guid>
+      <guid>https://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/</guid>
       <description>
 
 &lt;blockquote&gt;

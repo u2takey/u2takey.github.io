@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Db on LeiiWang&#39;s Blog</title>
-    <link>http://u2takey.github.io/categories/db/</link>
+    <link>https://u2takey.github.io/categories/db/</link>
     <description>Recent content in Db on LeiiWang&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 31 Jul 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://u2takey.github.io/categories/db/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://u2takey.github.io/categories/db/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>influxdb中文精简文档</title>
-      <link>http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</link>
+      <link>https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</link>
       <pubDate>Sun, 31 Jul 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</guid>
+      <guid>https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</guid>
       <description>
 
 &lt;blockquote&gt;
