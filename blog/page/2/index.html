@@ -36,7 +36,7 @@
 <meta property="og:url" content="http://u2takey.github.io/blog/" />
 
 
-<meta property="og:updated_time" content="2015-02-01T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-04-01T00:00:00&#43;00:00"/>
 
 
 
@@ -188,6 +188,10 @@
 
                 
                     <li>
+                        <a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/"><p>influxdb中文精简文档</p></a>
+                    </li>
+                
+                    <li>
                         <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
                     </li>
                 
@@ -203,10 +207,6 @@
                         <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
                     </li>
                 
-                    <li>
-                        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"><p>对技术的态度</p></a>
-                    </li>
-                
             </ul>
         </section>
 
@@ -220,6 +220,94 @@
         
             
         
+
+        
+            <article class="post">
+    <header>
+    <div class="title">
+        
+            <h2><a href="http://u2takey.github.io/blog/launchd/">Launchd Tutorial</a></h2>
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-04-01'>
+            April 1, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="http://u2takey.github.io/blog/launchd/" class="image featured">
+            <img src="/img/2016/04/sunset-1506365_960_720.jpg" alt="" />
+        </a>
+    
+
+
+    <p><ol>
+<li>Launchd Tutorial 1.1. 什么是launchd 1.2. 为什么要launchd 1.3. Daemons and Agents 1.4. 行为配置 1.5. 操作 1.6. recipes（例子） 1.6.1. 例1 app自动重启 1.6.2. 例2 一个crontab任务（同时监控文件state） 1.6.3. 例3 一个inetd任务 2. Launchd Sourcecode 2.1. 准备知识 2.2. 命令launchctl list的运行流程 2.3. 命令launchctl load的运行流程 3. 参考 1. Launchd Tutorial 1.1. 什么是launchd A unified, open-source service management framework for starting, stopping and managing daemons, applications, processes, and scripts. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License.</li>
+</ol>
+</p>
+
+    <footer>
+        <ul class="actions">
+            <li><a href="http://u2takey.github.io/blog/launchd/" class="button big">Continue Reading</a></li>
+        </ul>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesios--macos'>IOS &amp; MacOS</a></li>
+    
+</ul>
+
+    </footer>
+</article>
 
         
             <article class="post">
@@ -505,6 +593,20 @@
                     <li>
                         <article>
                             <header>
+                                <h3><a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/">influxdb中文精简文档</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-07-31'>
+                                    July 31, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
                                 
                                     
@@ -558,20 +660,6 @@
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2012-10-14'>
-                                    October 14, 2012</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -616,6 +704,15 @@
                             <header>
                                 <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
                                 <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/db/">Db</a>
+                                <span style="float:right;">1</span>
                             </header>
                         </article>
                     </li>
@@ -747,12 +844,14 @@
     var headerHeight = $('.header').outerHeight();
     $(window).scroll(function() {
       var scrolled = $(document).scrollTop();
-      if (scrolled > scroll && scrolled > headerHeight){
+      if ((scrolled - scroll) > 50 && scrolled > headerHeight){
          $('#header').hide();
-      } else {
+      } else if((scroll - scrolled) > 100 || scrolled < headerHeight * 2) {
          $('#header').show();
-      }           
+      } 
+      console.log(scrolled - scroll);          
       scroll = $(document).scrollTop(); 
+      
      });
 
    });

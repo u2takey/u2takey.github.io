@@ -61,7 +61,7 @@
 
 
 
-<meta itemprop="keywords" content="Golang,IOS &amp; MacOS,随感," />
+<meta itemprop="keywords" content="Db,Golang,IOS &amp; MacOS,随感," />
 
         
 
@@ -205,6 +205,10 @@
 
                 
                     <li>
+                        <a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/"><p>influxdb中文精简文档</p></a>
+                    </li>
+                
+                    <li>
                         <a href="http://u2takey.github.io/blog/first/"><p>first blog</p></a>
                     </li>
                 
@@ -218,10 +222,6 @@
                 
                     <li>
                         <a href="http://u2takey.github.io/blog/coredata/"><p>CoreData概要</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/"><p>对技术的态度</p></a>
                     </li>
                 
             </ul>
@@ -581,6 +581,20 @@
                     <li>
                         <article>
                             <header>
+                                <h3><a href="http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/">influxdb中文精简文档</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-07-31'>
+                                    July 31, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="http://u2takey.github.io/blog/first/">first blog</a></h3>
                                 
                                     
@@ -634,20 +648,6 @@
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="http://u2takey.github.io/blog/%E5%AF%B9%E6%8A%80%E6%9C%AF%E7%9A%84%E6%80%81%E5%BA%A6/">对技术的态度</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2012-10-14'>
-                                    October 14, 2012</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -692,6 +692,15 @@
                             <header>
                                 <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
                                 <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/db/">Db</a>
+                                <span style="float:right;">1</span>
                             </header>
                         </article>
                     </li>
@@ -820,12 +829,14 @@
     var headerHeight = $('.header').outerHeight();
     $(window).scroll(function() {
       var scrolled = $(document).scrollTop();
-      if (scrolled > scroll && scrolled > headerHeight){
+      if ((scrolled - scroll) > 50 && scrolled > headerHeight){
          $('#header').hide();
-      } else {
+      } else if((scroll - scrolled) > 100 || scrolled < headerHeight * 2) {
          $('#header').show();
-      }           
+      } 
+      console.log(scrolled - scroll);          
       scroll = $(document).scrollTop(); 
+      
      });
 
    });

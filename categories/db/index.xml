@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Db on LeiiWang&#39;s Blog</title>
+    <link>http://u2takey.github.io/categories/db/</link>
+    <description>Recent content in Db on LeiiWang&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 31 Jul 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://u2takey.github.io/categories/db/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>influxdb中文精简文档</title>
+      <link>http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</link>
+      <pubDate>Sun, 31 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/</guid>
+      <description>
+
+&lt;blockquote&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://docs.influxdata.com/influxdb/v0.13/&#34;&gt;https://docs.influxdata.com/influxdb/v0.13/&lt;/a&gt;, 当前版本0.13, 这是一个简化版的文档，摘录文档中我认为比较重要的概念内容,
+influxdb目前更新很快，不同版本之间概念差异很大，阅读时请注意当前最新版本。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;!-- vscode-markdown-toc --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1. &lt;a href=&#34;#-0&#34;&gt;概要&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1.1. &lt;a href=&#34;#-1&#34;&gt;简介&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.2. &lt;a href=&#34;#-2&#34;&gt;下载和安装&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.3. &lt;a href=&#34;#-3&#34;&gt;入门&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1.3.1. &lt;a href=&#34;#-4&#34;&gt;创建数据库&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;1.3.2. &lt;a href=&#34;#-5&#34;&gt;读写数据&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;2. &lt;a href=&#34;#-6&#34;&gt;指南&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2.1. &lt;a href=&#34;#-7&#34;&gt;写数据&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2.1.1. &lt;a href=&#34;#HTTPAPI-8&#34;&gt;使用HTTP API创建数据库&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.1.2. &lt;a href=&#34;#HTTPAPI-9&#34;&gt;使用HTTP API写入数据&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.1.3. &lt;a href=&#34;#-10&#34;&gt;写多个点数据&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.1.4. &lt;a href=&#34;#-11&#34;&gt;从文件中写入点&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.1.5. &lt;a href=&#34;#SchemalessDesign-12&#34;&gt;Schemaless Design&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.1.6. &lt;a href=&#34;#REST...-13&#34;&gt;关于REST&amp;hellip;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.1.7. &lt;a href=&#34;#HTTP-14&#34;&gt;HTTP响应概要&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;2.2. &lt;a href=&#34;#-15&#34;&gt;查询数据&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2.2.1. &lt;a href=&#34;#HTTPAPI-16&#34;&gt;使用 HTTP API查询数据&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.2.2. &lt;a href=&#34;#-17&#34;&gt;多个查询&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.2.3. &lt;a href=&#34;#-18&#34;&gt;查询数据的其他选项&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;2.3. &lt;a href=&#34;#DownsamplingandDataRetention-19&#34;&gt;缩减采样和数据保留（Downsampling and Data Retention）&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2.3.1. &lt;a href=&#34;#retentionpolicies-20&#34;&gt;保留策略retention policies&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.3.2. &lt;a href=&#34;#-21&#34;&gt;连续查询&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.3.3. &lt;a href=&#34;#RPsandCQs--22&#34;&gt;结合 RPs and CQs - 一个案例研究&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;2.4. &lt;a href=&#34;#-23&#34;&gt;硬件指南&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;3. &lt;a href=&#34;#-24&#34;&gt;概念&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /vscode-markdown-toc --&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;1-a-name-0-a-概要&#34;&gt;1. &lt;a name=&#39;-0&#39;&gt;&lt;/a&gt;概要&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-a-name-1-a-简介&#34;&gt;1.1. &lt;a name=&#39;-1&#39;&gt;&lt;/a&gt;简介&lt;/h3&gt;
+
+&lt;p&gt;InfluxDB是一个时间序列数据库，支持高效的写入和查询。 InfluxDB被设计来存储开发监控，应用指标，物联网传感数据，实时分析等产生的大量的时间序列数据。&lt;/p&gt;
+
+&lt;p&gt;为什么选择InfluxDB？
+- 为高性能数据存储的时间序列数据而编写。使用TSM引擎支持高存取速度和数据压缩。
+- go语言编写，无外部依赖。
+- 简单高效的HTTP（S）的API。
+- 支持Graphite，collectd和OpenTSDB插件。
+- 高可用性设置（基于Relay）。
+- 类SQL的查询语言，轻松查询汇总数据。
+- tags支持建立索引，以便快速，高效的查询。
+- 保留策略（Retention policies）有效地自动清理过期数据。
+- 连续查询（Continuous queries）自动汇总数据以提高查询效率。
+- 内置Web管理界面。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-a-name-2-a-下载和安装&#34;&gt;1.2. &lt;a name=&#39;-2&#39;&gt;&lt;/a&gt;下载和安装&lt;/h3&gt;
+
+&lt;p&gt;略&lt;/p&gt;
+
+&lt;h3 id=&#34;1-3-a-name-3-a-入门&#34;&gt;1.3. &lt;a name=&#39;-3&#39;&gt;&lt;/a&gt;入门&lt;/h3&gt;
+
+&lt;p&gt;本节使用命令行界面 &lt;code&gt;influx&lt;/code&gt;（CLI）作为演示，它已经包含在InfluxDB安装包中了，是与数据库交互的轻量级，简单的方式。 CLI中默认情况通过InfluxDB HTTP API使用端口&lt;code&gt;8086&lt;/code&gt;
+与InfluxDB通信。&lt;/p&gt;
+
+&lt;h4 id=&#34;1-3-1-a-name-4-a-创建数据库&#34;&gt;1.3.1. &lt;a name=&#39;-4&#39;&gt;&lt;/a&gt;创建数据库&lt;/h4&gt;
+
+&lt;p&gt;执行&lt;code&gt;influx&lt;/code&gt;命令启动CLI并自动连接到本地InfluxDB实例（假设你已经使用service influxdb start或者直接运行influxd启动了influxdbserver)。输出应该是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ influx
+Connected to http://localhost:8086 version 0.13.x
+InfluxDB shell 0.13.x
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注：InfluxDB HTTP API默认在端口8086运行。因此，influx会默认连接端口&lt;code&gt;8086&lt;/code&gt;和&lt;code&gt;localhost&lt;/code&gt;。如果您需要更改这些默认设置，运行influx &amp;ndash;help。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;现在你可以使用Influx查询语句了（a.k.a InfluxQL）。要退出InfluxQL shell，键入&lt;code&gt;exit&lt;/code&gt;并回车。&lt;/p&gt;
+
+&lt;p&gt;新安装的InfluxDB有没有数据库（除了系统的&lt;code&gt;_internal&lt;/code&gt;），所以创建先一个。使用&lt;code&gt;CREATE DATABASE  &amp;lt;db-name&amp;gt;&lt;/code&gt; 语句创建数据库，其中&lt;DB-name&gt;是您想要创建的数据库
+的名称。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; CREATE DATABASE mydb
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注：按下回车键后，出现一个新的提示符，这意味着该语句执行完成，没有任何错误显示。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; SHOW DATABASES
+name: databases
+---------------
+name
+_internal
+mydb
+
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注意：_internal数据库是InfluxDB自动创建并使用来存储内部运行指标的数据库。有兴趣可以看看它了解Influx内部是怎么运行的。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;不同于&lt;code&gt;SHOW DATABASES&lt;/code&gt;，大部分的InfluxQL语句必须针对特定的数据库执行。你可以每次查询的时候都指定数据库，CLI提供了一个方便的语句，&lt;code&gt;USE &amp;lt;db-name&amp;gt;&lt;/code&gt;，
+它会自动为之后的所有请求设置使用的数据库。例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; USE mydb
+Using database mydb
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这之后的命令只会使用mydb数据库运行。&lt;/p&gt;
+
+&lt;h4 id=&#34;1-3-2-a-name-5-a-读写数据&#34;&gt;1.3.2. &lt;a name=&#39;-5&#39;&gt;&lt;/a&gt;读写数据&lt;/h4&gt;
+
+&lt;p&gt;现在，我们有数据库了，InfluxDB可以接受查询和写入请求了。&lt;/p&gt;
+
+&lt;p&gt;首先，简介一下datastore。在InfluxDB数据由“时间序列”（time series）组织，它包含一个测量值，例如“cpu_load”或“temperature”。时间序列有0到多个点，
+一个点对应于一个测量数据。点包括&lt;code&gt;time&lt;/code&gt;（时间戳），&lt;code&gt;measurement&lt;/code&gt;（如“cpu_load”），至少一个键值字段&lt;code&gt;field&lt;/code&gt;
+（测量值本身，例如，“value= 0.64”，或“temperature= 21.2”），以及一个或者多个键值标签&lt;code&gt;tags&lt;/code&gt;,tags是value的元数据（例如，“host= SERVER01”，“region= EMEA”，
+“DC =Frankfurt”）。&lt;/p&gt;
+
+&lt;p&gt;从概念上讲，你可以认为&lt;code&gt;measurement&lt;/code&gt;是一个SQL表，其主索引始终是时间。&lt;code&gt;tags&lt;/code&gt;和&lt;code&gt;field&lt;/code&gt;都表中的列。&lt;code&gt;tags&lt;/code&gt;有索引，&lt;code&gt;field&lt;/code&gt;没有。
+不同的是，使用InfluxDB，你可以存储上百万的测量值，而不必提前定义schemas，并且null values 没有被存储。&lt;/p&gt;
+
+&lt;p&gt;Points 被使用&lt;code&gt;Line Protocol&lt;/code&gt;写入InfluxDB，遵循以下格式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;measurement&amp;gt;[,&amp;lt;tag-key&amp;gt;=&amp;lt;tag-value&amp;gt;...] &amp;lt;field-key&amp;gt;=&amp;lt;field-value&amp;gt;[,&amp;lt;field2-key&amp;gt;=&amp;lt;field2-value&amp;gt;...] [unix-nano-timestamp]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以下是可以写入InfluxDB的有效例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cpu,host=serverA,region=us_west value=0.64
+payment,device=mobile,product=Notepad,method=credit billed=33,licenses=3i 1434067467100293230
+stock,symbol=AAPL bid=127.46,ask=127.48
+temperature,machine=unit42,type=assembly external=25,internal=37 1434067467000000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用&lt;code&gt;INSERT&lt;/code&gt;命令插入一个时间序列点数据&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; INSERT cpu,host=serverA,region=us_west value=0.64
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一个名称为name,tag 为host，值为value:0.64的数据被插入Db中了，现在可以查询我们刚刚插入的数据：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; SELECT host, region, value FROM cpu
+name: cpu
+---------
+time		    	                     host     	region   value
+2015-10-21T19:28:07.580664347Z  serverA	  us_west	 0.64
+
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注：我们写数据的时候并没有提供一个timestamp。当没有提供timestamp的时候，InfluxDB会自动分配本地当前时间戳。这意味着和你的本地时间戳可能会有所不同。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;存储另一种数据，这个数据有两个fields&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; INSERT temperature,machine=unit42,type=assembly external=25,internal=37
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用*运算符查询所有数据：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; SELECT * FROM temperature
+name: temperature
+-----------------
+time		                        	 external	  internal	machine	type
+2015-10-21T19:28:08.385013942Z  25	        	37     		unit42  assembly
+
+&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;InfluxQL还有有许多功能和关键字，这里没有覆盖，包括GO风格正则表达式的支持。例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; SELECT * FROM /.*/限制1
+- 
+&amp;gt; SELECT * FROM cpu_load_short
+- 
+&amp;gt; SELECT * FROM cpu_load_short WHERE值&amp;gt; 0.9
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-a-name-6-a-指南&#34;&gt;2. &lt;a name=&#39;-6&#39;&gt;&lt;/a&gt;指南&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-a-name-7-a-写数据&#34;&gt;2.1. &lt;a name=&#39;-7&#39;&gt;&lt;/a&gt;写数据&lt;/h3&gt;
+
+&lt;p&gt;可以使用包括命令行界面，客户端库和插件等多种方式向InfluxDB 写入数据。在这里，我们将向你展示如何使用数据库内置的HTTP API来创建数据库和写入数据。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-1-1-a-name-httpapi-8-a-使用http-api创建数据库&#34;&gt;2.1.1. &lt;a name=&#39;HTTPAPI-8&#39;&gt;&lt;/a&gt;使用HTTP API创建数据库&lt;/h4&gt;
+
+&lt;p&gt;发送&lt;code&gt;POST&lt;/code&gt;请求到&lt;code&gt;/query&lt;/code&gt;，并设置URL参数&lt;code&gt;q&lt;/code&gt;为&lt;code&gt;CREATE DATABASE&lt;/code&gt;创建数据库&lt;code&gt;&amp;lt;new_database_name&amp;gt;&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -i -XPOST http://localhost:8086/query --data-urlencode &amp;quot;q=CREATE DATABASE mydb&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-1-2-a-name-httpapi-9-a-使用http-api写入数据&#34;&gt;2.1.2. &lt;a name=&#39;HTTPAPI-9&#39;&gt;&lt;/a&gt;使用HTTP API写入数据&lt;/h4&gt;
+
+&lt;p&gt;HTTP API是将数据放入InfluxDB的主要手段。发送&lt;code&gt;POST&lt;/code&gt;请求到&lt;code&gt;/write&lt;/code&gt;。下面的例子写一个单点mydb数据库。数据为 measurement cpu_load_short，
+ tag keys: host, region; tag values : server01, us-west, field key value: value -&amp;gt; 0.64, timestamp : 1434055562000000000&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -i -XPOST &#39;http://localhost:8086/write?db=mydb&#39; --data-binary &#39;cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;写点数据必须指定db参数。这个POST请求的BODY - 我们称之为线路协议- 包含您要保存的时间序列数据。它们由一个测量，标记，字段和时间戳
+(measurement, tags, fields, and a timestamp) 组成。 InfluxDB需要一个测量名称(measurement name.)。严格地说，标签是可选的，常使用来区分数据源，并使进行查询既简单又高效。
+标签键和标签值都是字符串。fields是必需的，始终是字符串，在默认情况下，字段值是floats。时间戳是可选的。如果不指定时间戳InfluxDB使用服务器的本地Unix纪元纳秒时间戳。
+InfluxDB相关的时间都是UTC。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-1-3-a-name-10-a-写多个点数据&#34;&gt;2.1.3. &lt;a name=&#39;-10&#39;&gt;&lt;/a&gt;写多个点数据&lt;/h4&gt;
+
+&lt;p&gt;通过换行符分隔多个序列的多个点，这种形式的Batching points可以提高性能。
+下面的示例将写三个点到mydb数据库。
+第一个点属于cpu_load_short， tag set host=server02， 使用 server’s local timestamp。
+第二个点是属于cpu_load_short， tag set host=server02,region=us-west，使用指定的时间戳1422568543702900257。
+第三个点具属于cpu_load_short， tag set direction=in,host=server01,region=us-west， 使用指定的时间戳1422568543702900257。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -i -XPOST &#39;http://localhost:8086/write?db=mydb&#39; --data-binary &#39;cpu_load_short,host=server02 value=0.67
+cpu_load_short,host=server02,region=us-west value=0.55 1422568543702900257
+cpu_load_short,direction=in,host=server01,region=us-west value=2.0 1422568543702900257&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-1-4-a-name-11-a-从文件中写入点&#34;&gt;2.1.4. &lt;a name=&#39;-11&#39;&gt;&lt;/a&gt;从文件中写入点&lt;/h4&gt;
+
+&lt;p&gt;通过@filename向curl传入文件内容。该文件中的数据应该遵循InfluxDB的 line protocol syntax的语法。正确格式的文件（cpu_data.txt）的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cpu_load_short,host=server02 value=0.67
+cpu_load_short,host=server02,region=us-west value=0.55 1422568543702900257
+cpu_load_short,direction=in,host=server01,region=us-west value=2.0 1422568543702900257
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;写cpu_data.txt到mydb数据库：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -i -XPOST &#39;http://localhost:8086/write?db=mydb&#39; --data-binary @cpu_data.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-1-5-a-name-schemalessdesign-12-a-schemaless-design&#34;&gt;2.1.5. &lt;a name=&#39;SchemalessDesign-12&#39;&gt;&lt;/a&gt;Schemaless Design&lt;/h4&gt;
+
+&lt;p&gt;InfluxDB是一个Schemaless的数据库。您可以随时添加measurements, tags, 和 fields。但需要注意的是，如果你试图写入不同的数据类型到之前用过的数据库
+（例如，写一个字符串到以前接受整型的字段，InfluxDB将拒绝这些数据。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-1-6-a-name-rest-13-a-关于rest&#34;&gt;2.1.6. &lt;a name=&#39;REST...-13&#39;&gt;&lt;/a&gt;关于REST&amp;hellip;&lt;/h4&gt;
+
+&lt;p&gt;InfluxDB使用HTTP仅作为一种方便和广泛支持的数据传输协议。InfluxDB API并没有试图成为RESTful的。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-1-7-a-name-http-14-a-http响应概要&#34;&gt;2.1.7. &lt;a name=&#39;HTTP-14&#39;&gt;&lt;/a&gt;HTTP响应概要&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2XX：如果&lt;code&gt;HTTP 204 No Content&lt;/code&gt;，请求成功了！如果它是HTTP 200 OK，InfluxDB理解了请求，但不能完成它。响应的BODEY会包含其他错误信息。&lt;/li&gt;
+&lt;li&gt;4XX：InfluxDB无法理解的请求。&lt;/li&gt;
+&lt;li&gt;5XX：系统超载有严重错误。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;错误响应示例：
+- 写入float到以前接受bool的字段：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -i -XPOST &#39;http://localhost:8086/write?db=hamlet&#39; --data-binary &#39;tobeornottobe booleanonly=true&#39;  
+
+curl -i -XPOST &#39;http://localhost:8086/write?db=hamlet&#39; --data-binary &#39;tobeornottobe booleanonly=5&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;返回：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;HTTP/1.1 400 Bad Request
+[...]
+write failed: field type conflict: input field &amp;quot;booleanonly&amp;quot; on measurement &amp;quot;tobeornottobe&amp;quot; is type float64, already exists as type boolean
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;写入一个不存在的数据库&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -i -XPOST &#39;http://localhost:8086/write?db=atlantis&#39; --data-binary &#39;liters value=10&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;返回&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;HTTP/1.1 404 Not Found
+[...]
+database not found: &amp;quot;atlantis&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-a-name-15-a-查询数据&#34;&gt;2.2. &lt;a name=&#39;-15&#39;&gt;&lt;/a&gt;查询数据&lt;/h3&gt;
+
+&lt;h4 id=&#34;2-2-1-a-name-httpapi-16-a-使用-http-api查询数据&#34;&gt;2.2.1. &lt;a name=&#39;HTTPAPI-16&#39;&gt;&lt;/a&gt;使用 HTTP API查询数据&lt;/h4&gt;
+
+&lt;p&gt;HTTP API是查询InfluxDB数据的主要方式（参见command line interface 和 client libraries 等替代方式来查询数据库）。&lt;/p&gt;
+
+&lt;p&gt;要执行一个查询，发送&lt;code&gt;GET&lt;/code&gt;请求到&lt;code&gt;/query&lt;/code&gt;，设置URL参数db作为目标数据库，并设置URL参数q作为查询。下面的示例使用HTTP API来查询您在上一节写入的数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -GET &#39;http://localhost:8086/query?pretty=true&#39; --data-urlencode &amp;quot;db=mydb&amp;quot; --data-urlencode &amp;quot;q=SELECT value FROM cpu_load_short WHERE region=&#39;us-west&#39;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;InfluxDB返回JSON。查询的结果显示在“results”数组中。如果发生错误，会有一个“error”字段来解释错误原因。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    &amp;quot;results&amp;quot;: [
+        {
+            &amp;quot;series&amp;quot;: [
+                {
+                    &amp;quot;name&amp;quot;: &amp;quot;cpu_load_short&amp;quot;,
+                    &amp;quot;columns&amp;quot;: [
+                        &amp;quot;time&amp;quot;,
+                        &amp;quot;value&amp;quot;
+                    ],
+                    &amp;quot;values&amp;quot;: [
+                        [
+                            &amp;quot;2015-01-29T21:55:43.702900257Z&amp;quot;,
+                            0.55
+                        ],
+                        [
+                            &amp;quot;2015-01-29T21:55:43.702900257Z&amp;quot;,
+                            23422
+                        ],
+                        [
+                            &amp;quot;2015-06-11T20:46:02Z&amp;quot;,
+                            0.64
+                        ]
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt; 
+&amp;gt; 注：追加pretty=true添加到URL能够漂亮的打印JSON输出。虽然这对调试很有用，不建议在生产中使用，因为它消耗了不必要的网络带宽。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-2-2-a-name-17-a-多个查询&#34;&gt;2.2.2. &lt;a name=&#39;-17&#39;&gt;&lt;/a&gt;多个查询&lt;/h4&gt;
+
+&lt;p&gt;可以在一个API调用种发送多个查询。只需用分号分割每个查询语句：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -G &#39;http://localhost:8086/query?pretty=true&#39; --data-urlencode &amp;quot;db=mydb&amp;quot; --data-urlencode &amp;quot;q=SELECT value FROM\
+ cpu_load_short WHERE region=&#39;us-west&#39;;SELECT count(value) FROM cpu_load_short WHERE region=&#39;us-west&#39;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;返回&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    &amp;quot;results&amp;quot;: [
+        {
+            &amp;quot;series&amp;quot;: [
+                {
+                    &amp;quot;name&amp;quot;: &amp;quot;cpu_load_short&amp;quot;,
+                    &amp;quot;columns&amp;quot;: [
+                        &amp;quot;time&amp;quot;,
+                        &amp;quot;value&amp;quot;
+                    ],
+                    &amp;quot;values&amp;quot;: [
+                        [
+                            &amp;quot;2015-01-29T21:55:43.702900257Z&amp;quot;,
+                            0.55
+                        ],
+                        [
+                            &amp;quot;2015-01-29T21:55:43.702900257Z&amp;quot;,
+                            23422
+                        ],
+                        [
+                            &amp;quot;2015-06-11T20:46:02Z&amp;quot;,
+                            0.64
+                        ]
+                    ]
+                }
+            ]
+        },
+        {
+            &amp;quot;series&amp;quot;: [
+                {
+                    &amp;quot;name&amp;quot;: &amp;quot;cpu_load_short&amp;quot;,
+                    &amp;quot;columns&amp;quot;: [
+                        &amp;quot;time&amp;quot;,
+                        &amp;quot;count&amp;quot;
+                    ],
+                    &amp;quot;values&amp;quot;: [
+                        [
+                            &amp;quot;1970-01-01T00:00:00Z&amp;quot;,
+                            3
+                        ]
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-2-3-a-name-18-a-查询数据的其他选项&#34;&gt;2.2.3. &lt;a name=&#39;-18&#39;&gt;&lt;/a&gt;查询数据的其他选项&lt;/h4&gt;
+
+&lt;h5 id=&#34;时间戳格式timestamp-format&#34;&gt;时间戳格式Timestamp Format&lt;/h5&gt;
+
+&lt;p&gt;在InfluxDB所有东西都被存为UTC格式。默认情况下，时间戳以RFC3339 UTC格式返回并提供纳秒级的精度，例如&lt;code&gt;2015-08-04T19：05：14.318570484Z&lt;/code&gt;。
+如果你需要 Unix epoch format可以设置查询字符串参数&lt;code&gt;epoch = [H，M，S，MS，U，NS]&lt;/code&gt;。例如，获取秒单位时间戳：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -G &#39;http://localhost:8086/query&#39; --data-urlencode &amp;quot;db=mydb&amp;quot; --data-urlencode &amp;quot;epoch=s&amp;quot;\
+ --data-urlencode &amp;quot;q=SELECT value FROM cpu_load_short WHERE region=&#39;us-west&#39;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;鉴权authentication&#34;&gt;鉴权Authentication&lt;/h5&gt;
+
+&lt;p&gt;Authentication in InfluxDB is disabled by default. See Authentication and Authorization for how to enable and set up authentication.&lt;/p&gt;
+
+&lt;h5 id=&#34;最大行数maximum-row-limit&#34;&gt;最大行数Maximum Row Limit&lt;/h5&gt;
+
+&lt;p&gt;最大行限制InfluxDB返回的结果的最大数量。默认设置为10,000，并且可以通过在配置文件的HTTP部分修改。
+最大行限制仅适用于非分块查询。分块查询可以返回点的数量不受限制。&lt;/p&gt;
+
+&lt;h5 id=&#34;分片chunking&#34;&gt;分片Chunking&lt;/h5&gt;
+
+&lt;p&gt;通过设置&lt;code&gt;chunked=true&lt;/code&gt;来使用分块组块，用于返回streamed batches形式的结果，而不是单个resposne返回所有数据。
+resposne将被按照series 或每10000个point分片。设置&lt;code&gt;chunk_size&lt;/code&gt;来改变最大块大小为不同的值
+,例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -G &#39;http://localhost:8086/query&#39; --data-urlencode &amp;quot;db=deluge&amp;quot; --data-urlencode=&amp;quot;chunked=true&amp;quot; --data-urlencode &amp;quot;chunk_size=20000&amp;quot; \
+--data-urlencode &amp;quot;q=SELECT * FROM liters&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-3-a-name-downsamplinganddataretention-19-a-缩减采样和数据保留-downsampling-and-data-retention&#34;&gt;2.3. &lt;a name=&#39;DownsamplingandDataRetention-19&#39;&gt;&lt;/a&gt;缩减采样和数据保留（Downsampling and Data Retention）&lt;/h3&gt;
+
+&lt;p&gt;InfluxDB每秒能够处理成千上万的数据点。长时间运行将会消耗大量存储空间。一个自然的解决方案是：缩减采样数据;
+只在有限的时间内保持高精度的原始数据，更长时间的数据则存储精度较低，汇总数据。
+本节说明了如何结合两个InfluxDB功能 - 保留策略和连续查询（retention policies and continuous queries） - 来自动缩减采样和淘汰数据。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-1-a-name-retentionpolicies-20-a-保留策略retention-policies&#34;&gt;2.3.1. &lt;a name=&#39;retentionpolicies-20&#39;&gt;&lt;/a&gt;保留策略retention policies&lt;/h4&gt;
+
+&lt;h5 id=&#34;定义&#34;&gt;定义&lt;/h5&gt;
+
+&lt;p&gt;保留策略retention policy（RP）是InfluxDB的一种数据结构，用于描述InfluxDB保留数据多久（持续时间）和有多少数据副本存储在集群中（复制因子
+replication factor）。一个数据库可以有多个RP，RP在每个数据库唯一。&lt;/p&gt;
+
+&lt;h5 id=&#34;目的&#34;&gt;目的&lt;/h5&gt;
+
+&lt;p&gt;一般来说InfluxDB不是为删除数据设计的。一个基本假设是，删除不频繁并且不必有高性能。然而，InfluxDB意识到清理过期数据
+的必要性 &amp;mdash; 这就是RPs的目的。&lt;/p&gt;
+
+&lt;h5 id=&#34;使用rps&#34;&gt;使用RPs&lt;/h5&gt;
+
+&lt;p&gt;当您创建一个数据库的时候，InfluxDB自动创建一个名为&lt;code&gt;default&lt;/code&gt;的具有无限持续时间，并设置复制因子为1的RP，并且把它作为
+默认&lt;code&gt;DEFAULT&lt;/code&gt;PR。当你写数据的时候没有提供一个明确的RP，数据会被设置为DEFAULT RP。&lt;/p&gt;
+
+&lt;p&gt;InfluxDB自动查询并写入到DEFAULT RP的数据库。要查询或写入到不同的RP，你必使用&lt;code&gt;&amp;lt;database_name&amp;gt;.&amp;quot;&amp;lt;retention_policy&amp;gt;&amp;quot;.&amp;lt;measurement_name&amp;gt;&lt;/code&gt;
+来完整的限定 database，retention policy 和 measurement name。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-2-a-name-21-a-连续查询&#34;&gt;2.3.2. &lt;a name=&#39;-21&#39;&gt;&lt;/a&gt;连续查询&lt;/h4&gt;
+
+&lt;h5 id=&#34;定义-1&#34;&gt;定义&lt;/h5&gt;
+
+&lt;p&gt;连续查询continuous query（CQ）是一个数据库中自动定期运行的InfluxQL查询。CQs需要一个&lt;code&gt;SELECT&lt;/code&gt;子句带有&lt;code&gt;GROUP BY time()&lt;/code&gt;
+。 InfluxDB存储CQ的结果在一个的特定的measurement里。&lt;/p&gt;
+
+&lt;h5 id=&#34;目的-1&#34;&gt;目的&lt;/h5&gt;
+
+&lt;p&gt;CQs是定期缩减采样数据的最佳方案 - 一旦你执行CQ，InfluxDB运行定期的执行查询，不同于一个简单地返回结果的正常的查询，
+InfluxDB把CQ的结果存储下来用于未来使用。&lt;/p&gt;
+
+&lt;h5 id=&#34;使用cqs&#34;&gt;使用CQs&lt;/h5&gt;
+
+&lt;p&gt;See Continuous Queries for a detailed discussion on how to create and manage CQs.&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-3-a-name-rpsandcqs-22-a-结合-rps-and-cqs-一个案例研究&#34;&gt;2.3.3. &lt;a name=&#39;RPsandCQs--22&#39;&gt;&lt;/a&gt;结合 RPs and CQs - 一个案例研究&lt;/h4&gt;
+
+&lt;p&gt;我们有通过电话，并通过网站以10秒间隔追踪食品订单到餐馆数量的实时数据。从长远来看，我们只关心30分钟时间间隔的数据。
+在接下来的步骤中，我们使用RP和CQ，使InfluxDB：
+- 自动删除两个小时以前的10秒级原始数据
+- 自动汇总10秒数据到30分钟级数据
+- 永久保留30分钟级数据&lt;/p&gt;
+
+&lt;p&gt;处理的数据格式
+- db=food_data
+- measurement=orders
+- fields=phone, website&lt;/p&gt;
+
+&lt;h5 id=&#34;准备数据库&#34;&gt;准备数据库&lt;/h5&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;在插入数据之前进行下面的两步，因为只有InfluxDB新数据进行CQ，也就是创建CQ之后产生的数据，&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&#34;创建-default-rp&#34;&gt;创建&lt;code&gt;DEFAULT&lt;/code&gt; RP&lt;/h5&gt;
+
+&lt;p&gt;我们希望DEFAULT RP是一个两小时的策略，而不是默认的&lt;code&gt;default&lt;/code&gt;策略：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; CREATE RETENTION POLICY two_hours ON food_data DURATION 2h REPLICATION 1 DEFAULT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; SHOW RETENTION POLICIES ON food_data
+name		      duration	  replicaN	  default
+default		   0		        1		        false
+two_hours	  2h0m0s		   1		        true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;创建cq&#34;&gt;创建CQ&lt;/h5&gt;
+
+&lt;p&gt;现在我们创建自动的缩减采样10秒级数据到30分钟级别的CQ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; CREATE CONTINUOUS QUERY cq_30m ON food_data BEGIN SELECT mean(website) AS mean_website,mean(phone)\
+ AS mean_phone INTO food_data.&amp;quot;default&amp;quot;.downsampled_orders FROM orders GROUP BY time(30m) END
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注意指明了使用default RP，而不是two_hours RP&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&#34;写入数据-查看结果&#34;&gt;写入数据，查看结果&lt;/h5&gt;
+
+&lt;p&gt;写入数据到food_data一段时间后我们可以看到两个measurements：orders 和 downsampled_orders&lt;/p&gt;
+
+&lt;p&gt;orders中的是10秒级别的two_hours RP下的原始数据：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; SELECT * FROM orders LIMIT 5
+name: orders
+-----------------
+time						            phone 	website
+2015-12-04T20:00:11Z	 1	     6
+2015-12-04T20:00:20Z		9	     10
+2015-12-04T20:00:30Z		2	     17
+2015-12-04T20:00:40Z		3	     10
+2015-12-04T20:00:50Z		1	     15
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们在12/04/2015 at 22:08:19 UTC提交这个查询 - 发现最早的数据是不超过大约两小时前的时间戳。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注：默认情况下，InfluxDB每隔30分钟检查执行RP。这是一个可配置的设置，请参阅数据库配置。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;downsampled_orders中的是default RP下的历史30分钟级别数据：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; SELECT * FROM food_data.&amp;quot;default&amp;quot;.downsampled_orders LIMIT 5
+name: downsampled_orders
+------------------------
+time			               mean_phone		       mean_website
+2015-12-03T22:30:00Z	 4.318181818181818	 9.254545454545454
+2015-12-03T23:00:00Z	 4.266666666666667	 9.827777777777778
+2015-12-03T23:30:00Z	 4.766666666666667	 9.677777777777777
+2015-12-04T00:00:00Z	 4.405555555555556	 8.5
+2015-12-04T00:30:00Z	 4.788888888888889	 9.383333333333333
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;请注意，在downsampled_orders时间戳为30分钟的时间间隔，并且比orders旧的时间戳。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-4-a-name-23-a-硬件指南&#34;&gt;2.4. &lt;a name=&#39;-23&#39;&gt;&lt;/a&gt;硬件指南&lt;/h3&gt;
+
+&lt;p&gt;略&lt;/p&gt;
+
+&lt;h2 id=&#34;3-a-name-24-a-概念&#34;&gt;3. &lt;a name=&#39;-24&#39;&gt;&lt;/a&gt;概念&lt;/h2&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
