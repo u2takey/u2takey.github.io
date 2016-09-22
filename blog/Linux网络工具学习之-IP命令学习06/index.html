@@ -1,0 +1,986 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>Linux网络工具学习之:IP命令学习06</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Linux网络工具学习之:IP命令学习06"/>
+<meta name="twitter:description" content="Linux网络工具学习之:IP命令学习6 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 6.1 概述 路由策略数据库管理命令 路由策略数据库的规则用于控制选择路由的算法。 Internet上采用的路由算法一般是基于数据包目的地址的。理论上，也可以由 TOS域决定，不过这没有实际应用。要了解经典路由算法的详细情况请参考 RFC-1812。 而在某些情况下，我们不只是需要通过数据包的目的地址决定路由，可能还需 要通过其他一些域：源地址、IP协议、传输层端口甚至数据包的负载。这就叫做： 策略路由(policy routing)。 注意：策略路由(policy routing)不等于路由策略(rouing policy)。 在这种情况下，传统的基于目的地址的路由表就无法满足要求了，需要使用路由策略数据库(routing policy database,RPDB)代替，通过它选择执行某些路由。 这些规则可以由很多不同的状态，而且它们没有天生的次序，要由系统管理员决定 。RPDB可以匹配以下的域: 数据包的源地址； 数据包的目的地址； 服务类型(Type of Service)； 进入的网络接口； 匹配IP协议和传输层端口也是可能的，不过这要依靠iptables或者ipchains通过fwmark为某些数据包做标记，并重定向。 每个路由策略由一个选择符(selector)和一个操作(action)组成。系统按照顺 序搜索路由策略数据库，把选择符和{源地址、目的地址、进入接口、tos、 fwmark}等关键词进行匹配，如果匹配成功，就执行action定义的操作。操作或者 成功返回，或者失败并且中止对路由策略。否则，系统继续查询路由策略数据库。 操作如何定义？最原始的操作是选择下一跳(nexthop)和输出设备(output device)。Cisco IOS使用这种方式，我们姑且把这叫做匹配并设置(match &amp; set) 。而Linux的方式则更为灵活，Linux允许的操作包括：基于目的地址的路由表查询 以及按照最长匹配的原则从路由表中选择路由。因此，匹配并设置(match &amp; set) 的方式只是一个最简单的特例而已。 再系统启动时，内核会为路由策略数据库配置三条缺省的规则： 0 匹配任何条件 查询路由表local(ID 255)路由表local是一个特殊的路由表，包 含对于本地和广播地址的高优先级控制路由。rule 0非常特殊，不能被删除或者覆 盖。 32766"/>
+
+
+
+        <meta property="og:title" content="Linux网络工具学习之:IP命令学习06" />
+<meta property="og:description" content="Linux网络工具学习之:IP命令学习6 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 6.1 概述 路由策略数据库管理命令 路由策略数据库的规则用于控制选择路由的算法。 Internet上采用的路由算法一般是基于数据包目的地址的。理论上，也可以由 TOS域决定，不过这没有实际应用。要了解经典路由算法的详细情况请参考 RFC-1812。 而在某些情况下，我们不只是需要通过数据包的目的地址决定路由，可能还需 要通过其他一些域：源地址、IP协议、传输层端口甚至数据包的负载。这就叫做： 策略路由(policy routing)。 注意：策略路由(policy routing)不等于路由策略(rouing policy)。 在这种情况下，传统的基于目的地址的路由表就无法满足要求了，需要使用路由策略数据库(routing policy database,RPDB)代替，通过它选择执行某些路由。 这些规则可以由很多不同的状态，而且它们没有天生的次序，要由系统管理员决定 。RPDB可以匹配以下的域: 数据包的源地址； 数据包的目的地址； 服务类型(Type of Service)； 进入的网络接口； 匹配IP协议和传输层端口也是可能的，不过这要依靠iptables或者ipchains通过fwmark为某些数据包做标记，并重定向。 每个路由策略由一个选择符(selector)和一个操作(action)组成。系统按照顺 序搜索路由策略数据库，把选择符和{源地址、目的地址、进入接口、tos、 fwmark}等关键词进行匹配，如果匹配成功，就执行action定义的操作。操作或者 成功返回，或者失败并且中止对路由策略。否则，系统继续查询路由策略数据库。 操作如何定义？最原始的操作是选择下一跳(nexthop)和输出设备(output device)。Cisco IOS使用这种方式，我们姑且把这叫做匹配并设置(match &amp; set) 。而Linux的方式则更为灵活，Linux允许的操作包括：基于目的地址的路由表查询 以及按照最长匹配的原则从路由表中选择路由。因此，匹配并设置(match &amp; set) 的方式只是一个最简单的特例而已。 再系统启动时，内核会为路由策略数据库配置三条缺省的规则： 0 匹配任何条件 查询路由表local(ID 255)路由表local是一个特殊的路由表，包 含对于本地和广播地址的高优先级控制路由。rule 0非常特殊，不能被删除或者覆 盖。 32766" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006/" />
+
+
+<meta property="og:updated_time" content="2016-09-22T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="Linux网络工具学习之:IP命令学习06">
+<meta itemprop="description" content="Linux网络工具学习之:IP命令学习6 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 6.1 概述 路由策略数据库管理命令 路由策略数据库的规则用于控制选择路由的算法。 Internet上采用的路由算法一般是基于数据包目的地址的。理论上，也可以由 TOS域决定，不过这没有实际应用。要了解经典路由算法的详细情况请参考 RFC-1812。 而在某些情况下，我们不只是需要通过数据包的目的地址决定路由，可能还需 要通过其他一些域：源地址、IP协议、传输层端口甚至数据包的负载。这就叫做： 策略路由(policy routing)。 注意：策略路由(policy routing)不等于路由策略(rouing policy)。 在这种情况下，传统的基于目的地址的路由表就无法满足要求了，需要使用路由策略数据库(routing policy database,RPDB)代替，通过它选择执行某些路由。 这些规则可以由很多不同的状态，而且它们没有天生的次序，要由系统管理员决定 。RPDB可以匹配以下的域: 数据包的源地址； 数据包的目的地址； 服务类型(Type of Service)； 进入的网络接口； 匹配IP协议和传输层端口也是可能的，不过这要依靠iptables或者ipchains通过fwmark为某些数据包做标记，并重定向。 每个路由策略由一个选择符(selector)和一个操作(action)组成。系统按照顺 序搜索路由策略数据库，把选择符和{源地址、目的地址、进入接口、tos、 fwmark}等关键词进行匹配，如果匹配成功，就执行action定义的操作。操作或者 成功返回，或者失败并且中止对路由策略。否则，系统继续查询路由策略数据库。 操作如何定义？最原始的操作是选择下一跳(nexthop)和输出设备(output device)。Cisco IOS使用这种方式，我们姑且把这叫做匹配并设置(match &amp; set) 。而Linux的方式则更为灵活，Linux允许的操作包括：基于目的地址的路由表查询 以及按照最长匹配的原则从路由表中选择路由。因此，匹配并设置(match &amp; set) 的方式只是一个最简单的特例而已。 再系统启动时，内核会为路由策略数据库配置三条缺省的规则： 0 匹配任何条件 查询路由表local(ID 255)路由表local是一个特殊的路由表，包 含对于本地和广播地址的高优先级控制路由。rule 0非常特殊，不能被删除或者覆 盖。 32766">
+
+
+<meta itemprop="dateModified" content="2016-09-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="445">
+
+
+
+<meta itemprop="keywords" content="Db,Golang,IOS &amp; MacOS,net,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/"><p>Linux网络工具学习之:IP命令学习01</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/"><p>Linux网络工具学习之:IP命令学习02</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/"><p>Linux网络工具学习之:IP命令学习03</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/"><p>Linux网络工具学习之:IP命令学习04</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/"><p>Linux网络工具学习之:IP命令学习05</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006/">Linux网络工具学习之:IP命令学习06</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-09-22'>
+            September 22, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a006" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A006%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006/" class="image featured">
+            <img src="/img/2016/09/winter.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<h1 id="linux网络工具学习之-ip命令学习6">Linux网络工具学习之:IP命令学习6</h1>
+
+<p>标签（空格分隔）： 网络</p>
+
+<hr />
+
+<blockquote>
+<p>本文旨在通过IP命令介绍和学习Linux网络的相关知识</p>
+</blockquote>
+
+<h2 id="1-概述">1. 概述</h2>
+
+<h2 id="2-ip-link">2. ip link</h2>
+
+<h2 id="3-ip-addr">3. ip addr</h2>
+
+<h2 id="4-ip-addrlabel">4 ip addrlabel</h2>
+
+<h2 id="5-ip-route">5 ip route</h2>
+
+<h2 id="6-ip-rule">6 ip rule</h2>
+
+<h3 id="6-1-概述">6.1 概述</h3>
+
+<blockquote>
+<p>路由策略数据库管理命令</p>
+</blockquote>
+
+<p>路由策略数据库的规则用于控制选择路由的算法。</p>
+
+<p>　　Internet上采用的路由算法一般是基于数据包目的地址的。理论上，也可以由 TOS域决定，不过这没有实际应用。要了解经典路由算法的详细情况请参考 RFC-1812。</p>
+
+<p>　　而在某些情况下，我们不只是需要通过数据包的目的地址决定路由，可能还需 要通过其他一些域：源地址、IP协议、传输层端口甚至数据包的负载。这就叫做： 策略路由(policy routing)。</p>
+
+<p>　　注意：策略路由(policy routing)不等于路由策略(rouing policy)。</p>
+
+<pre><code>在这种情况下，传统的基于目的地址的路由表就无法满足要求了，需要使用路由策略数据库(routing policy database,RPDB)代替，通过它选择执行某些路由。 这些规则可以由很多不同的状态，而且它们没有天生的次序，要由系统管理员决定 。RPDB可以匹配以下的域: 
+</code></pre>
+
+<p>数据包的源地址；
+数据包的目的地址；
+服务类型(Type of Service)；
+进入的网络接口；</p>
+
+<p>　　匹配IP协议和传输层端口也是可能的，不过这要依靠iptables或者ipchains通过fwmark为某些数据包做标记，并重定向。
+　　每个路由策略由一个选择符(selector)和一个操作(action)组成。系统按照顺 序搜索路由策略数据库，把选择符和{源地址、目的地址、进入接口、tos、 fwmark}等关键词进行匹配，如果匹配成功，就执行action定义的操作。操作或者 成功返回，或者失败并且中止对路由策略。否则，系统继续查询路由策略数据库。
+　　操作如何定义？最原始的操作是选择下一跳(nexthop)和输出设备(output
+device)。Cisco IOS使用这种方式，我们姑且把这叫做匹配并设置(match &amp; set) 。而Linux的方式则更为灵活，Linux允许的操作包括：基于目的地址的路由表查询 以及按照最长匹配的原则从路由表中选择路由。因此，匹配并设置(match &amp; set) 的方式只是一个最简单的特例而已。</p>
+
+<p>　　再系统启动时，内核会为路由策略数据库配置三条缺省的规则：</p>
+
+<ul>
+<li>0 匹配任何条件 查询路由表local(ID 255)路由表local是一个特殊的路由表，包 含对于本地和广播地址的高优先级控制路由。rule 0非常特殊，不能被删除或者覆 盖。<br /></li>
+<li>32766 匹配任何条件 查询路由表main(ID 254) 路由表main(ID 254)是一个通常的表，包含所有的无策略路由。系统管理员可以删除或者使用另外的规则覆盖这条规
+则。<br /></li>
+<li>32767 匹配任何条件 查询路由表default(ID 253) 路由表default(ID 253)是一个 空表，它是为一些后续处理保留的。对于前面的缺省策略没有匹配到的数据包，系统使用这个策略进行处理。这个规则也可以删除。<br /></li>
+</ul>
+
+<p>　　不要混淆路由表和策略：规则指向路由表，多个规则可以引用一个路由表，而且某些路由表可以没有策略指向它。如果系统管理员删除了指向某个路由表的所有规则，这个表就没有用了，但是仍然存在，直到里面的所有路由都被删除，它才会消失。</p>
+
+<p>　路由策略规则数据库可以包括如下类型的规则：</p>
+
+<ul>
+<li>unicast 返回从被引用的路由表中发现的路由<br /></li>
+<li>blackhole 丢弃数据包，不做任何反应<br /></li>
+<li>unreachable 产生网络不可达(Network is unreachable)的ICMP错误信息<br /></li>
+<li>prohibit 产生通讯被禁止(Communication is administratively prohibited)的</li>
+<li>ICMP错误信息<br /></li>
+<li>nat 把数据报的源地址转换为其它的值。详情请参考附录C<br /></li>
+</ul>
+
+<pre><code>Usage: ip rule [ list | add | del | flush ] SELECTOR ACTION
+SELECTOR := [ not ] [ from PREFIX ] [ to PREFIX ] [ tos TOS ] [ fwmark FWMARK[/MASK] ]
+            [ iif STRING ] [ oif STRING ] [ pref NUMBER ]
+ACTION := [ table TABLE_ID ]
+          [ prohibit | reject | unreachable ]
+          [ realms [SRCREALM/]DSTREALM ]
+          [ goto NUMBER ]
+TABLE_ID := [ local | main | default | NUMBER 
+</code></pre>
+
+<h3 id="6-2-ip-rule-add-delete">6.2 ip rule add/delete</h3>
+
+<blockquote>
+<p>插入新的规则/删除规则; 缩写：add、a；delete、del、d</p>
+</blockquote>
+
+<p>|参数 |说明|
+|-|-|
+|type TYPE(default) |这个规则的类型。有效的类型上一节已经介绍过了。<br />
+|from PREFIX |匹配的源地址<br />
+|iif NAME |选择数据包进入的设备。如果接口是回环设备，这个规则就只匹配源于本机的数据包。这意味着，你可以为本机发出的数据包和要转发的数据包分别建立路由表，使两者完全隔离。<br />
+|tos TOS或者dsfield TOS |选择匹配的TOS值<br />
+|fwmark MARK |选择要匹配的fwmark值（标记） <a href="http://jacker.blog.51cto.com/1333001/1429023">参考1</a>  <a href="http://staff.ustc.edu.cn/~james/sg/ippr/">参考2</a>
+|priority PREFERENCE|设置这个规则的优先级。每个规则的优先级都应该明确设置为一个唯一的数值。实际上，由于历史的原因，ip rule add命令无需任何优先级的值，也不必是唯一的。如果用户没有在命令中提供优先级的值，内核会自动选择。如果用户提供的优先级值已经存在，内核也不会拒绝这次请求，而是在相同优先级的规则前面插入新的规则。<br />
+|table TABLEID |如果规则选择符匹配，就被查询的路由表识别符。<br />
+|realms FROM/TO| 如果规则匹配和路由表查询成功，选择的realms值。 <a href="http://superuser.com/questions/193561/what-does-the-content-of-etc-iproute2-rt-realms-mean-ubuntu-10-4">参考</a><br />
+|nat ADDRESS |设置要进行网络地址转换的IP地址段。ADDRESS或者是进行网络地址转换ip地址段，或者是一个本机地址，甚至可以是0。</p>
+
+<pre><code>---------------------------------------------------------------
+Example  Creating a simple entry in the RPDB with ip rule add
+---------------------------------------------------------------
+[root@masq-gw]# ip route add default via 205.254.211.254 table 8
+[root@masq-gw]# ip rule add tos 0x08 table 8
+[root@masq-gw]# ip route flush cache
+[root@masq-gw]# ip rule show
+0:      from all lookup local 
+32765:  from all tos 0x08 lookup 8 
+32766:  from all lookup main 
+32767:  from all lookup 253
+
+Example Creating a complex entry in the RPDB with ip rule add
+
+[root@masq-gw]# ip rule add from 192.168.100.17 tos 0x08 fwmark 4 table 7
+
+
+Example Creating a NAT rule for an entire network with ip rule add nat
+
+[root@masq-gw]# ip rule add nat 205.254.211.32 from 192.168.100.32/29
+[root@masq-gw]# ip rule show
+0:      from all lookup local 
+32765:  from 192.168.100.32/29 lookup main map-to 205.254.211.32
+32766:  from all lookup main 
+32767:  from all lookup 253
+</code></pre>
+
+<p><a href="http://blog.scottlowe.org/2013/05/29/a-quick-introduction-to-linux-policy-routing/">参考：A Quick Introduction to Linux Policy Routing</a>
+<a href="http://blog.scottlowe.org/2013/05/30/a-use-case-for-policy-routing-with-kvm-and-open-vswitch/">参考：A Use Case for Policy Routing with KVM and Open vSwitch</a></p>
+
+<h3 id="6-3-ip-rule-show">6.3 ip rule show</h3>
+
+<blockquote>
+<p>列出路由规则; 缩写：show、list、sh、ls、l</p>
+</blockquote>
+
+<p>无参数</p>
+
+<pre><code>kuznet@amber:~ $ ip ru ls 
+0:      from all lookup local 
+200:    from 192.203.80.0/24 to 193.233.7.0/24 lookup main 
+210:    from 192.203.80.0/24 to 192.203.80.0/24 lookup main 
+220:    from 192.203.80.0/24 lookup inr.ruhep realms inr.ruhep/radio-msu 
+300:    from 193.233.7.83 to 193.233.7.0/24 lookup main 
+310:    from 193.233.7.83 to 192.203.80.0/24 lookup main 
+320:    from 193.233.7.83 lookup inr.ruhep map-to 192.203.80.144 
+32766:  from all lookup main 
+
+每行第一部分的数字是规则的优先级，接着是选择符-&gt;selector。 
+关键词lookup后面接着路由表识别符-&gt;action。 
+如果规则要进行网络地址转换，还需要一个关键词map-to设置转换以后的地址。 
+
+上面的示例非常简单，192.203.80.0/24和193.233.7.0/24组成内部网络，但 
+是它们向外发送数据包要通过不同的路由。主机193.233.7.83和外界会话时，地址需要转换为192.203.80.144。
+</code></pre>
+
+<h3 id="6-4-ip-rule-flush-save-restore">6.4 ip rule flush/save/restore</h3>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesnet'>net</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A007/"
+                class="button big previous">Linux网络工具学习之:IP命令学习07</a></li>
+    
+
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/"
+                class="button big next">Linux网络工具学习之:IP命令学习05</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006\/';
+    var disqus_title = 'Linux网络工具学习之:IP命令学习06';
+    var disqus_url = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/">Linux网络工具学习之:IP命令学习01</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/">Linux网络工具学习之:IP命令学习02</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/">Linux网络工具学习之:IP命令学习03</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/">Linux网络工具学习之:IP命令学习04</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/">Linux网络工具学习之:IP命令学习05</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/net/">net</a>
+                                <span style="float:right;">17</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/db/">Db</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/golang/">Golang</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+                
+                    <script src="/js/autohidingnavbar.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            <script>(function($){
+  $(function(){ 
+    var scroll = $(document).scrollTop();
+    var headerHeight = $('.header').outerHeight();
+    $(window).scroll(function() {
+      var scrolled = $(document).scrollTop();
+      if ((scrolled - scroll) > 50 && scrolled > headerHeight){
+         $('#header').hide();
+      } else if((scroll - scrolled) > 100 || scrolled < headerHeight * 2) {
+         $('#header').show();
+      } 
+      console.log(scrolled - scroll);          
+      scroll = $(document).scrollTop(); 
+      
+     });
+
+   });
+})(jQuery);;</script>
+            
+    </body>
+</html>
+

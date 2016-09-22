@@ -1,0 +1,1219 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>Linux网络工具学习之:IP命令学习05</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Linux网络工具学习之:IP命令学习05"/>
+<meta name="twitter:description" content="Linux网络工具学习之:IP命令学习5 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 5.1 概述 路由表管理 缩写 route、ro、r Usage: ip route { list | flush } SELECTOR ip route save SELECTOR ip route restore ip route showdump ip route get ADDRESS [ from ADDRESS iif STRING ] [ oif STRING ] [ tos TOS ] [ mark NUMBER ] ip route { add | del | change | append | replace } ROUTE SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ] [ table TABLE_ID ] [ proto RTPROTO ] [ type TYPE ] [ scope SCOPE ] ROUTE := NODE_SPEC [ INFO_SPEC ] NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ] [ table TABLE_ID ] [ proto RTPROTO ] [ scope SCOPE ] [ metric METRIC ] INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]..."/>
+
+
+
+        <meta property="og:title" content="Linux网络工具学习之:IP命令学习05" />
+<meta property="og:description" content="Linux网络工具学习之:IP命令学习5 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 5.1 概述 路由表管理 缩写 route、ro、r Usage: ip route { list | flush } SELECTOR ip route save SELECTOR ip route restore ip route showdump ip route get ADDRESS [ from ADDRESS iif STRING ] [ oif STRING ] [ tos TOS ] [ mark NUMBER ] ip route { add | del | change | append | replace } ROUTE SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ] [ table TABLE_ID ] [ proto RTPROTO ] [ type TYPE ] [ scope SCOPE ] ROUTE := NODE_SPEC [ INFO_SPEC ] NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ] [ table TABLE_ID ] [ proto RTPROTO ] [ scope SCOPE ] [ metric METRIC ] INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]..." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/" />
+
+
+<meta property="og:updated_time" content="2016-09-22T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="Linux网络工具学习之:IP命令学习05">
+<meta itemprop="description" content="Linux网络工具学习之:IP命令学习5 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 5.1 概述 路由表管理 缩写 route、ro、r Usage: ip route { list | flush } SELECTOR ip route save SELECTOR ip route restore ip route showdump ip route get ADDRESS [ from ADDRESS iif STRING ] [ oif STRING ] [ tos TOS ] [ mark NUMBER ] ip route { add | del | change | append | replace } ROUTE SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ] [ table TABLE_ID ] [ proto RTPROTO ] [ type TYPE ] [ scope SCOPE ] ROUTE := NODE_SPEC [ INFO_SPEC ] NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ] [ table TABLE_ID ] [ proto RTPROTO ] [ scope SCOPE ] [ metric METRIC ] INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]...">
+
+
+<meta itemprop="dateModified" content="2016-09-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1657">
+
+
+
+<meta itemprop="keywords" content="Db,Golang,IOS &amp; MacOS,net,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/"><p>Linux网络工具学习之:IP命令学习01</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/"><p>Linux网络工具学习之:IP命令学习02</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/"><p>Linux网络工具学习之:IP命令学习03</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/"><p>Linux网络工具学习之:IP命令学习04</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/"><p>Linux网络工具学习之:IP命令学习05</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/">Linux网络工具学习之:IP命令学习05</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-09-22'>
+            September 22, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a005" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A005%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/" class="image featured">
+            <img src="/img/2016/09/winter.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<h1 id="linux网络工具学习之-ip命令学习5">Linux网络工具学习之:IP命令学习5</h1>
+
+<p>标签（空格分隔）： 网络</p>
+
+<hr />
+
+<blockquote>
+<p>本文旨在通过IP命令介绍和学习Linux网络的相关知识</p>
+</blockquote>
+
+<h2 id="1-概述">1. 概述</h2>
+
+<h2 id="2-ip-link">2. ip link</h2>
+
+<h2 id="3-ip-addr">3. ip addr</h2>
+
+<h2 id="4-ip-addrlabel">4 ip addrlabel</h2>
+
+<h2 id="5-ip-route">5 ip route</h2>
+
+<h3 id="5-1-概述">5.1 概述</h3>
+
+<blockquote>
+<p>路由表管理</p>
+</blockquote>
+
+<pre><code>缩写 route、ro、r 
+Usage: ip route { list | flush } SELECTOR
+       ip route save SELECTOR
+       ip route restore
+       ip route showdump
+       ip route get ADDRESS [ from ADDRESS iif STRING ]
+                            [ oif STRING ]  [ tos TOS ]
+                            [ mark NUMBER ]
+       ip route { add | del | change | append | replace } ROUTE
+SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ]
+            [ table TABLE_ID ] [ proto RTPROTO ]
+            [ type TYPE ] [ scope SCOPE ]
+ROUTE := NODE_SPEC [ INFO_SPEC ]
+NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ]
+             [ table TABLE_ID ] [ proto RTPROTO ]
+             [ scope SCOPE ] [ metric METRIC ]
+INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]...
+NH := [ via ADDRESS ] [ dev STRING ] [ weight NUMBER ] NHFLAGS
+OPTIONS := FLAGS [ mtu NUMBER ] [ advmss NUMBER ]
+           [ rtt TIME ] [ rttvar TIME ] [reordering NUMBER ]
+           [ window NUMBER] [ cwnd NUMBER ] [ initcwnd NUMBER ]
+           [ ssthresh NUMBER ] [ realms REALM ] [ src ADDRESS ]
+           [ rto_min TIME ] [ hoplimit NUMBER ] [ initrwnd NUMBER ]
+TYPE := [ unicast | local | broadcast | multicast | throw |
+          unreachable | prohibit | blackhole | nat ]
+TABLE_ID := [ local | main | default | all | NUMBER ]
+SCOPE := [ host | link | global | NUMBER ]
+NHFLAGS := [ onlink | pervasive ]
+RTPROTO := [ kernel | boot | static | NUMBER ]
+TIME := NUMBER[s|ms]
+
+</code></pre>
+
+<p>注 : When using route and ip route on the same machine, it is important to understand that not all routing table entries can be shown with route. The key distinction is that route only displays information in the main routing table. NAT routes, and routes in tables other than the main routing table must be managed and viewed separately with the ip route tool.</p>
+
+<p>|路由类型|说明|
+|-|-|
+|unicast |这种类型的路由描述到目的地址的真实路径。<br />
+|unreachable |这些目的地址是不可达的。如果发过去的数据包都被丢弃并且收到
+|ICMP|信息host unreachable，目的地址就会被标记为不可达。在这种情况下，本地 发送者将返回EHOSTUNREACH错误。<br />
+|blackhole |这些目的地址不可达，而且发过去的数据包都被丢弃。在这种情况下， 本地发送者将返回EINVAL错误。<br />
+|prohibit| 这些路由是不可达的。发过去的数据包都被丢弃，而且产生ICMP信息 communication administratively prohibited。本地发送者会返回EACCESS错误 。<br />
+|local| 目的地址被分配给本机。数据包通过回环被投递到本地。<br />
+|broadcast |目的地址是广播地址，数据包作为链路广播发送。<br />
+|throw |和策略规则(policyrule)一块使用的控制路由。如果选择了这种路由，就 会认为没有发现路由，在这个表中的查询就会被终止。没有找到策略路由就相当于 在路由表中没有找到路由，数据包会被丢弃，并产生ICMP信息net unreachable。 本地发送者会返回ENETUNREACH错误。<br />
+|nat |特定的NAT路由。目标地址属于哑地址（或者称为外部地址），在转发前需要 进行地址转换。 Warning: Route NAT is no longer supported in Linux 2.6.<br />
+|anycast| 目标是anycast地址，被分配给本机。这类地址和本地地址大同小异，不同的是这类地址不能用于任何数据包的源地址。<br />
+|multicast| 使用多播路由。在普通的路由表中，这种路由并不存在。</p>
+
+<p>路由表
+Route tables: Linux-2.x can pack routes into several routing tables
+identified by a number in the range from 1 to 2^31 or by name from the file /etc/iproute2/rt_tables另外，为了方便，还可以在/etc/iproute2/rt_tables 中为路由表命名。默认情况下，所有的路由都会被插入到表main(编号254)中。在进行路由查询时，内核只使用路由表main。 Values (0, 253, 254, and 255) are reserved for  built-in use.
+实际上，还有另外一个路由表也一直存在，这个表是不可见的，而且极为重要 。这就是表local。这个表保存本地和广播路由。内核会自动维护这个路由表，通 常系统管理员没有必要对它进行修改，甚至不必看到。</p>
+
+<p>在使用策略路由（policy routing）时，我们将使用多个路由。在这种情况下，表识别符有很多参数，因此需要使用{prefix,tos,preference}的形式唯一地识 别每个路由。</p>
+
+<h3 id="5-2-ip-route-add-change-replace-route">5.2 ip route { add | change | replace } ROUTE</h3>
+
+<blockquote>
+<p>添加、删除、修改、替换路由</p>
+</blockquote>
+
+<p>|参数|说明
+|-|-|
+|to PREFIX或者to TYPE PREFIX(default)|路由的目标前缀(prefix)。如果TYPE被 忽略，ip命令就会使用默认的类型unicast。其它的类型在上一节都有介绍。 PREFIX是一个IP或者IPv6地址，也可以跟着一个斜杠和掩码长度。如果没有掩码长 度，ip命令就假定是一个单一ip地址。另外，还有一个特殊的PREFIX&ndash;default（缺省路由），它等于IPv4的0/0，或者IPv6的::/0。<br />
+|tos TOS 或者defield TOS|定义服务类型关键词。在进行路由匹配时，内核首先比 较数据包的TOS和route的TOS，如果没有和数据包TOS相同的路由，还可以选择TOS 等于0的路由。TOS或者是一个十六进制的数字，或者是一个由 /etc/iproute2/rt_dsfield文件定义的识别符。  <a href="http://jingdilaqi.blog.sohu.com/279709521.html">参考：tos</a>
+|metric NUMBER或者preference NUMBER|定义路由的优先值，NUMBER时一个任意的 32位数字。<br />
+|table TABLEID |路由要加入的表。TABLEID或者是一个数字或者是 /etc/iproute2/rt_tables文件定义的一个字符串。如果没有这个参数，ip命令就 会把路由加入到表main中，本地(local)、广播(broadcast)和网络地址转换(nat) 路由除外。在默认情况下，这些类型的路由都会被加入表local中。<br />
+|dev NAME |输出设备的名字<br />
+|via ADDRESS |指定下一跳路由器的地址。实际上，这个域的可靠性取决于路由类型 。对于通常的unicast路由，它或者是真正的下一跳路由器地址，或者如果它是 BSD兼容模式安装的直接路由，它可以是一个网络接口的本地地址。对于NAT路由， 它是转换后的地址。<br />
+|src ADDRESS| 在向目的prefix发送数据包时选择的源地址。<br />
+|realm REALMID |指定路由分配的realm。REALM可以是一个数字或者 /etc/iproute2/rt_realms文件定义的一个字符串。<br />
+|mtu MTU或者mtu lock MTU |设置到达目的路径的最大传输单元(MTU)。如果没有使 用修饰符lock，内核会通过路径最大传输单元发现（Path MTU Discovery）机制更 新MTU；如果使用了修饰符lock，内核就不会测试路径的最大传输单元。在这种情况下，发出的所有IPv4数据包DF域都会被设置为0（允许分片），对于IPv6数据包 也允许分片。<br />
+|window NUMBER| 设置到目的地址TCP连接的最大窗口值，以字节为单位。使用这个参数可以限制对端发送数据的速率。<br />
+|rtt NUMBER| 估算初始往返时间（Round Trip Time）<br />
+|rttvar NUMBER| 估算初始往返时间偏差(RTT variance)<br />
+|ssthresh NUMBER |估算慢启动阀值(slow start threshould)<br />
+|cwnd NUMBER |把拥挤窗口(congestion window)值锁定为NUMBER。如果没有lock标记，这个值会被忽略。<br />
+|advmss NUMBER| 设置在建立TCP连接时，向目的地址声明的最大报文段大小 (Maximal Segment Size,MSS)。如果没有设置，Linux内核会使用计算第一跳的最大传输单元得到的数值。<br />
+|nexthop NEXTHOP |设置多路径路由的下一跳地址。NEXTHOP比较复杂，它的语法和以下高层参数类似： via ADDRESS&ndash;表示下一跳路由器； dev NAME&ndash;表示输出设备； weight NUMBER&ndash;在多路由路径中，这个元素的权重。表示相对带宽或者服务质量 。
+|scope SCOPE_VAL |路由前缀(prefix)覆盖的范围。SCOPE_VAL可以是一个数字，也可以是/etc/iproute2/rt_scope文件定义的一个字符串。如果没有这个参数，ip命令就会根据具体情况猜测：对于经过网关的unicast路由，就设置为global；对于直连的unicast路由和广播路由，就设置为link；对于本地路由，就设置为host。
+|protocol RTPROTO |本条路由得路由协议识别符。RTPROTO可以是一个数字，也可以是/etc/iproute2/rt_protos文件定义的一个字符串。如果使用时没有提供这个参 数，ip命令就使用默认值boot(也就是说，ip命令认为添加路由的人不知道自己做 了些什么)。有些协议值有其固定的解释： redirect&ndash;路由是由ICMP重定向加入的； kernel&ndash;路由是由内核在自动配置期间加入的； boot&ndash;路由是启动过程中加入的。如果一个路由监控程序将要启动，这些路由都会 被清除； static&ndash;为了覆盖动态路由，由系统管理员手工添加的路由。路由监控程序也会优先考虑这类路由，甚至可能通告给其对端； ra&ndash;路由是通过路由发现协议加入的(Router Discovery Protocol)。 其它的值没有保留，系统管理员可以自由分配(或者不分配)给协议标记。至少，路 由监控程序应该注意对一些唯一协议值的设置，这些协议值在rtnetlink.h文件或者rt_protos数据库中分配。
+|onlink |假装和下一跳路由器是直接相连的，即使它没有匹配任何接口前缀 (prefix)。<br />
+|equalize |允许把数据包随机从多个路由发出。如果没有这个路由修饰符，内核就会冻结下一跳路由的地址。</p>
+
+<pre><code>----------------------------------------
+example
+----------------------------------------
+设置到网络10.0.0/24的路由经过网关193.233.7.65 
+ip route add 10.0.0/24 via 193.233.7.65 
+等价于
+route add -net 10.0.0.0 netmask 255.255.255.0 gw 193.233.7.65
+修改到网络10.0.0/24的直接路由，使其经过设备dummy 
+ip route chg 10.0.0/24 dev dummy 
+
+加入缺省多路径路由，让ppp0和ppp1分担负载(注意：scope值并非必需，它只不过是告诉内核，这个路由要经过网关而不是直连的。实际上，如果你知道远程端点的 地址，使用via参数来设置就更好了)。 
+ip route add default scope global nexthop dev ppp0 
+                                 nexthop dev ppp1 
+
+设置NAT路由。在转发来自192.203.80.144的数据包之前，先进行网络地址转换， 把这个地址转换为193.233.7.83（回来的转换将会在后面的章节路由策略中介绍） 。 
+ip route add nat 192.203.80.142 via 193.233.7.83
+
+[root@masq-gw]# ip route add nat 205.254.211.17 via 192.168.100.17
+[root@masq-gw]# ip route show table local | grep ^nat
+nat 205.254.211.17 via 192.168.100.17  scope host
+----------------------------------------
+Example  Adding a prohibit route with route add
+----------------------------------------
+[root@masq-gw]# ip route add prohibit 209.10.26.51
+[root@tristan]# ssh 209.10.26.51
+ssh: connect to address 209.10.26.51 port 22: No route to host
+[root@masq-gw]# tcpdump -nnq -i eth2
+tcpdump: listening on eth2
+22:13:13.740406 192.168.99.35.51973 &gt; 209.10.26.51.22: tcp 0 (DF)
+22:13:13.740714 192.168.99.254 &gt; 192.168.99.35: icmp: host 209.10.26.51 unreachable - admin prohibited filter [tos 0xc0]
+
+Altering existing routes with ip route change
+[root@tristan]# ip route change default via 192.168.99.113 dev eth0
+[root@tristan]# ip route show
+192.168.99.0/24 dev eth0  scope link 
+127.0.0.0/8 dev lo  scope link 
+default via 192.168.99.113 dev eth0
+</code></pre>
+
+<h3 id="5-3-ip-route-delete">5.3 ip route delete</h3>
+
+<blockquote>
+<p>删除路由，缩写：delete、del、d</p>
+</blockquote>
+
+<pre><code>[root@masq-gw]# ip route del 10.38.0.0/16 via 192.168.100.1 dev eth3
+</code></pre>
+
+<h3 id="5-4-ip-route-show">5.4 .ip route show</h3>
+
+<blockquote>
+<p>列出路由; 缩写：show、list、sh、ls、l</p>
+</blockquote>
+
+<p>|参数|说明|
+|-|-|
+|to SELECTOR(default)| 只选择到给定地址的路由。 SELECTOR由修饰符(root、 match、exact，可选)和一个前缀(prefix)组成。root PREFIX表示选择前缀 (prefix)不短于PREFIX的路由，例如：root0/0将选在路由表里面的全部路由；match PREFIX表示选择前缀(prefix)不长于PREFIX的路由，match 10.1/16会选择 前缀(prefix)是10.1/16、10./8和0/0的全部路由；而exact PREFIX(或者just PREFIX)表示精确匹配。如果没有这些选项(ip route ls)，ip命令就假定是ip route ls to root 0/0，将列出系统的所有路由。<br />
+|tos TOS或者dsfield TOS| 只列出tos等于TOS的路由<br />
+|table TABLEID |列出路由表TABLEID里面的路由。缺省设置是table main。 TABLEID或者是一个真正的路由表ID或者是/etc/iproute2/rt_tables文件定义的字 符串，或者是以下的特殊值： all &ndash; 列出所有表的路由； cache &ndash; 列出路由缓存的内容。
+|cloned或者cached |列出被克隆出来的路由（由于某些路由属性改变，例如：MTU， 而由某些路由派生出来的路由）。实际上，它的内容和表缓存的内容是一样的。
+|from SELECTOR |和to的语法是相同的，只不过由目的地址换为源地址而已。注意： 这个选项之适用于被克隆出来的路由。<br />
+|protocol RTPROTO |只列出协议是RTPROTO的路由<br />
+|scope SCOPE_VAL |只列出范围是SCOPE_VAL的路由<br />
+|type TYPE| 只列出类型为TYPE的路由<br />
+|dev NAME |只列出通过设备NAME的路由<br />
+|via PREFIX |只列出下一跳通过PREFIX的路由<br />
+|src PREFIX| 只列出源地址属于PREFIX的路由<br />
+|realm REALMID或者raalm FROMREALM/TOREALM| 只列出realm为REALMID的路由</p>
+
+<pre><code>[root@tristan]# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.99.0    0.0.0.0         255.255.255.0   U     0      0        0 eth0
+127.0.0.0       0.0.0.0         255.0.0.0       U     0      0        0 lo
+0.0.0.0         192.168.99.254  0.0.0.0         UG    0      0        0 eth0
+[root@tristan]# ip route show (table main)
+192.168.99.0/24 dev eth0  scope link 
+127.0.0.0/8 dev lo  scope link 
+default via 192.168.99.254 dev eth0
+
+[root@tristan]# ip route show table local
+[root@10-9-151-160 ~]# ip route ls proto kernel
+10.9.0.0/16 dev eth0  scope link  src 10.9.151.160 
+192.168.0.0/24 dev bridge  scope link  src 192.168.0.3 
+192.168.0.0/24 dev vlan0  scope link  src 192.168.0.4 
+192.168.1.0/24 dev eth0  scope link  src 192.168.1.1 
+192.168.10.0/24 dev eth0.8  scope link  src 192.168.10.100
+
+[root@tristan]# ip route show cache 192.168.100.17
+192.168.100.17 from 192.168.99.35 via 192.168.99.254 dev eth0 
+    cache  mtu 1500 rtt 18ms rttvar 15ms cwnd 15 advmss 1460
+192.168.100.17 via 192.168.99.254 dev eth0  src 192.168.99.35 
+    cache  mtu 1500 advmss 1460
+</code></pre>
+
+<h3 id="5-5-ip-route-flush">5.5 ip route flush</h3>
+
+<blockquote>
+<p>擦除路由表; 缩写：flush、f</p>
+</blockquote>
+
+<p>使用这个命令，可以很方便地删除符合某些条件的路由。 这个命令的参数和ip route show命令的参数相同，只不过被操作的路由表不会被显示出来。它和ip route show命令唯一的区别是它们的缺省操作，ip route show会显示出路由表main的所有条目，而ip route flush只会给出帮助信息 ，不对路由表进行任何操作。</p>
+
+<pre><code>netadm@amber:~ # ip -4 ro flush scope global type unicast 
+
+netadm@amber:~ # ip -6 -s -s ro flush cache
+
+[root@tristan]# ip route flush cache
+</code></pre>
+
+<h3 id="5-6-ip-route-get">5.6 ip route get</h3>
+
+<blockquote>
+<p>获得单个路由; 缩写：get、g ;使用这个命令可以获得到达目的地址的一个路由以及它的确切内容。 By simulating a request for the specified destination, ip route get causes the routing selection algorithm to be run.</p>
+</blockquote>
+
+<p>|参数|说明|
+|-|-|
+|to ADDRESS(default) |目标地址<br />
+|from ADDRESS |源地址<br />
+|tos TOS或者dsfield TOS |服务类型<br />
+|iif NAME| 数据包进来的设备<br />
+|oif NAME |数据包出去的设备<br />
+|connected ip |route get命令至少要有参数to ADDRESS。使用connected参数，如果没有给出源地址(from ADDRESS)，ip就会重新在路由表中查询能够到达目的地址 的源地址，给出获得的第一个源地址到目的地址的路由。如果使用了策略路由，会有所不同。</p>
+
+<p>　　ip route get命令和ip route show命令执行的操作是不同的。ip route
+show命令只是显示现有的路由，而ip route get命令在必要时会派生出新的路由。</p>
+
+<pre><code>搜索到193.233.7.82的路由 
+kuznet@amber:~ $ ip route get 193.233.7.82 
+193.233.7.82 dev eth0  src 193.233.7.65 realms inr.ac 
+   cache  mtu 1500 rtt 300 
+</code></pre>
+
+<h3 id="5-7-ip-route-save-save">5.7 ip route save/save</h3>
+
+<blockquote>
+<p>save routing table information to stdout / restore routing table information from stdin</p>
+</blockquote>
+
+<h3 id="5-8-其他相关命令-route">5.8 其他相关命令 route</h3>
+
+<h4 id="5-8-1-viewing-a-simple-routing-table-with-route">5.8.1 Viewing a simple routing table with route</h4>
+
+<pre><code>Usage: route [-nNvee] [-FC] [&lt;AF&gt;]           List kernel routing tables
+       route [-v] [-FC] {add|del|flush} ...  Modify routing table for AF.
+
+       route {-h|--help} [&lt;AF&gt;]              Detailed usage syntax for specified AF.
+       route {-V|--version}                  Display version/author and exit.
+
+        -v, --verbose            be verbose
+        -n, --numeric            don't resolve names
+        -e, --extend             display other/more information
+        -F, --fib                display Forwarding Information Base (default)
+        -C, --cache              display routing cache instead of FIB
+
+  &lt;AF&gt;=Use '-A &lt;af&gt;' or '--&lt;af&gt;'; default: inet
+  List of possible address families (which support routing):
+    inet (DARPA Internet) inet6 (IPv6) ax25 (AMPR AX.25) 
+    netrom (AMPR NET/ROM) ipx (Novell IPX) ddp (Appletalk DDP) 
+    x25 (CCITT X.25) 
+
+
+
+-c 显示更多信息
+-n 不解析名字
+-v 显示详细的处理信息
+-F 显示发送信息
+-C 显示路由缓存
+-f 清除所有网关入口的路由表。 
+-p 与 add 命令一起使用时使路由具有永久性。
+ 
+add:添加一条新路由。
+del:删除一条路由。
+-net:目标地址是一个网络。
+-host:目标地址是一个主机。
+netmask:当添加一个网络路由时，需要使用网络掩码。
+gw:路由数据包通过网关。注意，你指定的网关必须能够达到。
+metric：设置路由跳数。
+Command 指定您想运行的命令 (Add/Change/Delete/Print)。 
+Destination 指定该路由的网络目标。 
+mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 
+Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 
+metric Metric 为路由指定一个整数成本值标（从 1 至 9999），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 
+if Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或
+</code></pre>
+
+<pre><code>[root@tristan]# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.99.0    0.0.0.0         255.255.255.0   U     0      0        0 eth0
+127.0.0.0       0.0.0.0         255.0.0.0       U     0      0        0 lo
+0.0.0.0         192.168.99.254  0.0.0.0         UG    0      0        0 eth0
+</code></pre>
+
+<h4 id="5-8-2-reading-route-s-output">5.8.2 Reading route&rsquo;s output</h4>
+
+<p>|类别|说明|
+|-|-|
+|Destination|destination network or host address
+|Gateway     |   IP address of the gateway to the destination if the destination is not a locally connected network. If there is a value other than 0.0.0.0 in this field, the kernel will address the outbound packet for this device (a router of some kind) rather than directly for the destination.
+|Genmask   |<br />
+| Flags |U Up表示此路由当前为启动状态;H Host，表示此网关为一主机;G Gateway，表示此网关为一路由器; R Reinstate Route，使用动态路由重新初始化的路由; D Dynamically,此路由是动态性地写入; M Modified，此路由是由路由守护程序或导向器动态修改
+|Metric|    路由距离，到达指定网络所需的中转数（linux 内核中没有使用）
+| Ref    |路由项引用次数（linux 内核中没有使用）
+|Use |此路由项被路由软件查找的次数
+|Iface|the name of the interface through which the destination is reachable</p>
+
+<p>三种路由类型：主机路由H，网络路由N，默认路由G</p>
+
+<p><a href="http://www.cnblogs.com/peida/archive/2013/03/05/2943698.html">参考 : 每天一个linux命令（53）：route命令</a>
+<a href="http://blog.csdn.net/chenlycly/article/details/52141854">参考 : linux 路由表设置 之 route 指令详解</a></p>
+
+<h4 id="5-8-3-例子">5.8.3 例子</h4>
+
+<pre><code>实例1：显示当前路由
+命令：
+route
+route -n
+实例2：添加网关/设置网关
+命令： 增加一条 到达244.0.0.0的路由
+[root@localhost ~]# route add -net 224.0.0.0 netmask 240.0.0.0 dev eth0
+[root@localhost ~]# route （省略了部分输出）
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+224.0.0.0       *               240.0.0.0       U     0      0        0 eth0
+
+实例3：屏蔽一条路由 增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝
+命令：
+[root@localhost ~]# route add -net 224.0.0.0 netmask 240.0.0.0 reject
+
+实例4：删除路由记录
+命令：
+route del -net 224.0.0.0 netmask 240.0.0.0
+route del -net 224.0.0.0 netmask 240.0.0.0 reject
+
+实例5：删除和添加设置默认网关
+命令：
+route del default gw 192.168.120.240
+route add default gw 192.168.120.240
+
+[root@localhost ~]# route add default gw 192.168.120.240
+[root@localhost ~]# route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         192.168.120.240 0.0.0.0         UG    0      0        0 eth0
+
+实例6：Adding a static route to a network route add
+#the gateway address must be reachable on a locally connected network for a static route to be useable
+[root@masq-gw]# route add -net 10.38.0.0 netmask 255.255.0.0 gw 192.168.109.1
+SIOCADDRT: Network is unreachable
+[root@masq-gw]# route add -net 10.38.0.0 netmask 255.255.0.0 gw 192.168.100.1
+
+实例7：Using route to display the routing cache
+[root@tristan]# route -Cen
+Kernel IP routing cache
+Source          Destination     Gateway         Flags   MSS Window  irtt Iface
+194.52.197.133  192.168.99.35   192.168.99.35     l      40 0          0 lo
+192.168.99.35   194.52.197.133  192.168.99.254         1500 0         29 eth0
+192.168.99.35   192.168.99.254  192.168.99.254         1500 0          0 eth0
+192.168.99.254  192.168.99.35   192.168.99.35     il     40 0          0 lo
+192.168.99.35   192.168.99.35   192.168.99.35     l   16436 0          0 lo
+192.168.99.35   194.52.197.133  192.168.99.254         1500 0          0 eth0
+192.168.99.35   192.168.99.254  192.168.99.254         1500 0          0 eth0
+</code></pre>
+
+<h4 id="5-8-3">5.8.3</h4>
+
+<p>有用的参考:
+  <a href="https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/">https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/</a>
+  <a href="http://linux-ip.net/html/tools-ip-link.html">http://linux-ip.net/html/tools-ip-link.html</a>
+  <a href="http://baturin.org/docs/iproute2/">http://baturin.org/docs/iproute2/</a>
+  <a href="http://linux-ip.net/gl/ip-cref/">http://linux-ip.net/gl/ip-cref/</a>
+<a href="http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link">http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link</a>
+<a href="http://linux.vbird.org/linux_server/0250simple_firewall.php">http://linux.vbird.org/linux_server/0250simple_firewall.php</a>
+<a href="http://linux-ip.net/html/">http://linux-ip.net/html/</a>
+<a href="http://blog.csdn.net/yeqihong/article/details/710873">http://blog.csdn.net/yeqihong/article/details/710873</a>
+  [30/blog.kghost.info/2013/03/01/linux-network-emulator/</p>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesnet'>net</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006/"
+                class="button big previous">Linux网络工具学习之:IP命令学习06</a></li>
+    
+
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/"
+                class="button big next">Linux网络工具学习之:IP命令学习04</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005\/';
+    var disqus_title = 'Linux网络工具学习之:IP命令学习05';
+    var disqus_url = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/">Linux网络工具学习之:IP命令学习01</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/">Linux网络工具学习之:IP命令学习02</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/">Linux网络工具学习之:IP命令学习03</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/">Linux网络工具学习之:IP命令学习04</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/">Linux网络工具学习之:IP命令学习05</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/net/">net</a>
+                                <span style="float:right;">17</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/db/">Db</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/golang/">Golang</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+                
+                    <script src="/js/autohidingnavbar.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            <script>(function($){
+  $(function(){ 
+    var scroll = $(document).scrollTop();
+    var headerHeight = $('.header').outerHeight();
+    $(window).scroll(function() {
+      var scrolled = $(document).scrollTop();
+      if ((scrolled - scroll) > 50 && scrolled > headerHeight){
+         $('#header').hide();
+      } else if((scroll - scrolled) > 100 || scrolled < headerHeight * 2) {
+         $('#header').show();
+      } 
+      console.log(scrolled - scroll);          
+      scroll = $(document).scrollTop(); 
+      
+     });
+
+   });
+})(jQuery);;</script>
+            
+    </body>
+</html>
+

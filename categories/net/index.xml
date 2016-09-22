@@ -1,0 +1,2793 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>net on LeiiWang&#39;s Blog</title>
+    <link>https://u2takey.github.io/categories/net/</link>
+    <description>Recent content in net on LeiiWang&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 22 Sep 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://u2takey.github.io/categories/net/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习01</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习1&#34;&gt;Linux网络工具学习之:IP命令学习1&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-关于&#34;&gt;1.1 关于&lt;/h3&gt;
+
+&lt;p&gt;ip是iproute2软件包里面的一个强大的网络配置工具&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-语法&#34;&gt;1.2 语法&lt;/h3&gt;
+
+&lt;p&gt;本文使用的版本和相关命令如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[user]# ip -V
+ip utility, iproute2-ss130716
+[user]# ip
+Usage: ip [ OPTIONS ] OBJECT { COMMAND | help }
+       ip [ -force ] -batch filename
+where  OBJECT := { link | addr | addrlabel | route | rule | neigh | ntable |
+                   tunnel | tuntap | maddr | mroute | mrule | monitor | xfrm |
+                   netns | l2tp | tcp_metrics | token }
+       OPTIONS := { -V[ersion] | -s[tatistics] | -d[etails] | -r[esolve] |
+                    -h[uman-readable] | -iec |
+                    -f[amily] { inet | inet6 | ipx | dnet | bridge | link } |
+                    -4 | -6 | -I | -D | -B | -0 |
+                    -l[oops] { maximum-addr-flush-attempts } |
+                    -o[neline] | -t[imestamp] | -b[atch] [filename] |
+                    -rc[vbuf] [size] | -n[etns] name | -a[ll] }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-3-各个object的一个简要介绍&#34;&gt;1.3 各个Object的一个简要介绍&lt;/h3&gt;
+
+&lt;p&gt;|Object|简介|详述
+|-|-|
+|link|网络设备配置命令，启用、禁止设备、改变设备其他状态如MTU等|见节2
+| addr |网络设备配置IPv4或IPv6地址| 见节3
+| addrlabel|IPv6地址标签，主要用于RFC3484中描述的IPv6地址的选择|见节4
+| route |路由表管理|见节5
+| rule |管理路由策略数据库|见节6
+| neigh |邻居/ARP表管理|见节7
+| ntable |邻居表配置|见节8 未完成
+| tunnel |隧道配置|见节9
+| tuntap |管理TUN/TAP设备|见节10
+| maddr |多播地址管理|见节11
+| mroute |多播路由缓存管理|见节11
+| mrule |多播路由策略数据库的规则|见节11
+| monitor |状态控制，如可以持续监控ip地址和路由的状态|见节12
+| xfrm |XFRM框架实现IP层处理和IPSec处理|见节13
+| netns |进程网络namespace管理|见节14
+| l2tp |tunnel Ethernet over IP(L2TPv3)|见节15
+| tcp_metrics |管理TCP Metrics
+| token|表计划的接口标识符支持&lt;/p&gt;
+
+&lt;p&gt;有用的参考:
+  &lt;a href=&#34;https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/&#34;&gt;https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/&lt;/a&gt;
+  &lt;a href=&#34;http://linux-ip.net/html/tools-ip-link.html&#34;&gt;http://linux-ip.net/html/tools-ip-link.html&lt;/a&gt;
+  &lt;a href=&#34;http://baturin.org/docs/iproute2/&#34;&gt;http://baturin.org/docs/iproute2/&lt;/a&gt;
+  &lt;a href=&#34;http://linux-ip.net/gl/ip-cref/&#34;&gt;http://linux-ip.net/gl/ip-cref/&lt;/a&gt;
+&lt;a href=&#34;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link&#34;&gt;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link&lt;/a&gt;
+&lt;a href=&#34;http://linux.vbird.org/linux_server/0250simple_firewall.php&#34;&gt;http://linux.vbird.org/linux_server/0250simple_firewall.php&lt;/a&gt;
+&lt;a href=&#34;http://linux-ip.net/html/&#34;&gt;http://linux-ip.net/html/&lt;/a&gt;
+&lt;a href=&#34;http://blog.csdn.net/yeqihong/article/details/710873&#34;&gt;http://blog.csdn.net/yeqihong/article/details/710873&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习02</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习2&#34;&gt;Linux网络工具学习之:IP命令学习2&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-概述&#34;&gt;2.1 概述&lt;/h3&gt;
+
+&lt;p&gt;缩写：set、s&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip link add [link DEV] [ name ] NAME
+                   [ txqueuelen PACKETS ]
+                   [ address LLADDR ]
+                   [ broadcast LLADDR ]
+                   [ mtu MTU ]
+                   [ numtxqueues QUEUE_COUNT ]
+                   [ numrxqueues QUEUE_COUNT ]
+                   type TYPE [ ARGS ]
+       ip link delete DEV type TYPE [ ARGS ]
+
+       ip link set { dev DEVICE | group DEVGROUP } [ { up | down } ]
+	                  [ arp { on | off } ]
+	                  [ dynamic { on | off } ]
+	                  [ multicast { on | off } ]
+	                  [ allmulticast { on | off } ]
+	                  [ promisc { on | off } ]
+	                  [ trailers { on | off } ]
+	                  [ txqueuelen PACKETS ]
+	                  [ name NEWNAME ]
+	                  [ address LLADDR ]
+	                  [ broadcast LLADDR ]
+	                  [ mtu MTU ]
+	                  [ netns PID ]
+	                  [ netns NAME ]
+	                  [ link-netnsid ID ]
+			  [ alias NAME ]
+	                  [ vf NUM [ mac LLADDR ]
+				   [ vlan VLANID [ qos VLAN-QOS ] ]
+				   [ rate TXRATE ] ] 
+				   [ spoofchk { on | off} ] ] 
+				   [ query_rss { on | off} ] ] 
+				   [ state { auto | enable | disable} ] ]
+			  [ master DEVICE ]
+			  [ nomaster ]
+			  [ addrgenmode { eui64 | none } ]
+       ip link show [ DEVICE | group GROUP ] [up]
+
+TYPE := { vlan | veth | vcan | dummy | ifb | macvlan | can |
+          bridge | ipoib | ip6tnl | ipip | sit | vxlan |
+          gre | gretap | ip6gre | ip6gretap }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-ip-link-show&#34;&gt;2.2 ip link show&lt;/h3&gt;
+
+&lt;h4 id=&#34;2-2-1-简介&#34;&gt;2.2.1 简介&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Displaying link layer characteristics with ip link show&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link&#34; title=&#34;Manual&#34;&gt;Manual&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-2-2-例子&#34;&gt;2.2.2 例子&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+ip link show [ DEVICE | group GROUP ] [up]
+              设备      设备组    只显示running状态的设备
+---------------------------------------------
+---------------------------------------------
+example 1
+---------------------------------------------
+[root@10-10-229-73 ~]# ip link show
+1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1454 qdisc pfifo_fast state UP mode DEFAULT qlen 1000
+    link/ether 52:54:00:e7:ae:ff brd ff:ff:ff:ff:ff:ff
+3: docker0: &amp;lt;NO-CARRIER,BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc noqueue state DOWN mode DEFAULT 
+    link/ether 02:42:c4:87:09:25 brd ff:ff:ff:ff:ff:ff
+5: veth0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu 1500 qdisc noop state DOWN mode DEFAULT qlen 1000
+    link/ether 92:57:fa:48:7c:b2 brd ff:ff:ff:ff:ff:ff
+    
+显示的信息:
+设备名: &amp;lt;设备flags&amp;gt;, MTU, the active queueing mechanism (if any), queue size if there is a queue present. 
+第二行: type of link layer in use on the device, and link layer specific information. For Ethernet, the common case, the current hardware address and Ethernet broadcast address will be displayed.
+---------------------------------------------
+example 2
+---------------------------------------------
+[root@10-10-229-73 ~]# ip -s link show eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1454 qdisc pfifo_fast state UP mode DEFAULT qlen 1000
+    link/ether 52:54:00:e7:ae:ff brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast   
+    9913236656 17997331 0       168     0       0       
+    TX: bytes  packets  errors  dropped carrier collsns 
+    16696600379 17969943 0       0       0       0
+---------------------------------------------
+example 3
+---------------------------------------------   
+[root@10-10-229-73 ~]# ip link show group 0
+1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: docker0: &amp;lt;NO-CARRIER,BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc noqueue state DOWN mode DEFAULT 
+    link/ether 02:42:c4:87:09:25 brd ff:ff:ff:ff:ff:ff
+5: veth0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu 1500 qdisc noop state DOWN mode DEFAULT qlen 1000
+    link/ether 92:57:fa:48:7c:b2 brd ff:ff:ff:ff:ff:ff
+    
+在显示的信息中，每个引号之前的数字是一个接口索引，用于识别网络接口。
+这个数字后面是网络接口的名字(例如：eth0、dummy等)，它也和网络接口一一对
+应。不过，在某些情况下，例如：驱动模块被卸载，对应的接口名就会从列表中消
+失，而其它新创建的接口就会使用相同的名字。系统管理员可以ip link set 
+name修改接口的名字。
+
+　　接口名可以是别的,或者是@NONE。这意味着这个设备被绑定到其它的设备，例
+如数据包被发送到这个设备，由这个设备封装，并从master设备发出。如果设备名
+字是NONE，就表示master设备是未知的。
+
+　　接着，我们看到的是mtu(Maximal Transfer Unit,最大传输单元)。它决定这
+个接口单个数据包能够传输多少数据。
+
+　　qdisc(queuing discipline)显示这个网络接口使用的排队算法。noqueue表示
+不对数据包进行排队；noop表示这个网络接口出于黑洞模式，也就是所有进入本网
+络设备的数据会直接被丢弃。qlen是网络接口传输队列的默认长度。
+
+　　网络接口可以有如下标志：
+
+UP 这个设备处于运行状态，可以接收、发送数据包。 
+LOOPBACK 这个接口不能用于和其它的主机通讯，所有发送到这个接口的数据包都
+会返回，而且这种接口只能接收反弹回来的数据包。 
+BROADCAST 这个设备具有把数据包发送到所有主机的能力。以太网连接是一个很典
+型的例子。 
+POINTTOPOINT 两个节点之间是直接连接的。某个接点发出的所有数据包都会发到
+对端节点，接收到的所有数据包也都是从对端节点发过来的。 
+MULTICAST 这个标志表示设备具有多播能力，能够把数据包发送到某些相邻的网络
+节点。实际上，广播是多播的一个特例，它的多播组包括连接上的所有节点。
+从定义上，POINTTOPOINT和BROADCAST连接都属于多播。 
+
+　　*如果网络接口的标志不属于LOOPBACK、BROADCAST和POINTTOPOINT的任何一个
+，就假定是NMBA(Non-Broadcast Multi-Access)类型。这是最为普遍的一个标志。
+
+
+PROMISC 设备处于混杂模式，接收连接上的所有数据，不管目的地址是否是自己。
+通常，这种模式主要用于网桥和网络监视。 
+ALLMULTI 设备接收连接上的所有多播数据包，多播路由器(muliticast router)使
+用这种模式。 
+NOARP 这个标志和其它的标志不同，它的含义和涉及的网络协议有关。它一般表示
+这个设备无需地址解析，软件或者硬件不必借助于系统协议栈的帮助就知道如何把
+数据包投递到目的地。 
+DYNAMIC 这个标志表示这个网络接口是动态建立和撤消的。 
+SLAVE 表示这个接口被绑定到其它的网络接口。 
+
+　　*除此之外，还有其它一些标志。这些标志或者已经过时(例如：NOTRAILERS)
+，或者还没有实现(如：DEBUG)，或者只是特定于某些设备(例如：MASTER、
+AUTOMEDIA、PORTSEL)。因此，在此我们不作讨论。
+
+　　*对于PROMISC和ALLMULTI标志，ifconfig和ip显示的值是不同的。ip link 
+ls命令显示的是设备的真正状态，而ifconfig显示的是自己设置的虚拟设备状态。
+
+
+　　显示信息的第二行包含和链路层地址(MAC地址)相关的信息。其中，第一个词
+(ether、sit)定义接口的硬件类型。而接口的硬件类型又决定MAC地址的格式和语
+法。默认的格式是硬件的MAC地址和广播地址(如果是点对点连接方式，就是对端的
+地址)，地址是用冒号隔开的16进制数字。不过，默写类型的连接有其特定的地址
+格式，例如：IP通道的地址格式是用点分开的IP地址。
+
+　　NBMA(Non-Broadcast Multi-Access)连接没有明确定义的广播地址和对端地址
+。不过，这个域包含一些有用的信息，例如：倚赖于ARP服务器的广播地址。
+
+　　使用这个命令不会显示多播地址，需要使用ip maddr ls命令。详情请参考第
+9节ip maddr ls。
+
+
+统计信息
+
+　　使用-statistics选项，ip命令会打印出网络接口的统计信息，例如：
+
+kuznet@alisa:~ $ ip -s link ls eth0
+3: eth0: &amp;lt;BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc cbq qlen 100
+    link/ether 00:a0:cc:66:18:78 brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast
+    2449949362 2786187  0   0   0   0
+    TX: bytes  packets  errors  dropped carrier collsns
+    178558497  1783946  332 0   332 35172
+kuznet@alisa:~ $
+
+ 
+
+　　RX:和TX:分别是接收和发送统计信息的开头。得到的统计信息包括：
+
+bytes 网络接口发送或者收到的字节数。如果字节数超过数据类型能够表示的最大
+数值，就会造成回卷。因此，你如果想连续监视这个指标，需要一个用户空间的监
+控进程周期性地保存这个数据。 
+packets 网络接口收到或者发送的数据包个数。 
+errors 发生错误的次数。 
+dropped 由于系统资源限制，而丢弃数据包的数量。 
+overrun 由于发生堵塞，收到的数据包被丢弃的数量。如果接口发生堵塞，就意味
+着内核或者你的机器太慢，无法处理收到的数据。 
+mcast 收到的多播数据包数量，只有很少的设备支持这个选项。 
+carrier 连接介质出现故障的次数，例如：网线接触不好。 
+collsns 以太网类型介质发生冲突的事件次数。 
+compressed 压缩数据包的总数。这个指标只适用于使用VJ头压缩的网络接口。 
+
+　　如果-s选项出现两次或者更多次，ip会输出更为详细的错误信息统计。
+
+kuznet@alisa:~ $ ip -s -s link ls eth0
+3: eth0: &amp;lt;BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc cbq qlen 100
+    link/ether 00:a0:cc:66:18:78 brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast
+    2449949362 2786187  0   0   0   0
+    RX errors: length   crc frame   fifo    missed
+           0    0   0   0   0
+    TX: bytes  packets  errors  dropped carrier collsns
+    178558497  1783946  332 0   332 35172
+    TX errors: aborted  fifo    window  heartbeat
+           0    0   0   332
+kuznet@alisa:~ $
+
+ 
+
+　　这些错误的名字是纯以太化的，对于其它种类的设备，这些域可能有不同的解
+释。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-2-3-相关知识&#34;&gt;2.2.3 相关知识：&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;qdisc pfifo_fast &amp;ndash;&amp;gt; &lt;a href=&#34;http://blog.jobbole.com/62917/&#34; title=&#34;Linux 网络堆栈的排队机制&#34;&gt;网络堆栈的排队机制(有很多翻译错误)&lt;/a&gt;，&lt;a href=&#34;https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/&#34;&gt;原文&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Interface Flags &amp;ndash;&amp;gt; &lt;a href=&#34;http://linux-ip.net/html/tools-ifconfig.html#tools-ifconfig-flags&#34;&gt;Interface Flags&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Group &amp;ndash;&amp;gt; &lt;a href=&#34;http://baturin.org/docs/iproute2/#Link%20group%20management&#34;&gt;Link group&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;ip link show &amp;ndash;&amp;gt; &lt;a href=&#34;http://linux-ip.net/gl/ip-cref/ip-cref-node17.html&#34;&gt;Output format&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;其他 &amp;ndash;&amp;gt; &lt;a href=&#34;http://blog.csdn.net/yeqihong/article/details/710873&#34;&gt;ip-cref中文&lt;/a&gt;, &lt;a href=&#34;http://www.policyrouting.org/iproute2.doc.html&#34;&gt;原文&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;2-3-ip-link-set&#34;&gt;2.3 ip link set&lt;/h3&gt;
+
+&lt;h4 id=&#34;2-3-1-ip-link-set-up-down&#34;&gt;2.3.1 ip link set up/down&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Deactivating/Activating a device with ip link set&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;ip link set { dev DEVICE | group DEVGROUP } [ { up | down } ]
+---------------------------------------------
+example 4
+--------------------------------------------- 
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+[root@tristan]# ip route show
+192.168.99.0/24 dev eth0  proto kernel  scope link  src 192.168.99.35
+127.0.0.0/8 dev lo  scope link 
+default via 192.168.99.254 dev eth0
+[root@tristan]# ip link set dev eth0 down
+[root@tristan]# ip address show dev eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.99.35/24 brd 192.168.99.255 scope global eth0
+[root@tristan]# ip route show
+127.0.0.0/8 dev lo  scope link
+---------------------------------------------
+example 5
+--------------------------------------------- 
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+[root@tristan]# arping -D -I eth0 192.168.99.35
+Interface &amp;quot;eth0&amp;quot; is down
+[root@tristan]# ip link set dev eth0 up
+[root@tristan]# ip address show dev eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.99.35/24 brd 192.168.99.255 scope global eth0
+[root@tristan]# ip route show
+192.168.99.0/24 dev eth0  proto kernel  scope link  src 192.168.99.35
+127.0.0.0/8 dev lo  scope link
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-3-2-ip-link-set-on-off&#34;&gt;2.3.2 ip link set on/off&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Changing link layer characteristics with ip link set&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;
+ip link set { dev DEVICE | group DEVGROUP } [ arp/dynamic/multicast/allmulticast/promisc/trailers { on | off } ]
+---------------------------------------------
+example 6
+--------------------------------------------- 
+[root@tristan]# ip link set dev eth0 promisc on
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST,PROMISC,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+[root@tristan]# ip link set dev eth0 multicast off promisc off
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+[root@tristan]# ip link set arp off
+Not enough of information: &amp;quot;dev&amp;quot; argument is required.
+[root@tristan]# ip link set arp off dev eth0
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,NOARP,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+[root@enclitic root]# ip link set dev eth0 arp on 
+[root@tristan root]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+----------------------------------------------------
+#enable 或者 disable multicast on a device
+ip link set docker0 multicast on = ifconfig docker0 multicast
+ip link set docker0 multicast off = ifconfig docker0 -multicast
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意：ip不能修改PROMISC或者ALLMULTI选项。这两个选项已经比较陈旧，而
+且也不应该随便修改。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-3-txqueuelen-number-or-txqlen-number&#34;&gt;2.3.3 txqueuelen NUMBER or txqlen NUMBER&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;change the transmit queue length of the device 改变设备传输队列的长度&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.jobbole.com/62917/&#34; title=&#34;Linux 网络堆栈的排队机制&#34;&gt;网络堆栈的排队机制(有很多翻译错误)&lt;/a&gt;，&lt;a href=&#34;https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/&#34;&gt;原文&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-4-name-name&#34;&gt;2.3.4 name Name&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;change the name of the device. This operation is not recommended if the device is running or has some addresses already configured.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;作用:
+The convenience of being able to rename devices can be substantial when you are managing many machines and want to use the same name on many different machines, which may have different hardware. Of course, by changing the name of the device, you may foil any scripts which assume conventional device names (eth0, eth1, ppp0).&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-5-address-lladdr-broadcast-lladdress&#34;&gt;2.3.5 address LLADDR, broadcast LLADDRESS&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;change the station address/broadcast address of the interface.修改网络设备的MAC地址 或 修改数据链路层广播地址&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 7
+--------------------------------------------- 
+[root@tristan]# ip link set dev inside name eth0
+[root@tristan]# ip link set dev eth0 address 00:80:c8:f8:be:ef
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:be:ef brd ff:ff:ff:ff:ff:ff
+[root@tristan]# ip link set dev eth0 broadcast ff:ff:88:ff:ff:88
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:be:ef brd ff:ff:88:ff:ff:88
+[root@tristan]# ping -c 1 -n 192.168.99.254 &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;
+[root@tristan]# tcpdump -nnqtei eth0
+tcpdump: listening on eth0
+0:80:c8:f8:be:ef ff:ff:88:ff:ff:88 42: arp who-has 192.168.99.254 tell 192.168.99.35
+0:80:c8:f8:be:ef ff:ff:88:ff:ff:88 42: arp who-has 192.168.99.254 tell 192.168.99.35
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-3-6-mtu-mtu&#34;&gt;2.3.6 mtu MTU&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;change the MTU of the device&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 8
+--------------------------------------------- 
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+[root@tristan]# # ip link set dev eth0 mtu 1412
+[root@tristan]# ip link show dev eth0
+2: eth0: &amp;lt;BROADCAST,UP&amp;gt; mtu 1412 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-3-7-netns-netnsname-pid&#34;&gt;2.3.7 netns NETNSNAME | PID&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;move the device to the network namespace associated with the process PID&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 9
+--------------------------------------------- 
+移动一个veth接口道blue名字空间中
+ip link set veth1 netns blue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-3-8-link-netnsid-id&#34;&gt;2.3.8 link-netnsid ID&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;et peer netnsid for a cross-netns interface&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;2-3-9-alias-name&#34;&gt;2.3.9 alias NAME&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;give the device a symbolic name for easy reference.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 10
+---------------------------------------------
+[root@10-10-229-73 ~]# ip link set docker0 alias dockeralias 
+[root@10-10-229-73 ~]# ip link show
+1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: docker0: &amp;lt;NO-CARRIER,BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc noqueue state DOWN mode DEFAULT 
+    link/ether 02:42:c4:87:09:25 brd ff:ff:ff:ff:ff:ff
+    alias dockeralias
+5: veth0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu 1500 qdisc noop state DOWN mode DEFAULT qlen 1000
+    link/ether 92:57:fa:48:7c:b2 brd ff:ff:ff:ff:ff:ff
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-3-10-vf-num&#34;&gt;2.3.10 vf NUM&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;specify a Virtual Function device to be configured. The associated PF device must be specified using the dev parameter.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 11
+---------------------------------------------
+[ vf NUM [ mac LLADDR ]
+		   [ vlan VLANID [ qos VLAN-QOS ] ]
+		   [ rate TXRATE ] ] 
+		   [ spoofchk { on | off} ] ] 
+		   [ query_rss { on | off} ] ] 
+		   [ state { auto | enable | disable} ] ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://wiki.archlinux.org/index.php/VLAN_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29#.E5.88.9B.E5.BB.BA_VLAN_.E8.AE.BE.E5.A4.87&#34;&gt;参考1：VLAN&lt;/a&gt;
+&lt;a href=&#34;https://community.mellanox.com/docs/DOC-1123&#34;&gt;参考2：HowTo Set Virtual Network Attributes on a Virtual Function&lt;/a&gt;
+&lt;a href=&#34;http://www.ibm.com/developerworks/library/l-virtual-networking/&#34;&gt;参考3：Virtual networking in Linux&lt;/a&gt;
+&lt;a href=&#34;http://docs.oracle.com/cd/E38902_01/html/E38873/glbzi.html&#34;&gt;参考4：SR-IOV&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-11-master-device-nomaster&#34;&gt;2.3.11 master DEVICE/nomaster&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;set master device of the device (enslave device)/nset master device of the device (release device).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://wiki.archlinux.org/index.php/Network_bridge_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29#.E9.80.9A.E8.BF.87_iproute2&#34;&gt;参考：创建和设置bridge的几种方式&lt;/a&gt;,使用iproute是其中一种方式，也可以使用brctl(常用)等其他工具来设置&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Add an interface to bridge
+
+ip link set dev ${interface name} master ${bridge name}
+Examples:
+ip link set dev eth0 master br0
+Interface you added to a bridge becomes a virtual switch port. It operates only on datalink layer and ceases all network layer operation.
+
+Remove interface from bridge
+
+ip link set dev ${interface name} nomaster
+Examples:
+ip link set dev eth0 nomaster
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-3-11-addrgenmode-eui64-or-addrgenmode-none&#34;&gt;2.3.11 addrgenmode eui64 or addrgenmode none&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;set IPv6 address generation mode&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.sina.com.cn/s/blog_8ff4e74b0106cuog.html&#34;&gt;参考：IPV6接口ID的生成之EUI-64自动转换 &lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;2-4-ip-link-add&#34;&gt;2.4 ip link add&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;add virtual link&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;支持的device类型包括vlan | veth | vcan | dummy | ifb | macvlan | can |bridge | ipoib | ip6tnl | ipip | sit | vxlan ; add的同时可以设置一些特性&lt;/p&gt;
+
+&lt;p&gt;|type|说明|
+|-|-|
+|bridge | Ethernet Bridge device 网桥
+|bond | Bonding device can - Controller Area Network interface
+|dummy | Dummy network interface
+|hsr | High-availability Seamless Redundancy device
+|ifb | Intermediate Functional Block device
+|ipoib | IP over Infiniband device
+|macvlan | Virtual interface base on link layer address (MAC)
+|macvtap | Virtual interface based on link layer address(MAC) and TAP.
+|vcan |Virtual Controller Area Network interface
+|veth | Virtual ethernet interface
+|vlan | 802.1q tagged virtual LAN interface
+|vxlan |Virtual eXtended LAN
+|ip6tnl | Virtual tunnel interface IPv4|IPv6 over IPv6
+|ipip | Virtual tunnel interface IPv4 over IPv4
+|sit | Virtual tunnel interface IPv6 over IPv4
+|gre | Virtual tunnel interface GRE over IPv4
+|gretap | Virtual L2 tunnel interface GRE over IPv4
+|ip6gre | Virtual tunnel interface GRE over IPv6
+|ip6gretap | Virtual L2 tunnel interface GRE over IPv6
+|vti | Virtual tunnel interface
+|nlmon | Netlink monitoring device
+|ipvlan | Interface for L3 (IPv6/IPv4) based VLANs
+|lowpan |Interface for 6LoWPAN (IPv6) over IEEE 802.15.4/ Bluetooth
+|geneve | GEneric NEtwork Virtualization Encapsulation&lt;/p&gt;
+
+&lt;h4 id=&#34;2-4-1-vlan-type-support&#34;&gt;2.4.1 VLAN Type Support&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Linux 的 VLAN 设备实现的是隔离功能&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 12
+---------------------------------------------
+[root@10-9-151-160 ~]# ip link add link eth0 name eth0.8 type vlan id
+[root@10-9-151-160 ~]# ip address add 192.168.10.100/24 dev eth0.8
+[root@10-9-151-160 ~]# ip link set dev eth0.8 up
+[root@10-9-151-160 ~]# ip -d link show eth0.8
+9: eth0.8@eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1454 qdisc noqueue state UP mode DEFAULT 
+    link/ether 52:54:00:71:8e:42 brd ff:ff:ff:ff:ff:ff promiscuity 0 
+    vlan protocol 802.1Q id 8 &amp;lt;REORDER_HDR&amp;gt; 
+[root@10-9-151-160 ~]# cat /proc/net/vlan/eth0.8
+eth0.8  VID: 8	 REORDER_HDR: 1  dev-&amp;gt;priv_flags: 1
+         total frames received            0
+          total bytes received            0
+      Broadcast/Multicast Rcvd            0
+
+      total frames transmitted           13
+       total bytes transmitted         2131
+Device: eth0
+INGRESS priority mappings: 0:0  1:0  2:0  3:0  4:0  5:0  6:0 7:0
+ EGRESS priority mappings: 
+
+[root@10-9-151-160 ~]# ping -I eth0.8 192.168.10.101
+[root@10-9-151-160 ~]# tcpdump -Uw - | tcpdump -i eth0 -en -r - vlan 8
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+reading from file -, link-type EN10MB (Ethernet)
+11:30:49.249751 52:54:00:71:8e:42 &amp;gt; Broadcast, ethertype 802.1Q (0x8100), length 46: vlan 8, p 0, ethertype ARP, Request who-has 192.168.10.101 tell 192.168.10.100, length 28
+11:30:50.249944 52:54:00:71:8e:42 &amp;gt; Broadcast, ethertype 802.1Q (0x8100), length 46: vlan 8, p 0, ethertype ARP, Request who-has 192.168.10.101 tell 192.168.10.100, length 28
+11:30:51.251951 52:54:00:71:8e:42 &amp;gt; Broadcast, ethertype 802.1Q (0x8100), length 46: vlan 8, p 0, ethertype ARP, Request who-has 192.168.10.101 tell 192.168.10.100, length 28
+11:30:53.250178 52:54:00:71:8e:42 &amp;gt; Broadcast, ethertype 802.1Q (0x8100), length 46: vlan 8, p 0, ethertype ARP, Request who-has 192.168.10.101 tell 192.168.10.100, length 28
+11:30:54.251942 52:54:00:71:8e:42 &amp;gt; Broadcast, ethertype 802.1Q (0x8100), length 46: vlan 8, p 0, ethertype ARP, Request who-has 192.168.10.101 tell 192.168.10.100, length 28
+
+# 这是一个简单的例子，可以结合docker（或者namespace）做一个验证隔离性的例子（见参考）
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.infoq.com/cn/articles/docker-network-and-pipework-open-source-explanation-practice&#34;&gt;参考：使用Pipework做Docker容器的VLAN划分&lt;/a&gt;
+&lt;a href=&#34;https://tty1.net/blog/2010/ifconfig-ip-comparison_en.html&#34;&gt;参考：ifconfig vs ip:上面的很多命令用ifconfig也可以完成&lt;/a&gt;
+&lt;a href=&#34;http://serverfault.com/questions/490703/vconfig-not-tagging-outgoing-packets-with-vlan-tag-ubuntu&#34;&gt;serverfault: vconfig-not-tagging-outgoing-packets-with-vlan-tag-ubuntu&lt;/a&gt;
+&lt;a href=&#34;http://www.cnblogs.com/CloudMan6/p/5326737.html&#34;&gt;参考 : 动手实践 Linux VLAN - 每天5分钟玩转 OpenStack&lt;/a&gt;
+&lt;a href=&#34;https://onebitbug.me/2014/05/28/building-a-gateway-vlan/&#34;&gt;参考：搭建网关系列 —— VLAN篇&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-4-2-vxlan-type-support&#34;&gt;2.4.2  VXLAN Type Support&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Virtual Extensible LAN (VXLAN) is a network virtualization technology that attempts to improve the scalability problems associated with large cloud computing deployments.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.ipwithease.com/vlan-vs-vxlan/&#34;&gt;参考 : VLAN VS VXLAN&lt;/a&gt;
+&lt;a href=&#34;http://www.yellow-bricks.com/2012/11/02/vxlan-use-cases/&#34;&gt;参考 : VXLAN basics and use cases &lt;/a&gt;
+&lt;a href=&#34;http://blogs.vmware.com/vsphere/2013/04/vxlan-series-different-components-part-1.html&#34;&gt;参考 : VXLAN Series 1~5&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-4-3-gre-ipip-sit-type-support&#34;&gt;2.4.3  GRE, IPIP, SIT Type Support&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;ip隧道技术&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://onebitbug.me/2014/06/03/building-a-gateway-tunnel/&#34;&gt;参考 : 搭建网关系列 —— 隧道篇&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-4-4-ip6gre-ip6gretap-type-support&#34;&gt;2.4.4  IP6GRE/IP6GRETAP Type Support&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.kghost.info/2013/03/27/linux-network-tun/&#34;&gt;参考 : 网络虚拟化技术（二）: TUN/TAP MACVLAN MACVTAP&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-4-5-ipoib-type-support&#34;&gt;2.4.5  IPoIB Type Support&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://access.redhat.com/documentation/zh-CN/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/sec-Configuring_IPoIB.html&#34;&gt;参考 ： 配置 IPOIB&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-4-6-geneve-type-support&#34;&gt;2.4.6  GENEVE Type Support&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Primarily, we wanted to combine the best of the current network virtualization encapsulations (VXLAN, NVGRE, and STT) into a single protocol that could do all the things that those protocols do, and more. We drew on our experience from many years of network virtualization development, and one thing that really stood out was the need for an extensible protocol&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cto.vmware.com/geneve-vxlan-network-virtualization-encapsulations/&#34;&gt;参考 : Geneve, VXLAN, and Network Virtualization Encapsulations&lt;/a&gt;
+&lt;a href=&#34;https://tools.ietf.org/html/draft-gross-geneve-00&#34;&gt;参考：draft-gross-geneve-00&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-4-7-macvlan-and-macvtap-type-support&#34;&gt;2.4.7  MACVLAN and MACVTAP Type Support&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.kghost.info/2013/03/27/linux-network-tun/&#34;&gt;参考：TUN/TAP MACVLAN MACVTAP&lt;/a&gt;
+&lt;a href=&#34;http://hicu.be/bridge-vs-macvlan&#34;&gt;Bridge vs Macvlan&lt;/a&gt;
+&lt;a href=&#34;https://sreeninet.wordpress.com/2016/05/29/macvlan-and-ipvlan/&#34;&gt;Macvlan and IPvlan basics&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.kghost.info/2013/03/27/linux-network-tun/&#34;&gt;一篇非常好的文章带实验例子&lt;/a&gt;
+&lt;a href=&#34;https://blog.kghost.info/2013/03/27/linux-network-tun/&#34;&gt;一篇非常好的文章带实验例子2&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 12 模仿上面的实验的一个例子
+---------------------------------------------
+192.168.0.0/24
+net1(.1)   net2(.2)
+  |           | 
+------------------
+    bridge
+-----------------
+#创建虚拟网络环境并且连接网线
+ip netns add net1
+ip netns add net2
+ip link add type veth
+ip link add type veth
+ip link set dev veth1 name net1-bridge netns net1
+ip link set dev veth3 name net2-bridge netns net2
+ip link set dev veth0 name bridge-net1
+ip link set dev veth2 name bridge-net2
+#创建并且设置br设备
+brctl addbr bridge
+ip link set dev bridge up
+ip link set dev bridge-net1 up
+ip link set dev bridge-net2 up
+brctl addif bridge bridge-net1
+brctl addif bridge bridge-net2
+ip addr add 192.168.0.3/24 dev bridge
+# 配置两个虚拟环境的网卡
+ip netns exec net1 ip link set dev net1-bridge up
+ip netns exec net1 ip address add 192.168.0.1/24 dev net1-bridge
+ip netns exec net2 ip link set dev net2-bridge up
+ip netns exec net2 ip address add 192.168.0.2/24 dev net2-bridge
+# 测试
+ip netns exec net1 ping 192.168.0.2
+ip netns exec net2 ping 192.168.0.1
+ping 192.168.0.2
+ping 192.168.0.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-5-ip-link-delete&#34;&gt;2.5 ip link delete&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;ip link delete DEV type TYPE [ ARGS ]
+
+&amp;gt; [root@10-9-151-160 ~]# ip link delete vxlan0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有用的参考:
+  &lt;a href=&#34;https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/&#34;&gt;https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/&lt;/a&gt;
+  &lt;a href=&#34;http://linux-ip.net/html/tools-ip-link.html&#34;&gt;http://linux-ip.net/html/tools-ip-link.html&lt;/a&gt;
+  &lt;a href=&#34;http://baturin.org/docs/iproute2/&#34;&gt;http://baturin.org/docs/iproute2/&lt;/a&gt;
+  &lt;a href=&#34;http://linux-ip.net/gl/ip-cref/&#34;&gt;http://linux-ip.net/gl/ip-cref/&lt;/a&gt;
+&lt;a href=&#34;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link&#34;&gt;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link&lt;/a&gt;
+&lt;a href=&#34;http://linux.vbird.org/linux_server/0250simple_firewall.php&#34;&gt;http://linux.vbird.org/linux_server/0250simple_firewall.php&lt;/a&gt;
+&lt;a href=&#34;http://linux-ip.net/html/&#34;&gt;http://linux-ip.net/html/&lt;/a&gt;
+&lt;a href=&#34;http://blog.csdn.net/yeqihong/article/details/710873&#34;&gt;http://blog.csdn.net/yeqihong/article/details/710873&lt;/a&gt;
+  [30/blog.kghost.info/2013/03/01/linux-network-emulator/&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习03</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习3&#34;&gt;Linux网络工具学习之:IP命令学习3&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h3 id=&#34;3-1-概述&#34;&gt;3.1 概述&lt;/h3&gt;
+
+&lt;p&gt;缩写 address、addr、a
+对象 这里的地址是绑定到网络设备上的协议(IP或者IPv6)地址。每个网络设备至
+少应该有一个协议地址。而且，一个网络设备可以绑定多个协议地址。
+ip addr命令能够显示网络设备的协议地址及其性质，添加新的地址，删除旧的地
+址。
+命令 add、delete、flush和show(或者list)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-9-151-160 ~]# ip addr help
+Usage: ip addr {add|change|replace} IFADDR dev STRING [ LIFETIME ]
+                                                      [ CONFFLAG-LIST ]
+       ip addr del IFADDR dev STRING
+       ip addr {show|save|flush} [ dev STRING ] [ scope SCOPE-ID ]
+                            [ to PREFIX ] [ FLAG-LIST ] [ label PATTERN ] [up]
+       ip addr {showdump|restore}
+IFADDR := PREFIX | ADDR peer PREFIX
+          [ broadcast ADDR ] [ anycast ADDR ]
+          [ label STRING ] [ scope SCOPE-ID ]
+SCOPE-ID := [ host | link | global | NUMBER ]
+FLAG-LIST := [ FLAG-LIST ] FLAG
+FLAG  := [ permanent | dynamic | secondary | primary |
+           tentative | deprecated | dadfailed | temporary |
+           CONFFLAG-LIST ]
+CONFFLAG-LIST := [ CONFFLAG-LIST ] CONFFLAG
+CONFFLAG  := [ home | nodad ]
+LIFETIME := [ valid_lft LFT ] [ preferred_lft LFT ]
+LFT := forever | SECONDS
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-address&#34;&gt;参考 : Man page&amp;gt;ip-address&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;3-2-ip-address-add&#34;&gt;3.2 ip address add&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;添加一个新的协议地址&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;参数(参数说明见下面的例子)
+|参数|说明
+|-|-
+|dev IFNAME|the name of the device to add the address to.
+|local ADDRESS (default)|
+|peer ADDRESS|
+|broadcast ADDRESS| the broadcast address on the interface.
+|label LABEL|
+|scope SCOPE_VALUE| global /site /local / link / host
+|valid_lft LFT| Defaults to forever.
+|preferred_lft LFT| Defaults to forever.
+|home |  (IPv6 only) designates this address the &amp;ldquo;home address&amp;rdquo; as defined in RFC 6275.
+|mngtmpaddr|(IPv6 only)
+|nodad  |(IPv6 only)
+|noprefixroute|&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------
+example 13
+---------------------------------------------
+dev NAME 被操作的设备名 
+local ADDRESS(default)     接口的地址，地址格式和协议有关。IPv4地址使用.进行分隔，而IPv6地址使用冒号分隔。ADDRESS可以跟着一个斜杠和表示掩码位数的十进制数字。 
+peer ADDRESS 点对点接口对端的地址。ADDRESS也可以跟着一个斜杠和表示掩码位数的十进制数字。 
+broadcast ADDRESS 接口的广播地址。为了方便，可以使用+和-(注1)代替广播地址。例如：
+ip addr add local 192.168.1.1/24 brd + dev eth0
+ip addr add local 192.168.1.1/28 brd - dev eth0 
+label NAME 为每个地址设置一个字符串作为标签。为了和Linux-2.0的网络别名兼容，这个字符串必须以设备名开头，接着一个冒号，例如：
+#ip addr add local 192.168.4.1/28 brd + label eth0:1 dev eth0 
+scope SCOPE_VALUE
+设置地址的有效范围，它用于内核为数据包设置源地址。有效的范围在/etc/iproute2/tr_scopes文件列出，系统预先设定了一些范围值：
+
+global 这个地址全局有效。
+site (IPv6 only, deprecated) the address is site local, i.e. it is valid inside this site.
+link - the address is link local, i.e. it is valid only on this device.
+host 地址在主机内部有效。
+
+示例
+
+在回环设备上添加一个回环地址： 
+#ip addr add 127.0.0.1/8 dev lo brd + scope host
+
+在以太网接口eth0上增加一个地址10.0.0.1，掩码长度为24位(155.155.155.0)，
+标准广播地址，标签为eth0:Alias： 
+#ip addr add 10.0.0.1/24 brd + dev eth0 label eth0:Alias
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-3-ip-address-del&#34;&gt;3.3 ip address del&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;这个命令的参数和ip addr add命令的参数一致。其中，只有设备名是必需的
+参数，其它都是可选的。如果没有给定除设备名之外的其它参数，ip就会删除这个设备的第一个地址。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-9-151-160 ~]# ip addr del  192.168.1.1/28 dev eth0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-4-ip-address-show&#34;&gt;3.4 ip address show&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;缩写：show、list、lst、sh、ls、l&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;部分参数&lt;/p&gt;
+
+&lt;p&gt;|参数名|说明
+|-|
+|dev NAME(default) |设备的名字
+|scope SCOPE_VAL |只列出这个范围的地址
+|to PREFIX |只列出和PREFIX匹配的地址，例如：ip addr ls to 192.168.1.1
+|label PATTERN |只列出标签匹配PATTERN的地址，PATTERN是一个shell风格的正则表达式。
+|dynamic和permanent|这两个参数只适用于IPv6。使用dynamic，ip就只列出动态地址；使用permanent，ip就只列出固定地址。
+|tentative |这个参数只适用于IPv6，只列出没有通过重复地址检测的地址。
+|deprecated| 这个参数只适用于IPv6，只列出deprecated地址。
+|primary和secondary |只列出主(primary)或从(secondary)地址。(在每一个接口上可以配置多个Primary地址和多个Secondary地址。对一个特定的网络掩码（例子中的网络掩码为/24），只能有一个Primary地址。)&lt;/p&gt;
+
+&lt;h3 id=&#34;3-5-ip-address-flush&#34;&gt;3.5 ip address flush&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;This command flushes the protocol addresses selected by some criteria.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;示例1 : 删除属于私网10.0.0.0/8的所有地址：
+ip -s -s a f to 10/8
+示例2 : 取消所有以太网卡的IP地址
+ip -4 addr flush label “eth0″
+
+#Removing all IPs on an interface with ip address flush
+[root@tristan]# ip address show dev eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.99.35/24 brd 192.168.99.255 scope global eth0
+    inet 192.168.99.37/24 brd 192.168.99.255 scope global secondary eth0:0
+[root@tristan]# ip address flush
+Flush requires arguments.
+[root@tristan]# ip address flush dev eth0
+[root@tristan]# ip address show dev eth0
+2: eth0: &amp;lt;BROADCAST,MULTICAST,UP&amp;gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:80:c8:f8:4a:51 brd ff:ff:ff:ff:ff:ff
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习04</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习4&#34;&gt;Linux网络工具学习之:IP命令学习4&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h3 id=&#34;4-1-概述&#34;&gt;4.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;IPv6 address labels are used for address selection; they are described in RFC 3484. Precedence is managed by userspace, and only the label itself is stored in the kernel.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip addrlabel [ list | add | del | flush ] prefix PREFIX [ dev DEV ] [ label LABEL ]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习05</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习5&#34;&gt;Linux网络工具学习之:IP命令学习5&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h3 id=&#34;5-1-概述&#34;&gt;5.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;路由表管理&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;缩写 route、ro、r 
+Usage: ip route { list | flush } SELECTOR
+       ip route save SELECTOR
+       ip route restore
+       ip route showdump
+       ip route get ADDRESS [ from ADDRESS iif STRING ]
+                            [ oif STRING ]  [ tos TOS ]
+                            [ mark NUMBER ]
+       ip route { add | del | change | append | replace } ROUTE
+SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ]
+            [ table TABLE_ID ] [ proto RTPROTO ]
+            [ type TYPE ] [ scope SCOPE ]
+ROUTE := NODE_SPEC [ INFO_SPEC ]
+NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ]
+             [ table TABLE_ID ] [ proto RTPROTO ]
+             [ scope SCOPE ] [ metric METRIC ]
+INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]...
+NH := [ via ADDRESS ] [ dev STRING ] [ weight NUMBER ] NHFLAGS
+OPTIONS := FLAGS [ mtu NUMBER ] [ advmss NUMBER ]
+           [ rtt TIME ] [ rttvar TIME ] [reordering NUMBER ]
+           [ window NUMBER] [ cwnd NUMBER ] [ initcwnd NUMBER ]
+           [ ssthresh NUMBER ] [ realms REALM ] [ src ADDRESS ]
+           [ rto_min TIME ] [ hoplimit NUMBER ] [ initrwnd NUMBER ]
+TYPE := [ unicast | local | broadcast | multicast | throw |
+          unreachable | prohibit | blackhole | nat ]
+TABLE_ID := [ local | main | default | all | NUMBER ]
+SCOPE := [ host | link | global | NUMBER ]
+NHFLAGS := [ onlink | pervasive ]
+RTPROTO := [ kernel | boot | static | NUMBER ]
+TIME := NUMBER[s|ms]
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注 : When using route and ip route on the same machine, it is important to understand that not all routing table entries can be shown with route. The key distinction is that route only displays information in the main routing table. NAT routes, and routes in tables other than the main routing table must be managed and viewed separately with the ip route tool.&lt;/p&gt;
+
+&lt;p&gt;|路由类型|说明|
+|-|-|
+|unicast |这种类型的路由描述到目的地址的真实路径。&lt;br /&gt;
+|unreachable |这些目的地址是不可达的。如果发过去的数据包都被丢弃并且收到
+|ICMP|信息host unreachable，目的地址就会被标记为不可达。在这种情况下，本地 发送者将返回EHOSTUNREACH错误。&lt;br /&gt;
+|blackhole |这些目的地址不可达，而且发过去的数据包都被丢弃。在这种情况下， 本地发送者将返回EINVAL错误。&lt;br /&gt;
+|prohibit| 这些路由是不可达的。发过去的数据包都被丢弃，而且产生ICMP信息 communication administratively prohibited。本地发送者会返回EACCESS错误 。&lt;br /&gt;
+|local| 目的地址被分配给本机。数据包通过回环被投递到本地。&lt;br /&gt;
+|broadcast |目的地址是广播地址，数据包作为链路广播发送。&lt;br /&gt;
+|throw |和策略规则(policyrule)一块使用的控制路由。如果选择了这种路由，就 会认为没有发现路由，在这个表中的查询就会被终止。没有找到策略路由就相当于 在路由表中没有找到路由，数据包会被丢弃，并产生ICMP信息net unreachable。 本地发送者会返回ENETUNREACH错误。&lt;br /&gt;
+|nat |特定的NAT路由。目标地址属于哑地址（或者称为外部地址），在转发前需要 进行地址转换。 Warning: Route NAT is no longer supported in Linux 2.6.&lt;br /&gt;
+|anycast| 目标是anycast地址，被分配给本机。这类地址和本地地址大同小异，不同的是这类地址不能用于任何数据包的源地址。&lt;br /&gt;
+|multicast| 使用多播路由。在普通的路由表中，这种路由并不存在。&lt;/p&gt;
+
+&lt;p&gt;路由表
+Route tables: Linux-2.x can pack routes into several routing tables
+identified by a number in the range from 1 to 2^31 or by name from the file /etc/iproute2/rt_tables另外，为了方便，还可以在/etc/iproute2/rt_tables 中为路由表命名。默认情况下，所有的路由都会被插入到表main(编号254)中。在进行路由查询时，内核只使用路由表main。 Values (0, 253, 254, and 255) are reserved for  built-in use.
+实际上，还有另外一个路由表也一直存在，这个表是不可见的，而且极为重要 。这就是表local。这个表保存本地和广播路由。内核会自动维护这个路由表，通 常系统管理员没有必要对它进行修改，甚至不必看到。&lt;/p&gt;
+
+&lt;p&gt;在使用策略路由（policy routing）时，我们将使用多个路由。在这种情况下，表识别符有很多参数，因此需要使用{prefix,tos,preference}的形式唯一地识 别每个路由。&lt;/p&gt;
+
+&lt;h3 id=&#34;5-2-ip-route-add-change-replace-route&#34;&gt;5.2 ip route { add | change | replace } ROUTE&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;添加、删除、修改、替换路由&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;|参数|说明
+|-|-|
+|to PREFIX或者to TYPE PREFIX(default)|路由的目标前缀(prefix)。如果TYPE被 忽略，ip命令就会使用默认的类型unicast。其它的类型在上一节都有介绍。 PREFIX是一个IP或者IPv6地址，也可以跟着一个斜杠和掩码长度。如果没有掩码长 度，ip命令就假定是一个单一ip地址。另外，还有一个特殊的PREFIX&amp;ndash;default（缺省路由），它等于IPv4的0/0，或者IPv6的::/0。&lt;br /&gt;
+|tos TOS 或者defield TOS|定义服务类型关键词。在进行路由匹配时，内核首先比 较数据包的TOS和route的TOS，如果没有和数据包TOS相同的路由，还可以选择TOS 等于0的路由。TOS或者是一个十六进制的数字，或者是一个由 /etc/iproute2/rt_dsfield文件定义的识别符。  &lt;a href=&#34;http://jingdilaqi.blog.sohu.com/279709521.html&#34;&gt;参考：tos&lt;/a&gt;
+|metric NUMBER或者preference NUMBER|定义路由的优先值，NUMBER时一个任意的 32位数字。&lt;br /&gt;
+|table TABLEID |路由要加入的表。TABLEID或者是一个数字或者是 /etc/iproute2/rt_tables文件定义的一个字符串。如果没有这个参数，ip命令就 会把路由加入到表main中，本地(local)、广播(broadcast)和网络地址转换(nat) 路由除外。在默认情况下，这些类型的路由都会被加入表local中。&lt;br /&gt;
+|dev NAME |输出设备的名字&lt;br /&gt;
+|via ADDRESS |指定下一跳路由器的地址。实际上，这个域的可靠性取决于路由类型 。对于通常的unicast路由，它或者是真正的下一跳路由器地址，或者如果它是 BSD兼容模式安装的直接路由，它可以是一个网络接口的本地地址。对于NAT路由， 它是转换后的地址。&lt;br /&gt;
+|src ADDRESS| 在向目的prefix发送数据包时选择的源地址。&lt;br /&gt;
+|realm REALMID |指定路由分配的realm。REALM可以是一个数字或者 /etc/iproute2/rt_realms文件定义的一个字符串。&lt;br /&gt;
+|mtu MTU或者mtu lock MTU |设置到达目的路径的最大传输单元(MTU)。如果没有使 用修饰符lock，内核会通过路径最大传输单元发现（Path MTU Discovery）机制更 新MTU；如果使用了修饰符lock，内核就不会测试路径的最大传输单元。在这种情况下，发出的所有IPv4数据包DF域都会被设置为0（允许分片），对于IPv6数据包 也允许分片。&lt;br /&gt;
+|window NUMBER| 设置到目的地址TCP连接的最大窗口值，以字节为单位。使用这个参数可以限制对端发送数据的速率。&lt;br /&gt;
+|rtt NUMBER| 估算初始往返时间（Round Trip Time）&lt;br /&gt;
+|rttvar NUMBER| 估算初始往返时间偏差(RTT variance)&lt;br /&gt;
+|ssthresh NUMBER |估算慢启动阀值(slow start threshould)&lt;br /&gt;
+|cwnd NUMBER |把拥挤窗口(congestion window)值锁定为NUMBER。如果没有lock标记，这个值会被忽略。&lt;br /&gt;
+|advmss NUMBER| 设置在建立TCP连接时，向目的地址声明的最大报文段大小 (Maximal Segment Size,MSS)。如果没有设置，Linux内核会使用计算第一跳的最大传输单元得到的数值。&lt;br /&gt;
+|nexthop NEXTHOP |设置多路径路由的下一跳地址。NEXTHOP比较复杂，它的语法和以下高层参数类似： via ADDRESS&amp;ndash;表示下一跳路由器； dev NAME&amp;ndash;表示输出设备； weight NUMBER&amp;ndash;在多路由路径中，这个元素的权重。表示相对带宽或者服务质量 。
+|scope SCOPE_VAL |路由前缀(prefix)覆盖的范围。SCOPE_VAL可以是一个数字，也可以是/etc/iproute2/rt_scope文件定义的一个字符串。如果没有这个参数，ip命令就会根据具体情况猜测：对于经过网关的unicast路由，就设置为global；对于直连的unicast路由和广播路由，就设置为link；对于本地路由，就设置为host。
+|protocol RTPROTO |本条路由得路由协议识别符。RTPROTO可以是一个数字，也可以是/etc/iproute2/rt_protos文件定义的一个字符串。如果使用时没有提供这个参 数，ip命令就使用默认值boot(也就是说，ip命令认为添加路由的人不知道自己做 了些什么)。有些协议值有其固定的解释： redirect&amp;ndash;路由是由ICMP重定向加入的； kernel&amp;ndash;路由是由内核在自动配置期间加入的； boot&amp;ndash;路由是启动过程中加入的。如果一个路由监控程序将要启动，这些路由都会 被清除； static&amp;ndash;为了覆盖动态路由，由系统管理员手工添加的路由。路由监控程序也会优先考虑这类路由，甚至可能通告给其对端； ra&amp;ndash;路由是通过路由发现协议加入的(Router Discovery Protocol)。 其它的值没有保留，系统管理员可以自由分配(或者不分配)给协议标记。至少，路 由监控程序应该注意对一些唯一协议值的设置，这些协议值在rtnetlink.h文件或者rt_protos数据库中分配。
+|onlink |假装和下一跳路由器是直接相连的，即使它没有匹配任何接口前缀 (prefix)。&lt;br /&gt;
+|equalize |允许把数据包随机从多个路由发出。如果没有这个路由修饰符，内核就会冻结下一跳路由的地址。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;----------------------------------------
+example
+----------------------------------------
+设置到网络10.0.0/24的路由经过网关193.233.7.65 
+ip route add 10.0.0/24 via 193.233.7.65 
+等价于
+route add -net 10.0.0.0 netmask 255.255.255.0 gw 193.233.7.65
+修改到网络10.0.0/24的直接路由，使其经过设备dummy 
+ip route chg 10.0.0/24 dev dummy 
+
+加入缺省多路径路由，让ppp0和ppp1分担负载(注意：scope值并非必需，它只不过是告诉内核，这个路由要经过网关而不是直连的。实际上，如果你知道远程端点的 地址，使用via参数来设置就更好了)。 
+ip route add default scope global nexthop dev ppp0 
+                                 nexthop dev ppp1 
+
+设置NAT路由。在转发来自192.203.80.144的数据包之前，先进行网络地址转换， 把这个地址转换为193.233.7.83（回来的转换将会在后面的章节路由策略中介绍） 。 
+ip route add nat 192.203.80.142 via 193.233.7.83
+
+[root@masq-gw]# ip route add nat 205.254.211.17 via 192.168.100.17
+[root@masq-gw]# ip route show table local | grep ^nat
+nat 205.254.211.17 via 192.168.100.17  scope host
+----------------------------------------
+Example  Adding a prohibit route with route add
+----------------------------------------
+[root@masq-gw]# ip route add prohibit 209.10.26.51
+[root@tristan]# ssh 209.10.26.51
+ssh: connect to address 209.10.26.51 port 22: No route to host
+[root@masq-gw]# tcpdump -nnq -i eth2
+tcpdump: listening on eth2
+22:13:13.740406 192.168.99.35.51973 &amp;gt; 209.10.26.51.22: tcp 0 (DF)
+22:13:13.740714 192.168.99.254 &amp;gt; 192.168.99.35: icmp: host 209.10.26.51 unreachable - admin prohibited filter [tos 0xc0]
+
+Altering existing routes with ip route change
+[root@tristan]# ip route change default via 192.168.99.113 dev eth0
+[root@tristan]# ip route show
+192.168.99.0/24 dev eth0  scope link 
+127.0.0.0/8 dev lo  scope link 
+default via 192.168.99.113 dev eth0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-3-ip-route-delete&#34;&gt;5.3 ip route delete&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;删除路由，缩写：delete、del、d&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@masq-gw]# ip route del 10.38.0.0/16 via 192.168.100.1 dev eth3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-4-ip-route-show&#34;&gt;5.4 .ip route show&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;列出路由; 缩写：show、list、sh、ls、l&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;|参数|说明|
+|-|-|
+|to SELECTOR(default)| 只选择到给定地址的路由。 SELECTOR由修饰符(root、 match、exact，可选)和一个前缀(prefix)组成。root PREFIX表示选择前缀 (prefix)不短于PREFIX的路由，例如：root0/0将选在路由表里面的全部路由；match PREFIX表示选择前缀(prefix)不长于PREFIX的路由，match 10.1/16会选择 前缀(prefix)是10.1/16、10./8和0/0的全部路由；而exact PREFIX(或者just PREFIX)表示精确匹配。如果没有这些选项(ip route ls)，ip命令就假定是ip route ls to root 0/0，将列出系统的所有路由。&lt;br /&gt;
+|tos TOS或者dsfield TOS| 只列出tos等于TOS的路由&lt;br /&gt;
+|table TABLEID |列出路由表TABLEID里面的路由。缺省设置是table main。 TABLEID或者是一个真正的路由表ID或者是/etc/iproute2/rt_tables文件定义的字 符串，或者是以下的特殊值： all &amp;ndash; 列出所有表的路由； cache &amp;ndash; 列出路由缓存的内容。
+|cloned或者cached |列出被克隆出来的路由（由于某些路由属性改变，例如：MTU， 而由某些路由派生出来的路由）。实际上，它的内容和表缓存的内容是一样的。
+|from SELECTOR |和to的语法是相同的，只不过由目的地址换为源地址而已。注意： 这个选项之适用于被克隆出来的路由。&lt;br /&gt;
+|protocol RTPROTO |只列出协议是RTPROTO的路由&lt;br /&gt;
+|scope SCOPE_VAL |只列出范围是SCOPE_VAL的路由&lt;br /&gt;
+|type TYPE| 只列出类型为TYPE的路由&lt;br /&gt;
+|dev NAME |只列出通过设备NAME的路由&lt;br /&gt;
+|via PREFIX |只列出下一跳通过PREFIX的路由&lt;br /&gt;
+|src PREFIX| 只列出源地址属于PREFIX的路由&lt;br /&gt;
+|realm REALMID或者raalm FROMREALM/TOREALM| 只列出realm为REALMID的路由&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@tristan]# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.99.0    0.0.0.0         255.255.255.0   U     0      0        0 eth0
+127.0.0.0       0.0.0.0         255.0.0.0       U     0      0        0 lo
+0.0.0.0         192.168.99.254  0.0.0.0         UG    0      0        0 eth0
+[root@tristan]# ip route show (table main)
+192.168.99.0/24 dev eth0  scope link 
+127.0.0.0/8 dev lo  scope link 
+default via 192.168.99.254 dev eth0
+
+[root@tristan]# ip route show table local
+[root@10-9-151-160 ~]# ip route ls proto kernel
+10.9.0.0/16 dev eth0  scope link  src 10.9.151.160 
+192.168.0.0/24 dev bridge  scope link  src 192.168.0.3 
+192.168.0.0/24 dev vlan0  scope link  src 192.168.0.4 
+192.168.1.0/24 dev eth0  scope link  src 192.168.1.1 
+192.168.10.0/24 dev eth0.8  scope link  src 192.168.10.100
+
+[root@tristan]# ip route show cache 192.168.100.17
+192.168.100.17 from 192.168.99.35 via 192.168.99.254 dev eth0 
+    cache  mtu 1500 rtt 18ms rttvar 15ms cwnd 15 advmss 1460
+192.168.100.17 via 192.168.99.254 dev eth0  src 192.168.99.35 
+    cache  mtu 1500 advmss 1460
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-5-ip-route-flush&#34;&gt;5.5 ip route flush&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;擦除路由表; 缩写：flush、f&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;使用这个命令，可以很方便地删除符合某些条件的路由。 这个命令的参数和ip route show命令的参数相同，只不过被操作的路由表不会被显示出来。它和ip route show命令唯一的区别是它们的缺省操作，ip route show会显示出路由表main的所有条目，而ip route flush只会给出帮助信息 ，不对路由表进行任何操作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;netadm@amber:~ # ip -4 ro flush scope global type unicast 
+
+netadm@amber:~ # ip -6 -s -s ro flush cache
+
+[root@tristan]# ip route flush cache
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-6-ip-route-get&#34;&gt;5.6 ip route get&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;获得单个路由; 缩写：get、g ;使用这个命令可以获得到达目的地址的一个路由以及它的确切内容。 By simulating a request for the specified destination, ip route get causes the routing selection algorithm to be run.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;|参数|说明|
+|-|-|
+|to ADDRESS(default) |目标地址&lt;br /&gt;
+|from ADDRESS |源地址&lt;br /&gt;
+|tos TOS或者dsfield TOS |服务类型&lt;br /&gt;
+|iif NAME| 数据包进来的设备&lt;br /&gt;
+|oif NAME |数据包出去的设备&lt;br /&gt;
+|connected ip |route get命令至少要有参数to ADDRESS。使用connected参数，如果没有给出源地址(from ADDRESS)，ip就会重新在路由表中查询能够到达目的地址 的源地址，给出获得的第一个源地址到目的地址的路由。如果使用了策略路由，会有所不同。&lt;/p&gt;
+
+&lt;p&gt;　　ip route get命令和ip route show命令执行的操作是不同的。ip route
+show命令只是显示现有的路由，而ip route get命令在必要时会派生出新的路由。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;搜索到193.233.7.82的路由 
+kuznet@amber:~ $ ip route get 193.233.7.82 
+193.233.7.82 dev eth0  src 193.233.7.65 realms inr.ac 
+   cache  mtu 1500 rtt 300 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-7-ip-route-save-save&#34;&gt;5.7 ip route save/save&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;save routing table information to stdout / restore routing table information from stdin&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;5-8-其他相关命令-route&#34;&gt;5.8 其他相关命令 route&lt;/h3&gt;
+
+&lt;h4 id=&#34;5-8-1-viewing-a-simple-routing-table-with-route&#34;&gt;5.8.1 Viewing a simple routing table with route&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: route [-nNvee] [-FC] [&amp;lt;AF&amp;gt;]           List kernel routing tables
+       route [-v] [-FC] {add|del|flush} ...  Modify routing table for AF.
+
+       route {-h|--help} [&amp;lt;AF&amp;gt;]              Detailed usage syntax for specified AF.
+       route {-V|--version}                  Display version/author and exit.
+
+        -v, --verbose            be verbose
+        -n, --numeric            don&#39;t resolve names
+        -e, --extend             display other/more information
+        -F, --fib                display Forwarding Information Base (default)
+        -C, --cache              display routing cache instead of FIB
+
+  &amp;lt;AF&amp;gt;=Use &#39;-A &amp;lt;af&amp;gt;&#39; or &#39;--&amp;lt;af&amp;gt;&#39;; default: inet
+  List of possible address families (which support routing):
+    inet (DARPA Internet) inet6 (IPv6) ax25 (AMPR AX.25) 
+    netrom (AMPR NET/ROM) ipx (Novell IPX) ddp (Appletalk DDP) 
+    x25 (CCITT X.25) 
+
+
+
+-c 显示更多信息
+-n 不解析名字
+-v 显示详细的处理信息
+-F 显示发送信息
+-C 显示路由缓存
+-f 清除所有网关入口的路由表。 
+-p 与 add 命令一起使用时使路由具有永久性。
+ 
+add:添加一条新路由。
+del:删除一条路由。
+-net:目标地址是一个网络。
+-host:目标地址是一个主机。
+netmask:当添加一个网络路由时，需要使用网络掩码。
+gw:路由数据包通过网关。注意，你指定的网关必须能够达到。
+metric：设置路由跳数。
+Command 指定您想运行的命令 (Add/Change/Delete/Print)。 
+Destination 指定该路由的网络目标。 
+mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 
+Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 
+metric Metric 为路由指定一个整数成本值标（从 1 至 9999），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 
+if Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@tristan]# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.99.0    0.0.0.0         255.255.255.0   U     0      0        0 eth0
+127.0.0.0       0.0.0.0         255.0.0.0       U     0      0        0 lo
+0.0.0.0         192.168.99.254  0.0.0.0         UG    0      0        0 eth0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;5-8-2-reading-route-s-output&#34;&gt;5.8.2 Reading route&amp;rsquo;s output&lt;/h4&gt;
+
+&lt;p&gt;|类别|说明|
+|-|-|
+|Destination|destination network or host address
+|Gateway     |   IP address of the gateway to the destination if the destination is not a locally connected network. If there is a value other than 0.0.0.0 in this field, the kernel will address the outbound packet for this device (a router of some kind) rather than directly for the destination.
+|Genmask   |&lt;br /&gt;
+| Flags |U Up表示此路由当前为启动状态;H Host，表示此网关为一主机;G Gateway，表示此网关为一路由器; R Reinstate Route，使用动态路由重新初始化的路由; D Dynamically,此路由是动态性地写入; M Modified，此路由是由路由守护程序或导向器动态修改
+|Metric|    路由距离，到达指定网络所需的中转数（linux 内核中没有使用）
+| Ref    |路由项引用次数（linux 内核中没有使用）
+|Use |此路由项被路由软件查找的次数
+|Iface|the name of the interface through which the destination is reachable&lt;/p&gt;
+
+&lt;p&gt;三种路由类型：主机路由H，网络路由N，默认路由G&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/peida/archive/2013/03/05/2943698.html&#34;&gt;参考 : 每天一个linux命令（53）：route命令&lt;/a&gt;
+&lt;a href=&#34;http://blog.csdn.net/chenlycly/article/details/52141854&#34;&gt;参考 : linux 路由表设置 之 route 指令详解&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;5-8-3-例子&#34;&gt;5.8.3 例子&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;实例1：显示当前路由
+命令：
+route
+route -n
+实例2：添加网关/设置网关
+命令： 增加一条 到达244.0.0.0的路由
+[root@localhost ~]# route add -net 224.0.0.0 netmask 240.0.0.0 dev eth0
+[root@localhost ~]# route （省略了部分输出）
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+224.0.0.0       *               240.0.0.0       U     0      0        0 eth0
+
+实例3：屏蔽一条路由 增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝
+命令：
+[root@localhost ~]# route add -net 224.0.0.0 netmask 240.0.0.0 reject
+
+实例4：删除路由记录
+命令：
+route del -net 224.0.0.0 netmask 240.0.0.0
+route del -net 224.0.0.0 netmask 240.0.0.0 reject
+
+实例5：删除和添加设置默认网关
+命令：
+route del default gw 192.168.120.240
+route add default gw 192.168.120.240
+
+[root@localhost ~]# route add default gw 192.168.120.240
+[root@localhost ~]# route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         192.168.120.240 0.0.0.0         UG    0      0        0 eth0
+
+实例6：Adding a static route to a network route add
+#the gateway address must be reachable on a locally connected network for a static route to be useable
+[root@masq-gw]# route add -net 10.38.0.0 netmask 255.255.0.0 gw 192.168.109.1
+SIOCADDRT: Network is unreachable
+[root@masq-gw]# route add -net 10.38.0.0 netmask 255.255.0.0 gw 192.168.100.1
+
+实例7：Using route to display the routing cache
+[root@tristan]# route -Cen
+Kernel IP routing cache
+Source          Destination     Gateway         Flags   MSS Window  irtt Iface
+194.52.197.133  192.168.99.35   192.168.99.35     l      40 0          0 lo
+192.168.99.35   194.52.197.133  192.168.99.254         1500 0         29 eth0
+192.168.99.35   192.168.99.254  192.168.99.254         1500 0          0 eth0
+192.168.99.254  192.168.99.35   192.168.99.35     il     40 0          0 lo
+192.168.99.35   192.168.99.35   192.168.99.35     l   16436 0          0 lo
+192.168.99.35   194.52.197.133  192.168.99.254         1500 0          0 eth0
+192.168.99.35   192.168.99.254  192.168.99.254         1500 0          0 eth0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;5-8-3&#34;&gt;5.8.3&lt;/h4&gt;
+
+&lt;p&gt;有用的参考:
+  &lt;a href=&#34;https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/&#34;&gt;https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/&lt;/a&gt;
+  &lt;a href=&#34;http://linux-ip.net/html/tools-ip-link.html&#34;&gt;http://linux-ip.net/html/tools-ip-link.html&lt;/a&gt;
+  &lt;a href=&#34;http://baturin.org/docs/iproute2/&#34;&gt;http://baturin.org/docs/iproute2/&lt;/a&gt;
+  &lt;a href=&#34;http://linux-ip.net/gl/ip-cref/&#34;&gt;http://linux-ip.net/gl/ip-cref/&lt;/a&gt;
+&lt;a href=&#34;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link&#34;&gt;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link&lt;/a&gt;
+&lt;a href=&#34;http://linux.vbird.org/linux_server/0250simple_firewall.php&#34;&gt;http://linux.vbird.org/linux_server/0250simple_firewall.php&lt;/a&gt;
+&lt;a href=&#34;http://linux-ip.net/html/&#34;&gt;http://linux-ip.net/html/&lt;/a&gt;
+&lt;a href=&#34;http://blog.csdn.net/yeqihong/article/details/710873&#34;&gt;http://blog.csdn.net/yeqihong/article/details/710873&lt;/a&gt;
+  [30/blog.kghost.info/2013/03/01/linux-network-emulator/&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习06</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A006/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习6&#34;&gt;Linux网络工具学习之:IP命令学习6&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h3 id=&#34;6-1-概述&#34;&gt;6.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;路由策略数据库管理命令&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;路由策略数据库的规则用于控制选择路由的算法。&lt;/p&gt;
+
+&lt;p&gt;　　Internet上采用的路由算法一般是基于数据包目的地址的。理论上，也可以由 TOS域决定，不过这没有实际应用。要了解经典路由算法的详细情况请参考 RFC-1812。&lt;/p&gt;
+
+&lt;p&gt;　　而在某些情况下，我们不只是需要通过数据包的目的地址决定路由，可能还需 要通过其他一些域：源地址、IP协议、传输层端口甚至数据包的负载。这就叫做： 策略路由(policy routing)。&lt;/p&gt;
+
+&lt;p&gt;　　注意：策略路由(policy routing)不等于路由策略(rouing policy)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;在这种情况下，传统的基于目的地址的路由表就无法满足要求了，需要使用路由策略数据库(routing policy database,RPDB)代替，通过它选择执行某些路由。 这些规则可以由很多不同的状态，而且它们没有天生的次序，要由系统管理员决定 。RPDB可以匹配以下的域: 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;数据包的源地址；
+数据包的目的地址；
+服务类型(Type of Service)；
+进入的网络接口；&lt;/p&gt;
+
+&lt;p&gt;　　匹配IP协议和传输层端口也是可能的，不过这要依靠iptables或者ipchains通过fwmark为某些数据包做标记，并重定向。
+　　每个路由策略由一个选择符(selector)和一个操作(action)组成。系统按照顺 序搜索路由策略数据库，把选择符和{源地址、目的地址、进入接口、tos、 fwmark}等关键词进行匹配，如果匹配成功，就执行action定义的操作。操作或者 成功返回，或者失败并且中止对路由策略。否则，系统继续查询路由策略数据库。
+　　操作如何定义？最原始的操作是选择下一跳(nexthop)和输出设备(output
+device)。Cisco IOS使用这种方式，我们姑且把这叫做匹配并设置(match &amp;amp; set) 。而Linux的方式则更为灵活，Linux允许的操作包括：基于目的地址的路由表查询 以及按照最长匹配的原则从路由表中选择路由。因此，匹配并设置(match &amp;amp; set) 的方式只是一个最简单的特例而已。&lt;/p&gt;
+
+&lt;p&gt;　　再系统启动时，内核会为路由策略数据库配置三条缺省的规则：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;0 匹配任何条件 查询路由表local(ID 255)路由表local是一个特殊的路由表，包 含对于本地和广播地址的高优先级控制路由。rule 0非常特殊，不能被删除或者覆 盖。&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;32766 匹配任何条件 查询路由表main(ID 254) 路由表main(ID 254)是一个通常的表，包含所有的无策略路由。系统管理员可以删除或者使用另外的规则覆盖这条规
+则。&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;32767 匹配任何条件 查询路由表default(ID 253) 路由表default(ID 253)是一个 空表，它是为一些后续处理保留的。对于前面的缺省策略没有匹配到的数据包，系统使用这个策略进行处理。这个规则也可以删除。&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　不要混淆路由表和策略：规则指向路由表，多个规则可以引用一个路由表，而且某些路由表可以没有策略指向它。如果系统管理员删除了指向某个路由表的所有规则，这个表就没有用了，但是仍然存在，直到里面的所有路由都被删除，它才会消失。&lt;/p&gt;
+
+&lt;p&gt;　路由策略规则数据库可以包括如下类型的规则：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;unicast 返回从被引用的路由表中发现的路由&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;blackhole 丢弃数据包，不做任何反应&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;unreachable 产生网络不可达(Network is unreachable)的ICMP错误信息&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;prohibit 产生通讯被禁止(Communication is administratively prohibited)的&lt;/li&gt;
+&lt;li&gt;ICMP错误信息&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;nat 把数据报的源地址转换为其它的值。详情请参考附录C&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip rule [ list | add | del | flush ] SELECTOR ACTION
+SELECTOR := [ not ] [ from PREFIX ] [ to PREFIX ] [ tos TOS ] [ fwmark FWMARK[/MASK] ]
+            [ iif STRING ] [ oif STRING ] [ pref NUMBER ]
+ACTION := [ table TABLE_ID ]
+          [ prohibit | reject | unreachable ]
+          [ realms [SRCREALM/]DSTREALM ]
+          [ goto NUMBER ]
+TABLE_ID := [ local | main | default | NUMBER 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;6-2-ip-rule-add-delete&#34;&gt;6.2 ip rule add/delete&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;插入新的规则/删除规则; 缩写：add、a；delete、del、d&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;|参数 |说明|
+|-|-|
+|type TYPE(default) |这个规则的类型。有效的类型上一节已经介绍过了。&lt;br /&gt;
+|from PREFIX |匹配的源地址&lt;br /&gt;
+|iif NAME |选择数据包进入的设备。如果接口是回环设备，这个规则就只匹配源于本机的数据包。这意味着，你可以为本机发出的数据包和要转发的数据包分别建立路由表，使两者完全隔离。&lt;br /&gt;
+|tos TOS或者dsfield TOS |选择匹配的TOS值&lt;br /&gt;
+|fwmark MARK |选择要匹配的fwmark值（标记） &lt;a href=&#34;http://jacker.blog.51cto.com/1333001/1429023&#34;&gt;参考1&lt;/a&gt;  &lt;a href=&#34;http://staff.ustc.edu.cn/~james/sg/ippr/&#34;&gt;参考2&lt;/a&gt;
+|priority PREFERENCE|设置这个规则的优先级。每个规则的优先级都应该明确设置为一个唯一的数值。实际上，由于历史的原因，ip rule add命令无需任何优先级的值，也不必是唯一的。如果用户没有在命令中提供优先级的值，内核会自动选择。如果用户提供的优先级值已经存在，内核也不会拒绝这次请求，而是在相同优先级的规则前面插入新的规则。&lt;br /&gt;
+|table TABLEID |如果规则选择符匹配，就被查询的路由表识别符。&lt;br /&gt;
+|realms FROM/TO| 如果规则匹配和路由表查询成功，选择的realms值。 &lt;a href=&#34;http://superuser.com/questions/193561/what-does-the-content-of-etc-iproute2-rt-realms-mean-ubuntu-10-4&#34;&gt;参考&lt;/a&gt;&lt;br /&gt;
+|nat ADDRESS |设置要进行网络地址转换的IP地址段。ADDRESS或者是进行网络地址转换ip地址段，或者是一个本机地址，甚至可以是0。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;---------------------------------------------------------------
+Example  Creating a simple entry in the RPDB with ip rule add
+---------------------------------------------------------------
+[root@masq-gw]# ip route add default via 205.254.211.254 table 8
+[root@masq-gw]# ip rule add tos 0x08 table 8
+[root@masq-gw]# ip route flush cache
+[root@masq-gw]# ip rule show
+0:      from all lookup local 
+32765:  from all tos 0x08 lookup 8 
+32766:  from all lookup main 
+32767:  from all lookup 253
+
+Example Creating a complex entry in the RPDB with ip rule add
+
+[root@masq-gw]# ip rule add from 192.168.100.17 tos 0x08 fwmark 4 table 7
+
+
+Example Creating a NAT rule for an entire network with ip rule add nat
+
+[root@masq-gw]# ip rule add nat 205.254.211.32 from 192.168.100.32/29
+[root@masq-gw]# ip rule show
+0:      from all lookup local 
+32765:  from 192.168.100.32/29 lookup main map-to 205.254.211.32
+32766:  from all lookup main 
+32767:  from all lookup 253
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.scottlowe.org/2013/05/29/a-quick-introduction-to-linux-policy-routing/&#34;&gt;参考：A Quick Introduction to Linux Policy Routing&lt;/a&gt;
+&lt;a href=&#34;http://blog.scottlowe.org/2013/05/30/a-use-case-for-policy-routing-with-kvm-and-open-vswitch/&#34;&gt;参考：A Use Case for Policy Routing with KVM and Open vSwitch&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;6-3-ip-rule-show&#34;&gt;6.3 ip rule show&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;列出路由规则; 缩写：show、list、sh、ls、l&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;无参数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kuznet@amber:~ $ ip ru ls 
+0:      from all lookup local 
+200:    from 192.203.80.0/24 to 193.233.7.0/24 lookup main 
+210:    from 192.203.80.0/24 to 192.203.80.0/24 lookup main 
+220:    from 192.203.80.0/24 lookup inr.ruhep realms inr.ruhep/radio-msu 
+300:    from 193.233.7.83 to 193.233.7.0/24 lookup main 
+310:    from 193.233.7.83 to 192.203.80.0/24 lookup main 
+320:    from 193.233.7.83 lookup inr.ruhep map-to 192.203.80.144 
+32766:  from all lookup main 
+
+每行第一部分的数字是规则的优先级，接着是选择符-&amp;gt;selector。 
+关键词lookup后面接着路由表识别符-&amp;gt;action。 
+如果规则要进行网络地址转换，还需要一个关键词map-to设置转换以后的地址。 
+
+上面的示例非常简单，192.203.80.0/24和193.233.7.0/24组成内部网络，但 
+是它们向外发送数据包要通过不同的路由。主机193.233.7.83和外界会话时，地址需要转换为192.203.80.144。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;6-4-ip-rule-flush-save-restore&#34;&gt;6.4 ip rule flush/save/restore&lt;/h3&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习07</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A007/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A007/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习7&#34;&gt;Linux网络工具学习之:IP命令学习7&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h3 id=&#34;7-1-概述&#34;&gt;7.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;ip-neighbour - neighbour/arp tables management.缩写 neighbour、neighbor、neigh、n&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;对象 邻接(neighbour)对象实现同一网段协议地址和链路层地址的绑定。在内核中，这些条目被组织到表中。IPv4的相邻表也被叫做ARP表。
+ip neighbour命令支持对条目及其属性的显示、添加和删除。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-10-229-73 ~]# ip neigh help
+Usage: ip neigh { add | del | change | replace } { ADDR [ lladdr LLADDR ]
+          [ nud { permanent | noarp | stale | reachable } ]
+          | proxy ADDR } [ dev DEV ]
+       ip neigh {show|flush} [ to PREFIX ] [ dev DEV ] [ nud STATE ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://linux.vbird.org/linux_server/0110network_basic.php#tcpip_network_arp&#34;&gt;参考&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;7-2-ip-neighbour-add-change-replace&#34;&gt;7.2 ip neighbour add / change / replace&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;添加/修改/替换一个新的邻接条目； 缩写：add、a；change、chg；replace、repl&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;|参数|说明|
+|-|-
+|to ADDRESS(default) |相邻的协议地址。可以是IPv4或者IPv6。
+|dev NAME |和相邻节点连接的设备。
+|lladdr LLADDRESS |邻居的链路层地址。LLADDRESS可以为空。
+|nud NUD_STATE |邻接条目的状态。nud是Neighbour Unreachability Detection的缩写。可能的状态见下&lt;/p&gt;
+
+&lt;p&gt;|ARP cache entry state| meaning|    action if used
+|-|-|-
+|permanent| never expires; never verified邻接条目永远有效并且只能由管理员删除|    reset use counter
+|noarp  |normal expiration; never verified 在其生命期期满时会被删除。|   reset use counter
+|reachable| normal expiration在超时时间之内，这个邻接条目是有效的|    reset use counter
+|stale| still usable;needs verification |reset use counter; change state to delay&lt;/p&gt;
+
+&lt;p&gt;ip neigh show的可能的状态还有
+|条目状态|说明
+|-|-|
+|none |网络邻居的状态为空。
+|incomplete| 这个邻居正在被解析。
+|delay| 一个数据包已经发到处于stale的网络邻居,内核在等待应答信息。
+|probe delay |计时器过期，还没有收到确认信息。内核开始使用ARP/NDISC消息包探测这个网络邻居。
+|failed| 解析失败。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;在设备eth0上，为地址10.0.0.3添加一个permanent ARP条目： 
+ip neigh add 10.0.0.3 lladdr 0:0:0:0:0:1 dev eth0 nud perm
+
+把状态改为reachable 
+ip neigh chg 10.0.0.3 dev eth0 nud reachable
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;7-3-ip-neighbour-delete&#34;&gt;7.3 ip neighbour delete&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;删除一个邻接条目; 缩写：delete、del、d&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个命令的参数和ip neigh add命令的相同，只不过lladdr和nud将被忽略。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;删除设备eth0上的一个ARP条目10.0.0.3 
+ip neigh del 10.0.0.3 dev eth0
+
+执行了删除命令之后，被删除的条目不会马上消失，它会在系统的下次垃圾收
+集时被删除。如果被操作的条目正在使用，将不能被删除。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;7-4-ip-neighbour-show&#34;&gt;7.4 ip neighbour show&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;显示网络邻居的信息; 缩写：show、list、sh、ls&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;duznet@alisa:~ $ ip neigh ls
+:: dev lo lladdr 00:00:00:00:00:00 nud noarp
+fe80::200:cff:fe76:3f85 dev eth0 lladdr 00:00:0c:76:3f:86 router 
+    nud stale
+0.0.0.0 dev lo lladdr 00:00:00:00:00:00 nud noarp
+193.233.7.254 dev eth0 lladdr 00:00:0c:76:3f:85 nud reachable
+193.233.7.85 dev eth0 lladdr 00:e0:1e:63:39:00 nud stale
+kuznet@alisa:~ $
+
+    
+-statistics选项可以显示很多有用的信息。例如：
+
+kuznet@alisa:~ $ ip -s n ls 193.233.7.254
+193.233.7.254. dev eth0 lladdr 00:00:0c:76:3f:85 ref 5 
+    used 12/13/20 nud reachable
+kuznet@alisa:~ $
+
+输出信息里面多了ref和用斜缸分开的三个时间。ref表示有多少用户使用这个
+条目；三个时间分别是使用时间、确认时间和刷新时间。因此，上面输出中的时间
+表示：
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;7-5-ip-neighbour-flush&#34;&gt;7.5 ip neighbour flush&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;清除邻接条目, 缩写：flush、f&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个命令用来清除符合某个条件的邻接表条目。这个命令的参数和ip neigh sh相同。不同之处是，如果没有参数，它什么也
+不会做。而且，默认情况下，被删除的条目不包括处于permanent和noarp状态的条
+目。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;netadm@alisa:~ # ip -s -s n f 193.233.7.254
+193.233.7.254 dev eth0 lladdr 00:00:0c:76:3f:85 ref 5 
+    used 12/13/20 nud reachable
+
+*** Round 1,deleting 1 entries ***
+*** Flush is complete after 1 round ***
+netadm@alisa:~ #
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习08</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A008/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A008/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习8&#34;&gt;Linux网络工具学习之:IP命令学习8&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h3 id=&#34;8-1-概述&#34;&gt;8.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;ip ntable controls the parameters for the neighbour tables.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习09</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A009/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A009/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习9&#34;&gt;Linux网络工具学习之:IP命令学习9&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h2 id=&#34;9-ip-tunnel&#34;&gt;9 ip tunnel&lt;/h2&gt;
+
+&lt;h3 id=&#34;9-1-概述&#34;&gt;9.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;ip tunnel命令的操作对象是网络通道(tunnel)。所谓通道(tunnel)是指把数据包封装到IPv4数据包中，使用IP协议发出。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip tunnel { add | change | del | show | prl | 6rd } [ NAME ]
+          [ mode { ipip | gre | sit | isatap | vti } ] [ remote ADDR ] [ local ADDR ]
+          [ [i|o]seq ] [ [i|o]key KEY ] [ [i|o]csum ]
+          [ prl-default ADDR ] [ prl-nodefault ADDR ] [ prl-delete ADDR ]
+          [ 6rd-prefix ADDR ] [ 6rd-relay_prefix ADDR ] [ 6rd-reset ]
+          [ ttl TTL ] [ tos TOS ] [ [no]pmtudisc ] [ dev PHYS_DEV ]
+
+Where: NAME := STRING
+       ADDR := { IP_ADDRESS | any }
+       TOS  := { STRING | 00..ff | inherit | inherit/STRING | inherit/00..ff }
+       TTL  := { 1..255 | inherit }
+       KEY  := { DOTTED_QUAD | NUMBER }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;9-2-ip-tunnel-add-change-delete&#34;&gt;9.2 ip tunnel add/change/delete&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;添加新的通道; 修改现有的通道; 删除一个通道.缩写：add、a；change、chg；delete、del、d&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;|参数|说明|
+|-|-|
+|name NAME(default) |选择通道设备名
+|mode MODE |设置通道模式。有效的模式包括：ipip、sit和gre等等等等。
+|remote ADDRESS |设置通道远端地址
+|local ADDRESS |设置进入通道数据包的固定本地地址，必须是在本机另外一个接口上的地址。
+|ttl N |设置进入通道数据包的TTL为N。N是一个1—255之间的数字。0是一个特殊的 值，表示这个数据包的TTL值是继承(inherit)的。ttl参数的缺省值是：inherit。
+|tos T或者dsfield T |设置进入通道数据包的TOS域，缺省是inherit。
+|dev NAME| 把通道绑定到设备NAME，以便进入通道的数据包只能通过NAME设备路由 ，并且当对端发生变化时，不能够在另外的设备解开封装。
+|nopmtudisc |在这个通道上禁止路径最大传输单元发现( Path MTU Discovery)。默认情况下，这个功能是打开的。注意：这个选项和固定的ttl是不兼容的，如果使用了固定的ttl参数，系统会打开路径最大传输单元发现( Path MTU Discovery)功能。
+|key k,ikey k,okey k |只适用于GRE通道，设置keyedGRE通道的key。K或者是一个 数字或者是IP地址形式的数字序列。参数key在通道的双向使用，ikey和okey为输入和输出设置不同的key。
+|csum,icsum,ocsum |只用于GRE通道，计算进入通道数据包的校验和。ocsum表示只计算出去的数据包的校验和；icsum表示只计算进入的数据包的校验和；而csum等于icsum ocsum。
+|seq,iseq,oseq |只适用于GRE通道，顺序发送／接收数据包。oseq使向外的数据包顺序发送；iseq要求所有进入的数据包都是按照顺序的；而seq等于iseq oseq。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; ip tunnel add Cisco mode sit remote 192.31.7.104 local 192.203.80.1 ttl 32 
+&amp;lt;== 同 ==&amp;gt;
+ip link add Cisco type sit remote 192.31.7.104 local 192.203.80.1 ttl 32 
+-------------------------------------------------
+example
+-------------------------------------------------
+# 这里使用2.4.7里面的一个例子的环境来测试
+192.168.0.0/24
+net1(.1)   net2(.2)
+  |           | 
+------------------
+    bridge
+-----------------
+在net1 和 net2之前创建一个tunnel来通信
+
+#创建tunnel 设置ip 打开
+ip netns exec net1 ip tunnel add ethn mode ipip local 192.168.0.1 remote 192.168.0.2 
+ip netns exec net2 ip tunnel add ethm mode ipip local 192.168.0.2 remote 192.168.0.1
+ip netns exec net1 ip addr add 10.0.1.1 dev ethn
+ip netns exec net2 ip addr add 10.0.2.1 dev ethm
+ip netns exec net1 ip link set ethn up
+ip netns exec net2 ip link set ethm up
+
+# 设置路由规则
+ip netns exec net1 route add -host 10.0.2.1 dev ethn
+ip netns exec net2 route add -host 10.0.1.1 dev ethm
+
+# 测试
+ip netns exec net1 ping 10.0.2.1
+ip netns exec net2 ping 10.0.1.1
+
+[root@10-9-151-160 ~]# ip netns exec net1 tcpdump -nntei net1-bridge
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on net1-bridge, link-type EN10MB (Ethernet), capture size 65535 bytes
+e6:eb:1f:d4:9d:93 &amp;gt; b6:59:5b:f3:89:8d, ethertype IPv4 (0x0800), length 118: 192.168.0.2 &amp;gt; 192.168.0.1: 10.0.2.1 &amp;gt; 10.0.1.1: ICMP echo request, id 2246, seq 59, length 64 (ipip-proto-4)
+b6:59:5b:f3:89:8d &amp;gt; e6:eb:1f:d4:9d:93, ethertype IPv4 (0x0800), length 118: 192.168.0.1 &amp;gt; 192.168.0.2: 10.0.1.1 &amp;gt; 10.0.2.1: ICMP echo reply, id 2246, seq 59, length 64 (ipip-proto-4)
+e6:eb:1f:d4:9d:93 &amp;gt; b6:59:5b:f3:89:8d, ethertype IPv4 (0x0800), length 118: 192.168.0.2 &amp;gt; 192.168.0.1: 10.0.2.1 &amp;gt; 10.0.1.1: ICMP echo request, id 2246, seq 60, length 64 (ipip-proto-4)
+b6:59:5b:f3:89:8d &amp;gt; e6:eb:1f:d4:9d:93, ethertype IPv4 (0x0800), length 118: 192.168.0.1 &amp;gt; 192.168.0.2: 10.0.1.1 &amp;gt; 10.0.2.1: ICMP echo reply, id 2246, seq 60, length 64 (ipip-proto-4)
+e6:eb:1f:d4:9d:93 &amp;gt; b6:59:5b:f3:89:8d, ethertype IPv4 (0x0800), length 118: 192.168.0.2 &amp;gt; 192.168.0.1: 10.0.2.1 &amp;gt; 10.0.1.1: ICMP echo request, id 2246, seq 61, length 64 (ipip-proto-4)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/hoji-real/articles/2363049.html&#34;&gt;参考：两台linux机器上建立ip隧道&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;9-3-ip-tunnel-show&#34;&gt;9.3 ip tunnel show&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;列出现有的通道; 缩写：show、list、sh、ls、l&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-9-151-160 ~]# ip tunnel show
+Cisco1: ip/ip  remote 192.31.7.104  local 192.203.80.1  ttl 32 
+sit0: ipv6/ip  remote any  local any  ttl 64  nopmtudisc 6rd-prefix 2002::/16 
+tunl0: ip/ip  remote any  local any  ttl inherit  nopmtudisc
+Cisco: ipv6/ip  remote 192.31.7.104  local 192.203.80.1  ttl 32  6rd-prefix 2002::/16
+
+kuznet@amber:~ $ ip -s tunl ls Cisco 
+Cisco: ipv6/ip  remote 192.31.7.104  local 192.203.80.142  ttl 32 
+RX: Packets    Bytes        Errors CsumErrs OutOfSeq Mcasts 
+   12566      1707516      0      0        0        0        
+TX: Packets    Bytes        Errors DeadLoop NoRoute  NoBufs 
+   13445      1879677      0      0        0        0    
+
+CsumErrs 对于打开校验和检验的GRE通道，这个数字是由于校验和错误而丢弃的数 
+据包数量。 
+OutOfSeg 在打开顺序功能的GRE通道内，由于顺序错误而丢弃的数据包数量。 
+Mcasts 在GRE通道上接收到的多播数据包的数量。 
+DeadLoop 由于通道是回环到自己而没有传输的数据包数目。 
+NoRoute 由于到对端没有路由而没有被传输的数据包数目。 
+NoBufs 由于内核不能分配缓冲区而没有被传输的数据包数目。 
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习10</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A010/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A010/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习10&#34;&gt;Linux网络工具学习之:IP命令学习10&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h2 id=&#34;9-ip-tunnel&#34;&gt;9 ip tunnel&lt;/h2&gt;
+
+&lt;h2 id=&#34;10-ip-tuntap&#34;&gt;10 ip tuntap&lt;/h2&gt;
+
+&lt;h3 id=&#34;10-1-概述&#34;&gt;10.1 概述&lt;/h3&gt;
+
+&lt;p&gt;TUN/TAP provides packet reception and transmission for user space programs. It can be seen as a simple Point-to-Point or Ethernet device, which, instead of receiving packets from physical media, receives them from user space program and instead of sending packets via physical media writes them to the user space program.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;data:image/png;base64,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GOeyt6XccsstinzyySdOk23evFlxlaI6QHWeoroRI0a0RwPniWvWwjswu1RXzAuA6nqq6gDVMS+qA1SH6lAdqmNeAFSH6lBdD1Gd0z334eHh06ZN27hxY1dr40KtF9UBqnP+HlrZb775pl+/fuZWwBa/qI7TO0Z8fX0vu+yyBx98sKKiwrHU6SGe1mZvccmoDtV1unJMura2dvfu3VdeeaUiq1evdoHqXLzenJwcRfr3729FzEvjHnroISuiUkXMlPS54EGq+/rrr4ODg318fN56663WXNjivE1NTSdOnLj33nsd72+2bjzTd7sN1bVHwKgO1XWucgzm4cXm78rq6ufqXLPeyy+/XMFvv/3WZMeMGWMePjFZxZXVNIzqwLNUl5CQEHgWp8d92i+kkpISZTUodCzt27evfsPW19ejOlTX3VRXVVXV/EWULlCda9Z79913K/jmm28qnZuba5040TBOEcXNgyioDjxIdR988IG+eNLSzp07228dp6JTp04pGxYW5lhqHmRetmwZqkN13U115k8EXT+qc81633rrLQV/+9vfKm3e4GNeF2f+oPV3v/ud0m+88QaqAw9SnXnw2fG8pdMEbV9RczyB+cADDziWqmjKlClBQUHmj7K4VofquoPqamtr9+zZY66ZrVq1ymWqc+V6zUU482d1t912m7e396FDh/RNnzdvniJjx461/r4O1YGnqO5f//qXPkNCQs5hVOdIZGRkZWWl04wZGRn+/v6xsbEuHtVFRETw6vF2oqb3tDswBwwYcEHuwHTZes+cvVzn5eVVXFwcGhr6q1/9SpGYmJi+ffueOnVK8cGDB5//egF6kuqU0G9MHf0afn366acdPYGp36r79++fNGmS431ljjOav4g0b3N3mepEeXl5bm5uenp6UlJSQkLCe90A1eu9bon2j/aS9pX2mPabJ5zA7JA2etx6z/x0ue7Pf/6zPl944QVFXn75ZaWfeuopx/9AR3XgQao7c/aEvmzn5+f3/vvvd0h1hoKCAo3ehg4dat4c73TeZvTo0eYPw1ypOrvdXlhYmJWVlZaWlpiY+Hk3QPX6vFui/aO9pH2lPab9hurcQHXmcl2fPn30efDgQUUOHz5sBvH6fO2111AdeKLqRHx8vPdZzLXrjgrJ/CWYeW+6U+muXbvMP9e4UnXV1dWlpaX5+fnqwW02W0o3wPzL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&#34; alt=&#34;此处输入图片的描述&#34; /&gt;
+&lt;img src=&#34;data:image/png;base64,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&#34; alt=&#34;此处输入图片的描述&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;tun,tap的区别见下面的参考&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip tuntap { add | del } [ dev PHYS_DEV ] 
+          [ mode { tun | tap } ] [ user USER ] [ group GROUP ]
+          [ one_queue ] [ pi ] [ vnet_hdr ] [ multi_queue ]
+
+Where: USER  := { STRING | NUMBER }
+       GROUP := { STRING | NUMBER }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;10-2-ip-tuntap-add-del&#34;&gt;10.2 ip tuntap add/del&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;添加/删除 tun/tap设备&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;##control program &amp;lt;--read/write--&amp;gt; TUN interface &amp;lt;--send/receive IP packets--&amp;gt; any networking program 
+
+#1. Setting up a virtual TUN interface.
+ip tuntap add dev asa0 mode tun
+ip addr add 10.0.0.1/24 dev asa0
+ip link set dev asa0 up
+
+
+
+# 2.  tun-reader.c 
+
+#include &amp;lt;fcntl.h&amp;gt;  /* O_RDWR */
+#include &amp;lt;string.h&amp;gt; /* memset(), memcpy() */
+#include &amp;lt;stdio.h&amp;gt; /* perror(), printf(), fprintf() */
+#include &amp;lt;stdlib.h&amp;gt; /* exit(), malloc(), free() */
+#include &amp;lt;sys/ioctl.h&amp;gt; /* ioctl() */
+
+/* includes for struct ifreq, etc */
+#include &amp;lt;sys/types.h&amp;gt;
+#include &amp;lt;sys/socket.h&amp;gt;
+#include &amp;lt;linux/if.h&amp;gt;
+#include &amp;lt;linux/if_tun.h&amp;gt;
+
+int tun_open(char *devname)
+{
+    struct ifreq ifr;
+    int fd, err;
+
+    if ( (fd = open(&amp;quot;/dev/net/tun&amp;quot;, O_RDWR)) == -1 ) {
+        perror(&amp;quot;open /dev/net/tun&amp;quot;);
+        exit(1);
+    }
+
+    memset(&amp;amp;ifr, 0, sizeof(ifr));
+    ifr.ifr_flags = IFF_TUN;
+    strncpy(ifr.ifr_name, devname, IFNAMSIZ);
+
+    /* ioctl will use if_name as the name of TUN
+    * interface to open: &amp;quot;tun0&amp;quot;, etc. */
+    if ( (err = ioctl(fd, TUNSETIFF, (void *) &amp;amp;ifr)) == -1 ) {
+        perror(&amp;quot;ioctl TUNSETIFF&amp;quot;);close(fd);exit(1);
+    }
+
+    /* After the ioctl call the fd is &amp;quot;connected&amp;quot; to tun device
+    * specified
+    * by devname */
+
+    return fd;
+}
+
+int main(int argc, char *argv[])
+{
+    int fd, nbytes;
+    char buf[1600];
+
+    fd = tun_open(&amp;quot;asa0&amp;quot;) ;
+    printf(&amp;quot;Device asa0 opened\n&amp;quot;);
+
+    while(1) {
+        nbytes = read(fd, buf, sizeof(buf));
+        printf(&amp;quot;Read %d bytes from asa0\n&amp;quot;, nbytes);
+    }
+    return 0;
+}
+
+
+# 3. 运行
+gcc tun-reader.c
+./a.out
+
+It will open the file descriptor of the asa0 interface and will wait for any packets. Let&#39;s send some packets to the asa0 interface as follows to see whether our program receive those packets.
+
+# 4. 测试
+ping 10.0.0.1
+
+无输出
+In the above case, we are pinging to the exact IP address of the asa0 interface. Therefore we receive ping responses from the interface directly without directing the ICMP packets to the back-end program. Now, let&#39;s ping to some other IP address in the same network.
+
+ping 10.0.0.2
+[root@10-9-151-160 ~]# ./a.out 
+Device asa0 opened
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+
+[root@10-9-151-160 ~]# tcpdump -vvi asa0
+tcpdump: listening on asa0, link-type RAW (Raw IP), capture size 65535 bytes
+18:46:22.633821 IP (tos 0x0, ttl 64, id 37266, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &amp;gt; 10.0.0.2: ICMP echo request, id 2304, seq 1332, length 64
+18:46:23.633767 IP (tos 0x0, ttl 64, id 37267, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &amp;gt; 10.0.0.2: ICMP echo request, id 2304, seq 1333, length 64
+18:46:24.633776 IP (tos 0x0, ttl 64, id 37268, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &amp;gt; 10.0.0.2: ICMP echo request, id 2304, seq 1334, length 64
+
+
+# 5. 这时候新建一个tun0
+ip tuntap add dev tun0 mode tun
+ip addr add 10.0.0.2/24 dev tun0
+ip link set dev tun0 up
+
+# 6. 修改一下tun-reader.c 把数据写到tun0； 即 data-&amp;gt;asa0-&amp;gt;tun0
+#include &amp;lt;fcntl.h&amp;gt;  /* O_RDWR */
+#include &amp;lt;string.h&amp;gt; /* memset(), memcpy() */
+#include &amp;lt;stdio.h&amp;gt; /* perror(), printf(), fprintf() */
+#include &amp;lt;stdlib.h&amp;gt; /* exit(), malloc(), free() */
+#include &amp;lt;sys/ioctl.h&amp;gt; /* ioctl() */
+
+/* includes for struct ifreq, etc */
+#include &amp;lt;sys/types.h&amp;gt;
+#include &amp;lt;sys/socket.h&amp;gt;
+#include &amp;lt;linux/if.h&amp;gt;
+#include &amp;lt;linux/if_tun.h&amp;gt;
+
+int tun_open(char *devname)
+{
+    struct ifreq ifr;
+    int fd, err;
+
+    if ( (fd = open(&amp;quot;/dev/net/tun&amp;quot;, O_RDWR)) == -1 ) {
+        perror(&amp;quot;open /dev/net/tun&amp;quot;);
+        exit(1);
+    }
+
+    memset(&amp;amp;ifr, 0, sizeof(ifr));
+    ifr.ifr_flags = IFF_TUN;
+    strncpy(ifr.ifr_name, devname, IFNAMSIZ);
+
+    /* ioctl will use if_name as the name of TUN
+    * interface to open: &amp;quot;tun0&amp;quot;, etc. */
+    if ( (err = ioctl(fd, TUNSETIFF, (void *) &amp;amp;ifr)) == -1 ) {
+        perror(&amp;quot;ioctl TUNSETIFF&amp;quot;);close(fd);exit(1);
+    }
+
+    /* After the ioctl call the fd is &amp;quot;connected&amp;quot; to tun device
+    * specified
+    * by devname */
+
+    return fd;
+}
+
+int main(int argc, char *argv[])
+{
+    int fd, nbytes, fd2;
+    char buf[1600];
+
+    fd = tun_open(&amp;quot;asa0&amp;quot;) ;
+    fd2 = tun_open(&amp;quot;tun0&amp;quot;) ;
+    printf(&amp;quot;Device asa0 opened\n&amp;quot;);
+    printf(&amp;quot;Device tun0 opened\n&amp;quot;);
+
+    while(1) {
+        nbytes = read(fd, buf, sizeof(buf));
+        printf(&amp;quot;Read %d bytes from asa0\n&amp;quot;, nbytes);
+	nbytes = write(fd2, buf, sizeof(buf));
+        printf(&amp;quot;Write %d bytes to tun0\n&amp;quot;, nbytes);
+    }
+    return 0;
+}
+
+# 7. 测试可以看到 tun0 端口有和asa0端口一样的数据
+[root@10-9-151-160 ~]# tcpdump -vvi tun0
+tcpdump: listening on tun0, link-type RAW (Raw IP), capture size 65535 bytes
+18:50:19.642816 IP (tos 0x0, ttl 64, id 37503, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &amp;gt; 10.0.0.2: ICMP echo request, id 2304, seq 1569, length 64
+18:50:20.642842 IP (tos 0x0, ttl 64, id 37504, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &amp;gt; 10.0.0.2: ICMP echo request, id 2304, seq 1570, length 64
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.kghost.info/2013/03/27/linux-network-tun/&#34;&gt;参考：TUN/TAP MACVLAN MACVTAP&lt;/a&gt;
+&lt;a href=&#34;https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/&#34;&gt;参考：Linux 上的基础网络设备详解&lt;/a&gt;
+&lt;a href=&#34;https://www.kernel.org/doc/Documentation/networking/tuntap.txt&#34;&gt;参考：tuntap&lt;/a&gt;
+&lt;a href=&#34;http://www.noah.org/wiki/tun/tap_driver&#34;&gt;参考：tun/tap driver&lt;/a&gt;
+&lt;a href=&#34;http://backreference.org/2010/03/26/tuntap-interface-tutorial/&#34;&gt;参考：Tun/Tap interface tutorial&lt;/a&gt;
+&lt;a href=&#34;http://xcodest.me/tun-vethshe-bei.html&#34;&gt;参考：tun &amp;amp; veth设备&lt;/a&gt;
+&lt;a href=&#34;https://www.gitbook.com/book/yeasy/openstack_understand_neutron&#34;&gt;参考：openstack网络的介绍，里面用了tap&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习11</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A011/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A011/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习11&#34;&gt;Linux网络工具学习之:IP命令学习11&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h2 id=&#34;9-ip-tunnel&#34;&gt;9 ip tunnel&lt;/h2&gt;
+
+&lt;h2 id=&#34;10-ip-tuntap&#34;&gt;10 ip tuntap&lt;/h2&gt;
+
+&lt;h2 id=&#34;11-ip-maddr-mroute-mrule&#34;&gt;11 ip maddr/mroute/mrule&lt;/h2&gt;
+
+&lt;h3 id=&#34;11-1-ip-maddress-多播地址管理&#34;&gt;11.1 ip maddress &amp;ndash; 多播地址管理&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip maddr [ add | del ] MULTIADDR dev STRING
+       ip maddr show [ dev STRING ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;11-1-1-ip-maddress-show&#34;&gt;11.1.1 ip maddress show&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;列出多播地址; 缩写：show、list、sh、ls、l&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/tennysonsky/article/details/44493407&#34;&gt;参考： Linux网络编程——多播&lt;/a&gt;
+&lt;a href=&#34;http://book.51cto.com/art/200904/120471.htm&#34;&gt;参考： 单播、广播和多播地址&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-9-151-160 ~]# ip maddr show eth0
+2:	eth0
+	link  33:33:00:00:00:01
+	link  01:00:5e:00:00:01
+	link  01:00:5e:00:00:fb
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::1
+	inet6 ff01::1
+
+输出的第一行是设备的索引和设备名。后面几行是多播地址，每行由协议识别 
+符开头。关键词link表示这是链路层多播地址。 
+
+如果一个多播地址有几个用户，那么用户数就在users关键词之后列出。上面的例子没有出现关键词static，它表示这个地址是由ip maddr add命令加入的。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;11-1-2-ip-maddress-add-delete&#34;&gt;11.1.2 ip maddress add/delete&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;加入/删除多播地址; 缩写：add、a；delete、del、d&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;使用这两个命令，我们可以添加／删除在网络接口上监听的链路层多播地址。
+这个命令只能管理链路层地址。&lt;/p&gt;
+
+&lt;h3 id=&#34;11-2-ip-mroute&#34;&gt;11.2 ip mroute&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;多播路由缓存管理; 缩写mroute、mr&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个命令的操作对象是多播路由缓存条目，这个缓存是由一个用户空间的多播 路由监控进程(例如pimd或者mrouted)建立的。&lt;/p&gt;
+
+&lt;p&gt;目前，由于受和多播路由引擎接口的限制，还不能通过ip命令修改多播路由对象，因此我们只能查看。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip mroute show [ [ to ] PREFIX ] [ from PREFIX ] [ iif DEVICE ]
+                      [ table TABLE_ID ]
+TABLE_ID := [ local | main | default | all | NUMBER ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;|参数|说明|
+|-|-|
+|to PREFIX(default) |选择到目的多播地址是PREFIX
+|iif NAME |接收多播数据包的网络接口
+|from PREFIX |PREFIX选择多播路由的IP源地址&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kuznet@amber:~ $ ip mroute ls 
+(193.232.127.6, 224.0.1.39)      Iif: unresolved 
+(193.232.244.34, 224.0.1.40)     Iif: unresolved 
+(193.233.7.65, 224.66.66.66)     Iif: eth0       Oifs: pimreg 
+kuznet@amber:~ $ 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　多播路由缓存条目是(S,G)形式的，S是源地址，G是多播组。iif是接收多播数据包的网络接口，如果设备名是关键词unresolved，就表示路由监控进程不能解析这个条目；接下来的关键词是oif，它后面跟着一些输出网络接口，接口之间用空格分开。&lt;/p&gt;
+
+&lt;h3 id=&#34;11-3-ip-mrule&#34;&gt;11.3 ip mrule&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;多播路由策略数据库的规则&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;使用ip mrule 实际调用ip rule？&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习12</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A012/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A012/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习12&#34;&gt;Linux网络工具学习之:IP命令学习12&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h2 id=&#34;9-ip-tunnel&#34;&gt;9 ip tunnel&lt;/h2&gt;
+
+&lt;h2 id=&#34;10-ip-tuntap&#34;&gt;10 ip tuntap&lt;/h2&gt;
+
+&lt;h2 id=&#34;11-ip-maddr-mroute-mrule&#34;&gt;11 ip maddr/mroute/mrule&lt;/h2&gt;
+
+&lt;h2 id=&#34;12-ip-monitor&#34;&gt;12 ip monitor&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;用于连续地监视设备、地址和路由的状态。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip monitor [ all | LISTofOBJECTS ] [ FILE ]
+LISTofOBJECTS := link | address | route | mroute | prefix |
+                 neigh | netconf
+FILE := file FILENAME
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;和rtmon组合使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@OLDHOSTNAME ~]# rtmon help
+Usage: rtmon file FILE [ all | LISTofOBJECTS]
+LISTofOBJECTS := [ link ] [ address ] [ route 
+
+OBJECT-LIST是一些被监控的对象，它可以包括link、address和route。如果 没有给出file参数，ip命令就打开RTNETLINK，在上面监听，并把状态的变化输出到标准输出设备。 
+
+如果使用了file参数，ip命令就不是在RTNETLINK上监听，而是打开由file参数指定的包含RTNETLINK信息的二进制文件，把解析的结果显示出来。这种历史文件可以有工具产生。这个工具具有和ip monitor命令的语法类似的命令行。理想的情况是，在网络配置命令起动之前运行rtmon命令(当然，你可以在任意的时间起动rtmon，它会记录从起动开始的状态变化)。你可以在起动脚本中插入以下命令行： 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rtmon file /var/log/rtmon.log 
+
+如果我们执行如下命令： 
+
+[root@nixe0n root]ip route add dev eth0 to 61.133.4.7 via 211.99.114.65 
+[root@nixe0n root]ip route del dev eth0 to 61.133.4.7 
+
+
+
+然后，我们使用ip monitor命令分析/var/log/rtmon.log会得到如下输出结果 ： 
+
+[root@nixe0n root]ip monitor file /var/log/rtmon.log r 
+Timestamp: Wed Nov  6 20:25:54 2002 733331 us 
+1: lo:  mtu 16436 qdisc noqueue 
+   link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 
+2: eth0:  mtu 1500 qdisc pfifo_fast 
+   link/ether 00:01:4f:00:15:f1 brd ff:ff:ff:ff:ff:ff 
+Timestamp: Wed Nov  6 20:25:58 2002 33700 us 
+61.133.4.7 via 211.99.114.65 dev eth0 
+Timestamp: Wed Nov  6 20:25:59 2002 924124 us 
+Deleted 61.133.4.7 via 211.99.114.65 dev eth0 
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习13</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A013/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A013/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习13&#34;&gt;Linux网络工具学习之:IP命令学习13&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h2 id=&#34;9-ip-tunnel&#34;&gt;9 ip tunnel&lt;/h2&gt;
+
+&lt;h2 id=&#34;10-ip-tuntap&#34;&gt;10 ip tuntap&lt;/h2&gt;
+
+&lt;h2 id=&#34;11-ip-maddr-mroute-mrule&#34;&gt;11 ip maddr/mroute/mrule&lt;/h2&gt;
+
+&lt;h2 id=&#34;12-ip-monitor&#34;&gt;12 ip monitor&lt;/h2&gt;
+
+&lt;h2 id=&#34;13-ip-xfrm&#34;&gt;13 ip xfrm&lt;/h2&gt;
+
+&lt;h3 id=&#34;13-1-概述&#34;&gt;13.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;xfrm  is  an  IP framework for transforming packets (such as encrypting their payloads). This framework is used to implement the IPsec protocol suite  (with  the  state  object  operating on the Security Association Database, and the policy object operating on the Security Policy  Database). It is also used for the IP Payload Compression Protocol and features of Mobile IPv6.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip xfrm XFRM-OBJECT { COMMAND | help }
+where  XFRM-OBJECT := state | policy | monitor
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;xfrm_policy表示IPsec SP，xfrm_state表示IPsec SA&lt;/p&gt;
+
+&lt;h3 id=&#34;13-2-ip-xfrm-state&#34;&gt;13.2 ip xfrm state&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-9-151-160 ~]# ip xfrm state help
+Usage: ip xfrm state { add | update } ID [ ALGO-LIST ] [ mode MODE ]
+        [ mark MARK [ mask MASK ] ] [ reqid REQID ] [ seq SEQ ]
+        [ replay-window SIZE ] [ replay-seq SEQ ] [ replay-oseq SEQ ]
+        [ flag FLAG-LIST ] [ sel SELECTOR ] [ LIMIT-LIST ] [ encap ENCAP ]
+        [ coa ADDR[/PLEN] ] [ ctx CTX ] [ extra-flag EXTRA-FLAG-LIST ]
+Usage: ip xfrm state allocspi ID [ mode MODE ] [ mark MARK [ mask MASK ] ]
+        [ reqid REQID ] [ seq SEQ ] [ min SPI max SPI ]
+Usage: ip xfrm state { delete | get } ID [ mark MARK [ mask MASK ] ]
+Usage: ip xfrm state { deleteall | list } [ ID ] [ mode MODE ] [ reqid REQID ]
+        [ flag FLAG-LIST ]
+Usage: ip xfrm state flush [ proto XFRM-PROTO ]
+Usage: ip xfrm state count
+ID := [ src ADDR ] [ dst ADDR ] [ proto XFRM-PROTO ] [ spi SPI ]
+XFRM-PROTO := esp | ah | comp | route2 | hao
+ALGO-LIST := [ ALGO-LIST ] ALGO
+ALGO := { enc | auth } ALGO-NAME ALGO-KEYMAT |
+        auth-trunc ALGO-NAME ALGO-KEYMAT ALGO-TRUNC-LEN |
+        aead ALGO-NAME ALGO-KEYMAT ALGO-ICV-LEN |
+        comp ALGO-NAME
+MODE := transport | tunnel | beet | ro | in_trigger
+FLAG-LIST := [ FLAG-LIST ] FLAG
+FLAG := noecn | decap-dscp | nopmtudisc | wildrecv | icmp | af-unspec | align4
+EXTRA-FLAG-LIST := [ EXTRA-FLAG-LIST ] EXTRA-FLAG
+EXTRA-FLAG := dont-encap-dscp
+SELECTOR := [ src ADDR[/PLEN] ] [ dst ADDR[/PLEN] ] [ dev DEV ] [ UPSPEC ]
+UPSPEC := proto { { tcp | udp | sctp | dccp } [ sport PORT ] [ dport PORT ] |
+                  { icmp | ipv6-icmp | mobility-header } [ type NUMBER ] [ code NUMBER ] |
+                  gre [ key { DOTTED-QUAD | NUMBER } ] | PROTO }
+LIMIT-LIST := [ LIMIT-LIST ] limit LIMIT
+LIMIT := { time-soft | time-hard | time-use-soft | time-use-hard } SECONDS |
+         { byte-soft | byte-hard } SIZE | { packet-soft | packet-hard } COUNT
+ENCAP := { espinudp | espinudp-nonike } SPORT DPORT OADDR
+
+
+
+ip xfrm state add         add new state into xfrm
+ip xfrm state update      update existing state in xfrm
+ip xfrm state allocspi    allocate an SPI value
+ip xfrm state delete      delete existing state in xfrm
+ip xfrm state get         get existing state in xfrm
+ip xfrm state deleteall   delete all existing state in xfrm
+ip xfrm state list        print out the list of existing state in xfrm
+ip xfrm state flush       flush all state in xfrm
+ip xfrm state count       count all existing state in xfrm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;13-3-ip-xfrm-policy&#34;&gt;13.3 ip xfrm policy&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-9-151-160 ~]# ip xfrm policy help
+Usage: ip xfrm policy { add | update } SELECTOR dir DIR [ ctx CTX ]
+        [ mark MARK [ mask MASK ] ] [ index INDEX ] [ ptype PTYPE ]
+        [ action ACTION ] [ priority PRIORITY ] [ flag FLAG-LIST ]
+        [ LIMIT-LIST ] [ TMPL-LIST ]
+Usage: ip xfrm policy { delete | get } { SELECTOR | index INDEX } dir DIR
+        [ ctx CTX ] [ mark MARK [ mask MASK ] ] [ ptype PTYPE ]
+Usage: ip xfrm policy { deleteall | list } [ SELECTOR ] [ dir DIR ]
+        [ index INDEX ] [ ptype PTYPE ] [ action ACTION ] [ priority PRIORITY ]
+        [ flag FLAG-LIST ]
+Usage: ip xfrm policy flush [ ptype PTYPE ]
+Usage: ip xfrm count
+SELECTOR := [ src ADDR[/PLEN] ] [ dst ADDR[/PLEN] ] [ dev DEV ] [ UPSPEC ]
+UPSPEC := proto { { tcp | udp | sctp | dccp } [ sport PORT ] [ dport PORT ] |
+                  { icmp | ipv6-icmp | mobility-header } [ type NUMBER ] [ code NUMBER ] |
+                  gre [ key { DOTTED-QUAD | NUMBER } ] | PROTO }
+DIR := in | out | fwd
+PTYPE := main | sub
+ACTION := allow | block
+FLAG-LIST := [ FLAG-LIST ] FLAG
+FLAG := localok | icmp
+LIMIT-LIST := [ LIMIT-LIST ] limit LIMIT
+LIMIT := { time-soft | time-hard | time-use-soft | time-use-hard } SECONDS |
+         { byte-soft | byte-hard } SIZE | { packet-soft | packet-hard } COUNT
+TMPL-LIST := [ TMPL-LIST ] tmpl TMPL
+TMPL := ID [ mode MODE ] [ reqid REQID ] [ level LEVEL ]
+ID := [ src ADDR ] [ dst ADDR ] [ proto XFRM-PROTO ] [ spi SPI ]
+XFRM-PROTO := esp | ah | comp | route2 | hao
+MODE := transport | tunnel | beet | ro | in_trigger
+LEVEL := required | use
+
+
+ip xfrm policy add         add a new policy
+ip xfrm policy update      update an existing policy
+ip xfrm policy delete      delete an existing policy
+ip xfrm policy get         get an existing policy
+ip xfrm policy deleteall   delete all existing xfrm policies
+ip xfrm policy list        print out the list of xfrm policies
+ip xfrm policy flush       flush policies
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;# 例子环境见 节2.4.7
+#192.168.0.1 &amp;lt;=======&amp;gt; 192.168.0.2
+#192.168.0.1
+ip netns exec net1 ip netns exec net1 ip xfrm state add src 192.168.0.1 dst 192.168.0.2 proto esp spi 0x00000301 mode tunnel auth md5 0x96358c90783bbfa3d7b196ceabe0536b enc des3_ede 0xf6ddb555acfd9d77b03ea3843f2653255afe8eb5573965df  
+ip netns exec net1 ip xfrm state add src 192.168.0.2 dst 192.168.0.1 proto esp spi 0x00000302 mode tunnel auth md5 0x99358c90783bbfa3d7b196ceabe0536b enc des3_ede 0xffddb555acfd9d77b03ea3843f2653255afe8eb5573965df  
+ip netns exec net1 ip xfrm state get src 192.168.0.1 dst 192.168.0.2 proto esp spi 0x00000301  
+  
+ip netns exec net1 ip xfrm policy add src 192.168.0.1 dst 192.168.0.2 dir out ptype main tmpl src 192.168.0.1 dst 192.168.0.2 proto esp mode tunnel  
+ip netns exec net1 ip xfrm policy add src 192.168.0.2 dst 192.168.0.1 dir in ptype main tmpl src 192.168.0.2 dst 192.168.0.1 proto esp mode tunnel  
+ip netns exec net1 ip xfrm policy ls  
+
+#192.168.0.2
+ip netns exec net2 ip xfrm state add src 192.168.0.1 dst 192.168.0.2 proto esp spi 0x00000301 mode tunnel auth md5 0x96358c90783bbfa3d7b196ceabe0536b enc des3_ede 0xf6ddb555acfd9d77b03ea3843f2653255afe8eb5573965df  
+ip netns exec net2 ip xfrm state add src 192.168.0.2 dst 192.168.0.1 proto esp spi 0x00000302 mode tunnel auth md5 0x99358c90783bbfa3d7b196ceabe0536b enc des3_ede 0xffddb555acfd9d77b03ea3843f2653255afe8eb5573965df  
+ip netns exec net2 ip xfrm state get src 192.168.0.1 dst 192.168.0.2 proto esp spi 0x00000301  
+  
+ip netns exec net2 ip xfrm policy add src 192.168.0.1 dst 192.168.0.2 dir in ptype main tmpl src 192.168.0.1 dst 192.168.0.2 proto esp mode tunnel  
+ip netns exec net2 ip xfrm policy add src 192.168.0.2 dst 192.168.0.1 dir out ptype main tmpl src 192.168.0.2 dst 192.168.0.1 proto esp mode tunnel  
+ip netns exec net2 ip xfrm policy ls   
+ 
+#测试
+ip netns exec net1 ping 192.168.0.2
+
+# 另一个console观察
+[root@10-9-151-160 ~]# ip netns exec net2 tcpdump -i net2-bridge
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on net2-bridge, link-type EN10MB (Ethernet), capture size 65535 bytes
+14:32:15.413849 IP 192.168.0.1 &amp;gt; 10-9-151-160: ESP(spi=0x00000301,seq=0x99), length 116
+14:32:15.413849 IP 192.168.0.1 &amp;gt; 10-9-151-160: ICMP echo request, id 16721, seq 33, length 64
+14:32:15.415893 IP 10-9-151-160 &amp;gt; 192.168.0.1: ESP(spi=0x00000302,seq=0x99), length 116
+14:32:16.414868 IP 192.168.0.1 &amp;gt; 10-9-151-160: ESP(spi=0x00000301,seq=0x9a), length 116
+14:32:16.414868 IP 192.168.0.1 &amp;gt; 10-9-151-160: ICMP echo request, id 16721, seq 34, length 64
+14:32:16.414923 IP 10-9-151-160 &amp;gt; 192.168.0.1: ESP(spi=0x00000302,seq=0x9a), length 116
+14:32:17.414823 IP 192.168.0.1 &amp;gt; 10-9-151-160: ESP(spi=0x00000301,seq=0x9b), length 116
+14:32:17.414823 IP 192.168.0.1 &amp;gt; 10-9-151-160: ICMP echo request, id 16721, seq 35, length 64
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;13-4-ip-xfrm-monitor&#34;&gt;13.4 ip xfrm monitor&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@10-9-151-160 ~]# ip xfrm monitor help
+Usage: ip xfrm monitor [ all | LISTofXFRM-OBJECTS ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://124.16.141.157/mediawiki-0101/index.php/%E5%88%86%E7%B1%BB:Linux%E5%86%85%E6%A0%B8%E5%88%86%E6%9E%90--%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F--%E5%8D%8F%E8%AE%AE%E6%97%A0%E5%85%B3%E6%8E%A5%E5%8F%A3%E5%B1%82--xfrm&#34;&gt;参考：Linux内核分析&amp;ndash;网络系统&amp;ndash;协议无关接口层&amp;ndash;xfrm&lt;/a&gt;
+&lt;a href=&#34;https://www.google.com.hk/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=8&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=0ahUKEwjTntXjsJrPAhXDEpQKHf5yAGgQFghQMAc&amp;amp;url=http://www.ecice06.com/CN/article/downloadArticleFile.do?attachType=PDF&amp;amp;id=13199&amp;amp;usg=AFQjCNGHVnjmyUTAdc3UwSXE07SIW7oLUw&amp;amp;sig2=w5uRUxF5Mbefk5BXB5Jq0g&#34;&gt;参考：基于Linux 的XFRM 框架下IPSec VPN 的研究&lt;/a&gt;
+&lt;a href=&#34;https://www.google.com.hk/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=30&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=0ahUKEwjiwaKBsZrPAhUEipQKHbKmA4U4FBAWCFUwCQ&amp;amp;url=http://www.paper.edu.cn/download/downPaper/201312-760&amp;amp;usg=AFQjCNFWAdnEXAEYLmv6leyXLrudJ9XsqQ&amp;amp;sig2=RzehstWMzGz_8qczAXkSXw&#34;&gt;参考：基于IPv6 的IPSec 原理分析和在Linux 内核中的实现&lt;/a&gt;
+&lt;a href=&#34;http://www.h3c.com.cn/service/channel_service/operational_service/icg_technology/201005/675214_30005_0.htm&#34;&gt;参考：IPSec VPN基本原理（这篇文章讲得最清楚）&lt;/a&gt;
+&lt;a href=&#34;http://www.h3c.com.cn/MiniSite/Technology_Circle/Technology_Column/ICG/ICG_Technology/201006/677319_9766kSXw&#34;&gt;参考：IPSec穿越NAT&lt;/a&gt;
+&lt;a href=&#34;http://www.lorier.net/docs/xfrm&#34;&gt;参考：Experimentation with Linux XFRM&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习14</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A014/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A014/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习14&#34;&gt;Linux网络工具学习之:IP命令学习14&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h2 id=&#34;9-ip-tunnel&#34;&gt;9 ip tunnel&lt;/h2&gt;
+
+&lt;h2 id=&#34;10-ip-tuntap&#34;&gt;10 ip tuntap&lt;/h2&gt;
+
+&lt;h2 id=&#34;11-ip-maddr-mroute-mrule&#34;&gt;11 ip maddr/mroute/mrule&lt;/h2&gt;
+
+&lt;h2 id=&#34;12-ip-monitor&#34;&gt;12 ip monitor&lt;/h2&gt;
+
+&lt;h2 id=&#34;13-ip-xfrm&#34;&gt;13 ip xfrm&lt;/h2&gt;
+
+&lt;h2 id=&#34;14-ip-netns&#34;&gt;14 ip netns&lt;/h2&gt;
+
+&lt;h3 id=&#34;14-1-概述&#34;&gt;14.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;process network namespace management&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这一节的技术其实在前面的章节里面已经使用了很多了，在&lt;a href=&#34;https://blog.kghost.info/2013/03/01/linux-network-emulator/ps://blog.kghost.info/2013/03/01/linux-network-emulator/&#34;&gt;这篇文章&lt;/a&gt;里面有比较完整的实验例子，其他参考文献也很多，比如&lt;a href=&#34;http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/&#34;&gt;Introducing Linux Network Namespaces&lt;/a&gt;，&lt;a href=&#34;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-netns&#34;&gt;Linux网络名字空间(Network Namespace)介绍（同前一篇）&lt;/a&gt; ，&lt;a href=&#34;https://segmentfault.com/a/1190000004059167&#34;&gt;linux network namespace 学习&lt;/a&gt; ， &lt;a href=&#34;https://yeasy.gitbooks.io/openstack_understand_neutron/content/namespace/&#34;&gt;网络名字空间&lt;/a&gt;，下面是来自&lt;a href=&#34;https://segmentfault.com/a/1190000004059167&#34;&gt;帮助文档&lt;/a&gt;的一段有用的概述。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    A network namespace is logically another copy of the network stack,with its own routes, firewall rules, and network devices.
+
+    By default a process inherits its network namespace from its parent.Initially all the processes share the same default network namespace from the init process.
+
+    By convention a named network namespace is an object at /var/run/netns/NAME that can be opened. The file descriptor resulting from opening /var/run/netns/NAME refers to the specified network namespace. Holding that file descriptor open keeps the network namespace alive. The file descriptor can be used with the setns(2) system call to change the network namespace associated with a task.
+
+    For applications that are aware of network namespaces, the convention is to look for global network configuration files first in /etc/netns/NAME/ then in /etc/.  For example, if you want a different version of /etc/resolv.conf for a network namespace used to isolate your vpn you would name it /etc/netns/myvpn/resolv.conf.
+
+    ip netns exec automates handling of this configuration, file convention for network namespace unaware applications, by creating a mount namespace and bind mounting all of the per network namespace configure files into their traditional location in /etc.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;14-2-使用&#34;&gt;14.2 使用&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: 
+ip netns list 
+&amp;gt;&amp;gt; show all of the named network namespaces This command displays all of the network namespaces in /var/run/netns
+
+ip netns add NAME 
+&amp;gt;&amp;gt; create a new named network namespace, If NAME is available in /var/run/netns/ this command creates a new network namespace and assigns NAME.
+
+ip netns delete NAME 
+&amp;gt;&amp;gt;ip [-all] netns delete [ NAME ] - delete the name of a network namespace(s)
+
+ip netns identify PID 
+&amp;gt;&amp;gt; Report network namespaces names for process
+
+ip netns pids NAME
+&amp;gt;&amp;gt; Report processes in the named network namespace
+
+ip netns exec NAME cmd ...
+&amp;gt;&amp;gt; ip [-all] netns exec [ NAME ] cmd ... - Run cmd in the named network namespace
+
+ip netns monitor 
+&amp;gt;&amp;gt;Report as network namespace names are added and deleted
+
+
+# 命令是和/var/run/netns/紧密联系的，执行方式也是围绕这些文件
+[root@10-9-151-160 ~]# ll /var/run/netns/
+total 0
+-r--r--r-- 1 root root 0 Sep 19 12:07 net1
+-r--r--r-- 1 root root 0 Sep 19 12:07 net2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;除了2.4.7的例子，这里给了另一个类似的例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;net server 192.168.1.1
+    |svr-veth
+    |vrgw-veth
+net gateway 192.168.1.254 10.0.100.254 -&amp;gt; NAT
+    |cli-veth 
+    |cligw-veth
+net client 10.0.100.1
+
+# 1. add net add veth pair 
+ip netns add server
+ip netns add gateway
+ip netns add client
+
+ip link add svr-veth type veth peer name svrgw-veth
+ip link add cli-veth type veth peer name cligw-veth
+
+ip link set svr-veth netns server
+ip link set svrgw-veth netns gateway
+ip link set cligw-veth netns gateway
+ip link set cli-veth netns client
+
+# 2. 配置server
+ip netns exec server ifconfig svr-veth 192.168.1.1
+ip netns exec server route add default gw 192.168.1.254
+
+# 3. 配置client
+ip netns exec client ifconfig cli-veth 10.0.100.1
+ip netns exec client route add default gw 10.0.100.254
+
+
+# 4. 配置gateway
+ip netns exec gateway ifconfig svrgw-veth 192.168.1.254
+ip netns exec gateway ifconfig cligw-veth 10.0.100.254
+ip netns exec gateway sysctl net.ipv4.ip_forward=1
+
+# 5. 测试
+ip netns exec gateway ping 192.168.1.1 -I 192.168.1.254
+ip netns exec gateway ping 10.0.100.1 -I 10.0.100.254
+ip netns exec client ping 192.168.1.1 -I 10.0.100.1
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux网络工具学习之:IP命令学习15</title>
+      <link>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A015/</link>
+      <pubDate>Thu, 22 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A015/</guid>
+      <description>
+
+&lt;h1 id=&#34;linux网络工具学习之-ip命令学习15&#34;&gt;Linux网络工具学习之:IP命令学习15&lt;/h1&gt;
+
+&lt;p&gt;标签（空格分隔）： 网络&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文旨在通过IP命令介绍和学习Linux网络的相关知识&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;1-概述&#34;&gt;1. 概述&lt;/h2&gt;
+
+&lt;h2 id=&#34;2-ip-link&#34;&gt;2. ip link&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-ip-addr&#34;&gt;3. ip addr&lt;/h2&gt;
+
+&lt;h2 id=&#34;4-ip-addrlabel&#34;&gt;4 ip addrlabel&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-ip-route&#34;&gt;5 ip route&lt;/h2&gt;
+
+&lt;h2 id=&#34;6-ip-rule&#34;&gt;6 ip rule&lt;/h2&gt;
+
+&lt;h2 id=&#34;7-ip-neighbour&#34;&gt;7 ip neighbour&lt;/h2&gt;
+
+&lt;h2 id=&#34;8-ip-ntable&#34;&gt;8 ip ntable&lt;/h2&gt;
+
+&lt;h2 id=&#34;9-ip-tunnel&#34;&gt;9 ip tunnel&lt;/h2&gt;
+
+&lt;h2 id=&#34;10-ip-tuntap&#34;&gt;10 ip tuntap&lt;/h2&gt;
+
+&lt;h2 id=&#34;11-ip-maddr-mroute-mrule&#34;&gt;11 ip maddr/mroute/mrule&lt;/h2&gt;
+
+&lt;h2 id=&#34;12-ip-monitor&#34;&gt;12 ip monitor&lt;/h2&gt;
+
+&lt;h2 id=&#34;13-ip-xfrm&#34;&gt;13 ip xfrm&lt;/h2&gt;
+
+&lt;h2 id=&#34;14-ip-netns&#34;&gt;14 ip netns&lt;/h2&gt;
+
+&lt;h2 id=&#34;15-ip-l2tp&#34;&gt;15 ip l2tp&lt;/h2&gt;
+
+&lt;h3 id=&#34;15-1-概述&#34;&gt;15.1 概述&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;第二层隧道协议（英语：Layer Two Tunneling Protocol，缩写为L2TP)是一种虚拟隧道协议，通常用于虚拟专用网。L2TP协议自身不提供加密与可靠性验证的功能，可以和安全协议搭配使用，从而实现数据的加密传输。经常与L2TP协议搭配的加密协议是IPsec，当这两个协议搭配使用时，通常合称L2TP/IPsec。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Usage: ip l2tp add tunnel
+          remote ADDR local ADDR
+          tunnel_id ID peer_tunnel_id ID
+          [ encap { ip | udp } ]
+          [ udp_sport PORT ] [ udp_dport PORT ]
+Usage: ip l2tp add session [ name NAME ]
+          tunnel_id ID
+          session_id ID peer_session_id ID
+          [ cookie HEXSTR ] [ peer_cookie HEXSTR ]
+          [ offset OFFSET ] [ peer_offset OFFSET ]
+          [ l2spec_type L2SPEC ]
+       ip l2tp del tunnel tunnel_id ID
+       ip l2tp del session tunnel_id ID session_id ID
+       ip l2tp show tunnel [ tunnel_id ID ]
+       ip l2tp show session [ tunnel_id ID ] [ session_id ID ]
+
+Where: NAME   := STRING
+       ADDR   := { IP_ADDRESS | any }
+       PORT   := { 0..65535 }
+       ID     := { 1..4294967295 }
+       HEXSTR := { 8 or 16 hex digits (4 / 8 bytes) }
+       L2SPEC := { none | default }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-l2tp&#34;&gt;参考：manual&lt;/a&gt;
+&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%AC%AC%E4%BA%8C%E5%B1%82%E9%9A%A7%E9%81%93%E5%8D%8F%E8%AE%AE&#34;&gt;参考：第二层隧道协议&lt;/a&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Layer_2_Tunneling_Protocol&#34;&gt;参考：Layer 2 Tunneling Protocol&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Tunnels 相关的知识：
+&lt;a href=&#34;http://www.netheaven.com/TunnelTypes.html&#34;&gt;参考：Types of Network Tunnels&lt;/a&gt;
+&lt;a href=&#34;http://packetlife.net/blog/2012/feb/27/gre-vs-ipip-tunneling/&#34;&gt;参考：GRE vs IPIP Tunneling&lt;/a&gt;
+ipip tunnel 是端对端的，通信也就只能是点对点的，而 GRE tunnel 却可以进行多播。
+&lt;a href=&#34;https://linux.cn/article-3407-1.html&#34;&gt;参考：VPN 隧道协议PPTP、L2TP、IPSec和SSLVPN的区别&lt;/a&gt;
+&lt;a href=&#34;http://www.h3c.com.cn/MiniSite/Technology_Circle/Technology_Column/ICG/ICG_Technology/201004/671383_97665_0.htm&#34;&gt;参考：技术点详解&amp;mdash;L2TP VPN&lt;/a&gt;
+&lt;a href=&#34;http://wenku.baidu.com/link?url=u9zVuDs8gO3_Y_nRkQaDuvHk6DOGeX_raehCuz47Wv5Hzf00gm3gYaqwr5tVUSc4Dd6LwRp-BUHZDbcYZMbn6_6xttFCyeD2MXGu62-MZV3&#34;&gt;参考：互联网安全协议&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;15-2-ip-l2tp-add-del-show-tunnel&#34;&gt;15.2 ip l2tp add/del/show tunnel&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;增删查tunnel&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;15-3-ip-l2tp-add-del-show-session&#34;&gt;15.3 ip l2tp add/del/show session&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;增删查a new session to a tunnel&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;modprobe l2tp_eth
+#Setup L2TP tunnels and sessions
+ip netns exec net1 ip l2tp add tunnel tunnel_id 3000 peer_tunnel_id 4000 encap udp local 192.168.0.1 remote 192.168.0.2 udp_sport 5000 udp_dport 6000
+ip netns exec net1 ip l2tp add session tunnel_id 3000 session_id 1000 peer_session_id 2000
+
+ip netns exec net2 ip l2tp add tunnel tunnel_id 4000 peer_tunnel_id 3000 encap udp local 192.168.0.2 remote 192.168.0.1 udp_sport 6000 udp_dport 5000
+ip netns exec net2 ip l2tp add session tunnel_id 4000 session_id 2000 peer_session_id 1000
+
+ip netns exec net1 ip link set l2tpeth0 up mtu 1488
+ip netns exec net2 ip link set l2tpeth0 up mtu 1488
+
+#Notice that the IP addresses, UDP ports and tunnel / session ids are matched and reversed at each site.
+
+#Configure as IP interfaces  The two interfaces can be configured with IP addresses if only IP data s to be carried. This is perhaps the simplest configuration.
+
+ip netns exec net1 ip addr add 10.42.1.1 peer 10.42.1.2 dev l2tpeth0
+ip netns exec net2 ip addr add 10.42.1.2 peer 10.42.1.1 dev l2tpeth0
+
+ip netns exec net1 ping 10.42.1.2
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://remote-lab.net/linux-l2tp-ethernet-pseudowires&#34;&gt;另一个例子&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

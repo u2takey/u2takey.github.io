@@ -1,0 +1,894 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>Linux网络工具学习之IP命令学习</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Linux网络工具学习之IP命令学习"/>
+<meta name="twitter:description" content="本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 1.1 关于 ip是iproute2软件包里面的一个强大的网络配置工具 1.2 语法 本文使用的版本和相关命令如下 [user]# ip -V ip utility, iproute2-ss130716 [user]# ip Usage: ip [ OPTIONS ] OBJECT { COMMAND | help } ip [ -force ] -batch filename where OBJECT := { link | addr | addrlabel | route | rule | neigh | ntable | tunnel | tuntap | maddr | mroute | mrule | monitor | xfrm | netns | l2tp |"/>
+
+
+
+        <meta property="og:title" content="Linux网络工具学习之IP命令学习" />
+<meta property="og:description" content="本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 1.1 关于 ip是iproute2软件包里面的一个强大的网络配置工具 1.2 语法 本文使用的版本和相关命令如下 [user]# ip -V ip utility, iproute2-ss130716 [user]# ip Usage: ip [ OPTIONS ] OBJECT { COMMAND | help } ip [ -force ] -batch filename where OBJECT := { link | addr | addrlabel | route | rule | neigh | ntable | tunnel | tuntap | maddr | mroute | mrule | monitor | xfrm | netns | l2tp |" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8BIP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/" />
+
+
+<meta property="og:updated_time" content="2016-09-22T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="Linux网络工具学习之IP命令学习">
+<meta itemprop="description" content="本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 1.1 关于 ip是iproute2软件包里面的一个强大的网络配置工具 1.2 语法 本文使用的版本和相关命令如下 [user]# ip -V ip utility, iproute2-ss130716 [user]# ip Usage: ip [ OPTIONS ] OBJECT { COMMAND | help } ip [ -force ] -batch filename where OBJECT := { link | addr | addrlabel | route | rule | neigh | ntable | tunnel | tuntap | maddr | mroute | mrule | monitor | xfrm | netns | l2tp |">
+
+
+<meta itemprop="dateModified" content="2016-09-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="205">
+
+
+
+<meta itemprop="keywords" content="Db,Golang,IOS &amp; MacOS,net,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/"><p>Linux网络工具学习之:IP命令学习01</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/"><p>Linux网络工具学习之:IP命令学习02</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/"><p>Linux网络工具学习之:IP命令学习03</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/"><p>Linux网络工具学习之:IP命令学习04</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/"><p>Linux网络工具学习之:IP命令学习05</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8BIP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/">Linux网络工具学习之IP命令学习</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-09-22'>
+            September 22, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8bIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a0" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258BIP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A0%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8BIP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/" class="image featured">
+            <img src="/img/2016/09/winter.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<blockquote>
+<p>本文旨在通过IP命令介绍和学习Linux网络的相关知识</p>
+</blockquote>
+
+<h2 id="1-概述">1. 概述</h2>
+
+<h3 id="1-1-关于">1.1 关于</h3>
+
+<p>ip是iproute2软件包里面的一个强大的网络配置工具</p>
+
+<h3 id="1-2-语法">1.2 语法</h3>
+
+<p>本文使用的版本和相关命令如下</p>
+
+<pre><code>[user]# ip -V
+ip utility, iproute2-ss130716
+[user]# ip
+Usage: ip [ OPTIONS ] OBJECT { COMMAND | help }
+       ip [ -force ] -batch filename
+where  OBJECT := { link | addr | addrlabel | route | rule | neigh | ntable |
+                   tunnel | tuntap | maddr | mroute | mrule | monitor | xfrm |
+                   netns | l2tp | tcp_metrics | token }
+       OPTIONS := { -V[ersion] | -s[tatistics] | -d[etails] | -r[esolve] |
+                    -h[uman-readable] | -iec |
+                    -f[amily] { inet | inet6 | ipx | dnet | bridge | link } |
+                    -4 | -6 | -I | -D | -B | -0 |
+                    -l[oops] { maximum-addr-flush-attempts } |
+                    -o[neline] | -t[imestamp] | -b[atch] [filename] |
+                    -rc[vbuf] [size] | -n[etns] name | -a[ll] }
+
+</code></pre>
+
+<h3 id="1-3-各个object的一个简要介绍">1.3 各个Object的一个简要介绍</h3>
+
+<p>|Object|简介|详述
+|-|-|
+|link|网络设备配置命令，启用、禁止设备、改变设备其他状态如MTU等|见节2
+| addr |网络设备配置IPv4或IPv6地址| 见节3
+| addrlabel|IPv6地址标签，主要用于RFC3484中描述的IPv6地址的选择|见节4
+| route |路由表管理|见节5
+| rule |管理路由策略数据库|见节6
+| neigh |邻居/ARP表管理|见节7
+| ntable |邻居表配置|见节8 未完成
+| tunnel |隧道配置|见节9
+| tuntap |管理TUN/TAP设备|见节10
+| maddr |多播地址管理|见节11
+| mroute |多播路由缓存管理|见节11
+| mrule |多播路由策略数据库的规则|见节11
+| monitor |状态控制，如可以持续监控ip地址和路由的状态|见节12
+| xfrm |XFRM框架实现IP层处理和IPSec处理|见节13
+| netns |进程网络namespace管理|见节14
+| l2tp |tunnel Ethernet over IP(L2TPv3)|见节15
+| tcp_metrics |管理TCP Metrics
+| token|表计划的接口标识符支持</p>
+
+<p>有用的参考:
+<a href="https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/">https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/</a>
+<a href="http://linux-ip.net/html/tools-ip-link.html">http://linux-ip.net/html/tools-ip-link.html</a>
+<a href="http://baturin.org/docs/iproute2/">http://baturin.org/docs/iproute2/</a>
+<a href="http://linux-ip.net/gl/ip-cref/">http://linux-ip.net/gl/ip-cref/</a>
+<a href="http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link">http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-link</a>
+<a href="http://linux.vbird.org/linux_server/0250simple_firewall.php">http://linux.vbird.org/linux_server/0250simple_firewall.php</a>
+<a href="http://linux-ip.net/html/">http://linux-ip.net/html/</a>
+<a href="http://blog.csdn.net/yeqihong/article/details/710873">http://blog.csdn.net/yeqihong/article/details/710873</a></p>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesnet'>net</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="https://u2takey.github.io/blog/influxdb%E4%B8%AD%E6%96%87%E7%B2%BE%E7%AE%80%E6%96%87%E6%A1%A3/"
+                class="button big previous">influxdb中文精简文档</a></li>
+    
+
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A016/"
+                class="button big next">Linux网络工具学习之:IP命令学习16</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8BIP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0\/';
+    var disqus_title = 'Linux网络工具学习之IP命令学习';
+    var disqus_url = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8BIP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/">Linux网络工具学习之:IP命令学习01</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/">Linux网络工具学习之:IP命令学习02</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/">Linux网络工具学习之:IP命令学习03</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/">Linux网络工具学习之:IP命令学习04</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/">Linux网络工具学习之:IP命令学习05</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/net/">net</a>
+                                <span style="float:right;">17</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/db/">Db</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/golang/">Golang</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+                
+                    <script src="/js/autohidingnavbar.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            <script>(function($){
+  $(function(){ 
+    var scroll = $(document).scrollTop();
+    var headerHeight = $('.header').outerHeight();
+    $(window).scroll(function() {
+      var scrolled = $(document).scrollTop();
+      if ((scrolled - scroll) > 50 && scrolled > headerHeight){
+         $('#header').hide();
+      } else if((scroll - scrolled) > 100 || scrolled < headerHeight * 2) {
+         $('#header').show();
+      } 
+      console.log(scrolled - scroll);          
+      scroll = $(document).scrollTop(); 
+      
+     });
+
+   });
+})(jQuery);;</script>
+            
+    </body>
+</html>
+

@@ -1,0 +1,948 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>Linux网络工具学习之:IP命令学习15</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Linux网络工具学习之:IP命令学习15"/>
+<meta name="twitter:description" content="Linux网络工具学习之:IP命令学习15 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 7 ip neighbour 8 ip ntable 9 ip tunnel 10 ip tuntap 11 ip maddr/mroute/mrule 12 ip monitor 13 ip xfrm 14 ip netns 15 ip l2tp 15.1 概述 第二层隧道协议（英语：Layer Two Tunneling Protocol，缩写为L2TP)是一种虚拟隧道协议，通常用于虚拟专用网。L2TP协议自身不提供加密与可靠性验证的功能，可以和安全协议搭配使用，从而实现数据的加密传输。经常与L2TP协议搭配的加密协议是IPsec，当这两个协议搭配使用时，通常合称L2TP/IPsec。 Usage: ip l2tp add tunnel remote ADDR local ADDR tunnel_id ID peer_tunnel_id ID [ encap { ip | udp } ] [ udp_sport PORT ] [ udp_dport PORT ] Usage: ip l2tp add session [ name NAME ] tunnel_id ID session_id ID peer_session_id ID [ cookie HEXSTR ] [ peer_cookie HEXSTR ] [ offset OFFSET ] [ peer_offset OFFSET ] [ l2spec_type L2SPEC ] ip l2tp del tunnel tunnel_id ID ip l2tp del session tunnel_id ID session_id ID ip l2tp show tunnel [ tunnel_id ID ] ip l2tp show session [ tunnel_id ID ] [ session_id ID ] Where: NAME := STRING ADDR := { IP_ADDRESS | any } PORT := { 0..65535 } ID := { 1..4294967295 } HEXSTR := { 8 or 16 hex digits (4 / 8 bytes) } L2SPEC := { none | default } 参考：manual 参考：第二层隧道协议 参考：Layer 2 Tunneling Protocol Tunnels 相关的知识： 参考：Types of Network Tunnels 参考：GRE vs IPIP Tunneling ipip tunnel 是端对端的，通信也就只能是点对点的，而 GRE tunnel 却可以进行多播。 参考：VPN 隧道协议PPTP、L2TP、IPSec和SSLVPN的区别 参考：技术点详解&mdash;L2TP VPN 参考：互联网安全协议 15.2 ip l2tp add/del/show tunnel 增删查tunnel 15.3 ip l2tp add/del/show session 增删查a new session to a tunnel modprobe l2tp_eth #Setup L2TP tunnels and sessions ip netns exec net1 ip l2tp add tunnel tunnel_id 3000 peer_tunnel_id 4000 encap udp local 192.168.0.1 remote 192.168.0.2 udp_sport 5000 udp_dport 6000 ip netns exec net1 ip l2tp add session tunnel_id 3000 session_id 1000 peer_session_id 2000 ip netns exec net2 ip l2tp add tunnel tunnel_id 4000 peer_tunnel_id 3000 encap udp local 192.168.0.2 remote 192.168.0.1 udp_sport 6000 udp_dport 5000 ip netns exec net2 ip l2tp add session tunnel_id 4000 session_id 2000 peer_session_id 1000 ip netns exec net1 ip link set l2tpeth0 up mtu 1488 ip netns exec net2 ip link set l2tpeth0 up mtu 1488 #Notice that the IP addresses, UDP ports and tunnel / session ids are matched and reversed at each site."/>
+
+
+
+        <meta property="og:title" content="Linux网络工具学习之:IP命令学习15" />
+<meta property="og:description" content="Linux网络工具学习之:IP命令学习15 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 7 ip neighbour 8 ip ntable 9 ip tunnel 10 ip tuntap 11 ip maddr/mroute/mrule 12 ip monitor 13 ip xfrm 14 ip netns 15 ip l2tp 15.1 概述 第二层隧道协议（英语：Layer Two Tunneling Protocol，缩写为L2TP)是一种虚拟隧道协议，通常用于虚拟专用网。L2TP协议自身不提供加密与可靠性验证的功能，可以和安全协议搭配使用，从而实现数据的加密传输。经常与L2TP协议搭配的加密协议是IPsec，当这两个协议搭配使用时，通常合称L2TP/IPsec。 Usage: ip l2tp add tunnel remote ADDR local ADDR tunnel_id ID peer_tunnel_id ID [ encap { ip | udp } ] [ udp_sport PORT ] [ udp_dport PORT ] Usage: ip l2tp add session [ name NAME ] tunnel_id ID session_id ID peer_session_id ID [ cookie HEXSTR ] [ peer_cookie HEXSTR ] [ offset OFFSET ] [ peer_offset OFFSET ] [ l2spec_type L2SPEC ] ip l2tp del tunnel tunnel_id ID ip l2tp del session tunnel_id ID session_id ID ip l2tp show tunnel [ tunnel_id ID ] ip l2tp show session [ tunnel_id ID ] [ session_id ID ] Where: NAME := STRING ADDR := { IP_ADDRESS | any } PORT := { 0..65535 } ID := { 1..4294967295 } HEXSTR := { 8 or 16 hex digits (4 / 8 bytes) } L2SPEC := { none | default } 参考：manual 参考：第二层隧道协议 参考：Layer 2 Tunneling Protocol Tunnels 相关的知识： 参考：Types of Network Tunnels 参考：GRE vs IPIP Tunneling ipip tunnel 是端对端的，通信也就只能是点对点的，而 GRE tunnel 却可以进行多播。 参考：VPN 隧道协议PPTP、L2TP、IPSec和SSLVPN的区别 参考：技术点详解&mdash;L2TP VPN 参考：互联网安全协议 15.2 ip l2tp add/del/show tunnel 增删查tunnel 15.3 ip l2tp add/del/show session 增删查a new session to a tunnel modprobe l2tp_eth #Setup L2TP tunnels and sessions ip netns exec net1 ip l2tp add tunnel tunnel_id 3000 peer_tunnel_id 4000 encap udp local 192.168.0.1 remote 192.168.0.2 udp_sport 5000 udp_dport 6000 ip netns exec net1 ip l2tp add session tunnel_id 3000 session_id 1000 peer_session_id 2000 ip netns exec net2 ip l2tp add tunnel tunnel_id 4000 peer_tunnel_id 3000 encap udp local 192.168.0.2 remote 192.168.0.1 udp_sport 6000 udp_dport 5000 ip netns exec net2 ip l2tp add session tunnel_id 4000 session_id 2000 peer_session_id 1000 ip netns exec net1 ip link set l2tpeth0 up mtu 1488 ip netns exec net2 ip link set l2tpeth0 up mtu 1488 #Notice that the IP addresses, UDP ports and tunnel / session ids are matched and reversed at each site." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A015/" />
+
+
+<meta property="og:updated_time" content="2016-09-22T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="Linux网络工具学习之:IP命令学习15">
+<meta itemprop="description" content="Linux网络工具学习之:IP命令学习15 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 7 ip neighbour 8 ip ntable 9 ip tunnel 10 ip tuntap 11 ip maddr/mroute/mrule 12 ip monitor 13 ip xfrm 14 ip netns 15 ip l2tp 15.1 概述 第二层隧道协议（英语：Layer Two Tunneling Protocol，缩写为L2TP)是一种虚拟隧道协议，通常用于虚拟专用网。L2TP协议自身不提供加密与可靠性验证的功能，可以和安全协议搭配使用，从而实现数据的加密传输。经常与L2TP协议搭配的加密协议是IPsec，当这两个协议搭配使用时，通常合称L2TP/IPsec。 Usage: ip l2tp add tunnel remote ADDR local ADDR tunnel_id ID peer_tunnel_id ID [ encap { ip | udp } ] [ udp_sport PORT ] [ udp_dport PORT ] Usage: ip l2tp add session [ name NAME ] tunnel_id ID session_id ID peer_session_id ID [ cookie HEXSTR ] [ peer_cookie HEXSTR ] [ offset OFFSET ] [ peer_offset OFFSET ] [ l2spec_type L2SPEC ] ip l2tp del tunnel tunnel_id ID ip l2tp del session tunnel_id ID session_id ID ip l2tp show tunnel [ tunnel_id ID ] ip l2tp show session [ tunnel_id ID ] [ session_id ID ] Where: NAME := STRING ADDR := { IP_ADDRESS | any } PORT := { 0..65535 } ID := { 1..4294967295 } HEXSTR := { 8 or 16 hex digits (4 / 8 bytes) } L2SPEC := { none | default } 参考：manual 参考：第二层隧道协议 参考：Layer 2 Tunneling Protocol Tunnels 相关的知识： 参考：Types of Network Tunnels 参考：GRE vs IPIP Tunneling ipip tunnel 是端对端的，通信也就只能是点对点的，而 GRE tunnel 却可以进行多播。 参考：VPN 隧道协议PPTP、L2TP、IPSec和SSLVPN的区别 参考：技术点详解&mdash;L2TP VPN 参考：互联网安全协议 15.2 ip l2tp add/del/show tunnel 增删查tunnel 15.3 ip l2tp add/del/show session 增删查a new session to a tunnel modprobe l2tp_eth #Setup L2TP tunnels and sessions ip netns exec net1 ip l2tp add tunnel tunnel_id 3000 peer_tunnel_id 4000 encap udp local 192.168.0.1 remote 192.168.0.2 udp_sport 5000 udp_dport 6000 ip netns exec net1 ip l2tp add session tunnel_id 3000 session_id 1000 peer_session_id 2000 ip netns exec net2 ip l2tp add tunnel tunnel_id 4000 peer_tunnel_id 3000 encap udp local 192.168.0.2 remote 192.168.0.1 udp_sport 6000 udp_dport 5000 ip netns exec net2 ip l2tp add session tunnel_id 4000 session_id 2000 peer_session_id 1000 ip netns exec net1 ip link set l2tpeth0 up mtu 1488 ip netns exec net2 ip link set l2tpeth0 up mtu 1488 #Notice that the IP addresses, UDP ports and tunnel / session ids are matched and reversed at each site.">
+
+
+<meta itemprop="dateModified" content="2016-09-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="415">
+
+
+
+<meta itemprop="keywords" content="Db,Golang,IOS &amp; MacOS,net,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/"><p>Linux网络工具学习之:IP命令学习01</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/"><p>Linux网络工具学习之:IP命令学习02</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/"><p>Linux网络工具学习之:IP命令学习03</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/"><p>Linux网络工具学习之:IP命令学习04</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/"><p>Linux网络工具学习之:IP命令学习05</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A015/">Linux网络工具学习之:IP命令学习15</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-09-22'>
+            September 22, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a015" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A015%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A015/" class="image featured">
+            <img src="/img/2016/09/winter.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<h1 id="linux网络工具学习之-ip命令学习15">Linux网络工具学习之:IP命令学习15</h1>
+
+<p>标签（空格分隔）： 网络</p>
+
+<hr />
+
+<blockquote>
+<p>本文旨在通过IP命令介绍和学习Linux网络的相关知识</p>
+</blockquote>
+
+<h2 id="1-概述">1. 概述</h2>
+
+<h2 id="2-ip-link">2. ip link</h2>
+
+<h2 id="3-ip-addr">3. ip addr</h2>
+
+<h2 id="4-ip-addrlabel">4 ip addrlabel</h2>
+
+<h2 id="5-ip-route">5 ip route</h2>
+
+<h2 id="6-ip-rule">6 ip rule</h2>
+
+<h2 id="7-ip-neighbour">7 ip neighbour</h2>
+
+<h2 id="8-ip-ntable">8 ip ntable</h2>
+
+<h2 id="9-ip-tunnel">9 ip tunnel</h2>
+
+<h2 id="10-ip-tuntap">10 ip tuntap</h2>
+
+<h2 id="11-ip-maddr-mroute-mrule">11 ip maddr/mroute/mrule</h2>
+
+<h2 id="12-ip-monitor">12 ip monitor</h2>
+
+<h2 id="13-ip-xfrm">13 ip xfrm</h2>
+
+<h2 id="14-ip-netns">14 ip netns</h2>
+
+<h2 id="15-ip-l2tp">15 ip l2tp</h2>
+
+<h3 id="15-1-概述">15.1 概述</h3>
+
+<blockquote>
+<p>第二层隧道协议（英语：Layer Two Tunneling Protocol，缩写为L2TP)是一种虚拟隧道协议，通常用于虚拟专用网。L2TP协议自身不提供加密与可靠性验证的功能，可以和安全协议搭配使用，从而实现数据的加密传输。经常与L2TP协议搭配的加密协议是IPsec，当这两个协议搭配使用时，通常合称L2TP/IPsec。</p>
+</blockquote>
+
+<pre><code>Usage: ip l2tp add tunnel
+          remote ADDR local ADDR
+          tunnel_id ID peer_tunnel_id ID
+          [ encap { ip | udp } ]
+          [ udp_sport PORT ] [ udp_dport PORT ]
+Usage: ip l2tp add session [ name NAME ]
+          tunnel_id ID
+          session_id ID peer_session_id ID
+          [ cookie HEXSTR ] [ peer_cookie HEXSTR ]
+          [ offset OFFSET ] [ peer_offset OFFSET ]
+          [ l2spec_type L2SPEC ]
+       ip l2tp del tunnel tunnel_id ID
+       ip l2tp del session tunnel_id ID session_id ID
+       ip l2tp show tunnel [ tunnel_id ID ]
+       ip l2tp show session [ tunnel_id ID ] [ session_id ID ]
+
+Where: NAME   := STRING
+       ADDR   := { IP_ADDRESS | any }
+       PORT   := { 0..65535 }
+       ID     := { 1..4294967295 }
+       HEXSTR := { 8 or 16 hex digits (4 / 8 bytes) }
+       L2SPEC := { none | default }
+
+</code></pre>
+
+<p><a href="http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=ip-l2tp">参考：manual</a>
+<a href="https://zh.wikipedia.org/wiki/%E7%AC%AC%E4%BA%8C%E5%B1%82%E9%9A%A7%E9%81%93%E5%8D%8F%E8%AE%AE">参考：第二层隧道协议</a>
+<a href="https://en.wikipedia.org/wiki/Layer_2_Tunneling_Protocol">参考：Layer 2 Tunneling Protocol</a></p>
+
+<p>Tunnels 相关的知识：
+<a href="http://www.netheaven.com/TunnelTypes.html">参考：Types of Network Tunnels</a>
+<a href="http://packetlife.net/blog/2012/feb/27/gre-vs-ipip-tunneling/">参考：GRE vs IPIP Tunneling</a>
+ipip tunnel 是端对端的，通信也就只能是点对点的，而 GRE tunnel 却可以进行多播。
+<a href="https://linux.cn/article-3407-1.html">参考：VPN 隧道协议PPTP、L2TP、IPSec和SSLVPN的区别</a>
+<a href="http://www.h3c.com.cn/MiniSite/Technology_Circle/Technology_Column/ICG/ICG_Technology/201004/671383_97665_0.htm">参考：技术点详解&mdash;L2TP VPN</a>
+<a href="http://wenku.baidu.com/link?url=u9zVuDs8gO3_Y_nRkQaDuvHk6DOGeX_raehCuz47Wv5Hzf00gm3gYaqwr5tVUSc4Dd6LwRp-BUHZDbcYZMbn6_6xttFCyeD2MXGu62-MZV3">参考：互联网安全协议</a></p>
+
+<h3 id="15-2-ip-l2tp-add-del-show-tunnel">15.2 ip l2tp add/del/show tunnel</h3>
+
+<blockquote>
+<p>增删查tunnel</p>
+</blockquote>
+
+<h3 id="15-3-ip-l2tp-add-del-show-session">15.3 ip l2tp add/del/show session</h3>
+
+<blockquote>
+<p>增删查a new session to a tunnel</p>
+</blockquote>
+
+<pre><code>modprobe l2tp_eth
+#Setup L2TP tunnels and sessions
+ip netns exec net1 ip l2tp add tunnel tunnel_id 3000 peer_tunnel_id 4000 encap udp local 192.168.0.1 remote 192.168.0.2 udp_sport 5000 udp_dport 6000
+ip netns exec net1 ip l2tp add session tunnel_id 3000 session_id 1000 peer_session_id 2000
+
+ip netns exec net2 ip l2tp add tunnel tunnel_id 4000 peer_tunnel_id 3000 encap udp local 192.168.0.2 remote 192.168.0.1 udp_sport 6000 udp_dport 5000
+ip netns exec net2 ip l2tp add session tunnel_id 4000 session_id 2000 peer_session_id 1000
+
+ip netns exec net1 ip link set l2tpeth0 up mtu 1488
+ip netns exec net2 ip link set l2tpeth0 up mtu 1488
+
+#Notice that the IP addresses, UDP ports and tunnel / session ids are matched and reversed at each site.
+
+#Configure as IP interfaces  The two interfaces can be configured with IP addresses if only IP data s to be carried. This is perhaps the simplest configuration.
+
+ip netns exec net1 ip addr add 10.42.1.1 peer 10.42.1.2 dev l2tpeth0
+ip netns exec net2 ip addr add 10.42.1.2 peer 10.42.1.1 dev l2tpeth0
+
+ip netns exec net1 ping 10.42.1.2
+
+</code></pre>
+
+<p><a href="https://remote-lab.net/linux-l2tp-ethernet-pseudowires">另一个例子</a></p>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesnet'>net</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A016/"
+                class="button big previous">Linux网络工具学习之:IP命令学习16</a></li>
+    
+
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A014/"
+                class="button big next">Linux网络工具学习之:IP命令学习14</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A015\/';
+    var disqus_title = 'Linux网络工具学习之:IP命令学习15';
+    var disqus_url = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A015\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/">Linux网络工具学习之:IP命令学习01</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/">Linux网络工具学习之:IP命令学习02</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/">Linux网络工具学习之:IP命令学习03</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/">Linux网络工具学习之:IP命令学习04</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/">Linux网络工具学习之:IP命令学习05</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/net/">net</a>
+                                <span style="float:right;">17</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/db/">Db</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/golang/">Golang</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+                
+                    <script src="/js/autohidingnavbar.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            <script>(function($){
+  $(function(){ 
+    var scroll = $(document).scrollTop();
+    var headerHeight = $('.header').outerHeight();
+    $(window).scroll(function() {
+      var scrolled = $(document).scrollTop();
+      if ((scrolled - scroll) > 50 && scrolled > headerHeight){
+         $('#header').hide();
+      } else if((scroll - scrolled) > 100 || scrolled < headerHeight * 2) {
+         $('#header').show();
+      } 
+      console.log(scrolled - scroll);          
+      scroll = $(document).scrollTop(); 
+      
+     });
+
+   });
+})(jQuery);;</script>
+            
+    </body>
+</html>
+

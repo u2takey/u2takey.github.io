@@ -1,0 +1,1061 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>Linux网络工具学习之:IP命令学习10</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17-DEV" />
+        
+
+
+        
+            <meta name="author" content="leiiwang">
+        
+        
+            
+                <meta name="description" content="Theme ported by Julio Pescador. Powered by Hugo">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Linux网络工具学习之:IP命令学习10"/>
+<meta name="twitter:description" content="Linux网络工具学习之:IP命令学习10 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 7 ip neighbour 8 ip ntable 9 ip tunnel 10 ip tuntap 10.1 概述 TUN/TAP provides packet reception and transmission for user space programs. It can be seen as a simple Point-to-Point or Ethernet device, which, instead of receiving packets from physical media, receives them from user space program and instead of sending packets via physical media writes them to the user space program."/>
+
+
+
+        <meta property="og:title" content="Linux网络工具学习之:IP命令学习10" />
+<meta property="og:description" content="Linux网络工具学习之:IP命令学习10 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 7 ip neighbour 8 ip ntable 9 ip tunnel 10 ip tuntap 10.1 概述 TUN/TAP provides packet reception and transmission for user space programs. It can be seen as a simple Point-to-Point or Ethernet device, which, instead of receiving packets from physical media, receives them from user space program and instead of sending packets via physical media writes them to the user space program." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A010/" />
+
+
+<meta property="og:updated_time" content="2016-09-22T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="Linux网络工具学习之:IP命令学习10">
+<meta itemprop="description" content="Linux网络工具学习之:IP命令学习10 标签（空格分隔）： 网络 本文旨在通过IP命令介绍和学习Linux网络的相关知识 1. 概述 2. ip link 3. ip addr 4 ip addrlabel 5 ip route 6 ip rule 7 ip neighbour 8 ip ntable 9 ip tunnel 10 ip tuntap 10.1 概述 TUN/TAP provides packet reception and transmission for user space programs. It can be seen as a simple Point-to-Point or Ethernet device, which, instead of receiving packets from physical media, receives them from user space program and instead of sending packets via physical media writes them to the user space program.">
+
+
+<meta itemprop="dateModified" content="2016-09-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="897">
+
+
+
+<meta itemprop="keywords" content="Db,Golang,IOS &amp; MacOS,net,随感," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="/css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="/">LeiiWang&#39;s Blog</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/blog">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/categories">
+                        Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/about">
+                        About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:https://u2takey.github.io/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/blog">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            <h3>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            <h3>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/"><p>Linux网络工具学习之:IP命令学习01</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/"><p>Linux网络工具学习之:IP命令学习02</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/"><p>Linux网络工具学习之:IP命令学习03</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/"><p>Linux网络工具学习之:IP命令学习04</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/"><p>Linux网络工具学习之:IP命令学习05</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A010/">Linux网络工具学习之:IP命令学习10</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-09-22'>
+            September 22, 2016</time>
+        <span class="author">leiiwang</span>
+        
+        
+    </div>
+</header>
+
+
+    <section id="social-share">
+        <ul class="icons">
+            
+
+
+<li><a href="//twitter.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&text=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010&via=" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f&title=Linux%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7%e5%ad%a6%e4%b9%a0%e4%b9%8b%3aIP%e5%91%bd%e4%bb%a4%e5%ad%a6%e4%b9%a010" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by leiiwang&body=https%3a%2f%2fu2takey.github.io%2fblog%2fLinux%25E7%25BD%2591%25E7%25BB%259C%25E5%25B7%25A5%25E5%2585%25B7%25E5%25AD%25A6%25E4%25B9%25A0%25E4%25B9%258B-IP%25E5%2591%25BD%25E4%25BB%25A4%25E5%25AD%25A6%25E4%25B9%25A010%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+    
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A010/" class="image featured">
+            <img src="/img/2016/09/winter.jpg" alt="" />
+        </a>
+    
+
+
+    <div id="content">
+        
+
+<h1 id="linux网络工具学习之-ip命令学习10">Linux网络工具学习之:IP命令学习10</h1>
+
+<p>标签（空格分隔）： 网络</p>
+
+<hr />
+
+<blockquote>
+<p>本文旨在通过IP命令介绍和学习Linux网络的相关知识</p>
+</blockquote>
+
+<h2 id="1-概述">1. 概述</h2>
+
+<h2 id="2-ip-link">2. ip link</h2>
+
+<h2 id="3-ip-addr">3. ip addr</h2>
+
+<h2 id="4-ip-addrlabel">4 ip addrlabel</h2>
+
+<h2 id="5-ip-route">5 ip route</h2>
+
+<h2 id="6-ip-rule">6 ip rule</h2>
+
+<h2 id="7-ip-neighbour">7 ip neighbour</h2>
+
+<h2 id="8-ip-ntable">8 ip ntable</h2>
+
+<h2 id="9-ip-tunnel">9 ip tunnel</h2>
+
+<h2 id="10-ip-tuntap">10 ip tuntap</h2>
+
+<h3 id="10-1-概述">10.1 概述</h3>
+
+<p>TUN/TAP provides packet reception and transmission for user space programs. It can be seen as a simple Point-to-Point or Ethernet device, which, instead of receiving packets from physical media, receives them from user space program and instead of sending packets via physical media writes them to the user space program.</p>
+
+<p><img src="data:image/png;base64,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GOeyt6XccsstinzyySdOk23evFlxlaI6QHWeoroRI0a0RwPniWvWwjswu1RXzAuA6nqq6gDVMS+qA1SH6lAdqmNeAFSH6lBdD1Gd0z334eHh06ZN27hxY1dr40KtF9UBqnP+HlrZb775pl+/fuZWwBa/qI7TO0Z8fX0vu+yyBx98sKKiwrHU6SGe1mZvccmoDtV1unJMura2dvfu3VdeeaUiq1evdoHqXLzenJwcRfr3729FzEvjHnroISuiUkXMlPS54EGq+/rrr4ODg318fN56663WXNjivE1NTSdOnLj33nsd72+2bjzTd7sN1bVHwKgO1XWucgzm4cXm78rq6ufqXLPeyy+/XMFvv/3WZMeMGWMePjFZxZXVNIzqwLNUl5CQEHgWp8d92i+kkpISZTUodCzt27evfsPW19ejOlTX3VRXVVXV/EWULlCda9Z79913K/jmm28qnZuba5040TBOEcXNgyioDjxIdR988IG+eNLSzp07228dp6JTp04pGxYW5lhqHmRetmwZqkN13U115k8EXT+qc81633rrLQV/+9vfKm3e4GNeF2f+oPV3v/ud0m+88QaqAw9SnXnw2fG8pdMEbV9RczyB+cADDziWqmjKlClBQUHmj7K4VofquoPqamtr9+zZY66ZrVq1ymWqc+V6zUU482d1t912m7e396FDh/RNnzdvniJjx461/r4O1YGnqO5f//qXPkNCQs5hVOdIZGRkZWWl04wZGRn+/v6xsbEuHtVFRETw6vF2oqb3tDswBwwYcEHuwHTZes+cvVzn5eVVXFwcGhr6q1/9SpGYmJi+ffueOnVK8cGDB5//egF6kuqU0G9MHf0afn366acdPYGp36r79++fNGmS431ljjOav4g0b3N3mepEeXl5bm5uenp6UlJSQkLCe90A1eu9bon2j/aS9pX2mPabJ5zA7JA2etx6z/x0ue7Pf/6zPl944QVFXn75ZaWfeuopx/9AR3XgQao7c/aEvmzn5+f3/vvvd0h1hoKCAo3ehg4dat4c73TeZvTo0eYPw1ypOrvdXlhYmJWVlZaWlpiY+Hk3QPX6vFui/aO9pH2lPab9hurcQHXmcl2fPn30efDgQUUOHz5sBvH6fO2111AdeKLqRHx8vPdZzLXrjgrJ/CWYeW+6U+muXbvMP9e4UnXV1dWlpaX5+fnqwW02W0o3wPzL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" alt="此处输入图片的描述" />
+<img src="data:image/png;base64,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" alt="此处输入图片的描述" /></p>
+
+<p>tun,tap的区别见下面的参考</p>
+
+<pre><code>Usage: ip tuntap { add | del } [ dev PHYS_DEV ] 
+          [ mode { tun | tap } ] [ user USER ] [ group GROUP ]
+          [ one_queue ] [ pi ] [ vnet_hdr ] [ multi_queue ]
+
+Where: USER  := { STRING | NUMBER }
+       GROUP := { STRING | NUMBER }
+</code></pre>
+
+<h3 id="10-2-ip-tuntap-add-del">10.2 ip tuntap add/del</h3>
+
+<blockquote>
+<p>添加/删除 tun/tap设备</p>
+</blockquote>
+
+<pre><code>##control program &lt;--read/write--&gt; TUN interface &lt;--send/receive IP packets--&gt; any networking program 
+
+#1. Setting up a virtual TUN interface.
+ip tuntap add dev asa0 mode tun
+ip addr add 10.0.0.1/24 dev asa0
+ip link set dev asa0 up
+
+
+
+# 2.  tun-reader.c 
+
+#include &lt;fcntl.h&gt;  /* O_RDWR */
+#include &lt;string.h&gt; /* memset(), memcpy() */
+#include &lt;stdio.h&gt; /* perror(), printf(), fprintf() */
+#include &lt;stdlib.h&gt; /* exit(), malloc(), free() */
+#include &lt;sys/ioctl.h&gt; /* ioctl() */
+
+/* includes for struct ifreq, etc */
+#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;linux/if.h&gt;
+#include &lt;linux/if_tun.h&gt;
+
+int tun_open(char *devname)
+{
+    struct ifreq ifr;
+    int fd, err;
+
+    if ( (fd = open(&quot;/dev/net/tun&quot;, O_RDWR)) == -1 ) {
+        perror(&quot;open /dev/net/tun&quot;);
+        exit(1);
+    }
+
+    memset(&amp;ifr, 0, sizeof(ifr));
+    ifr.ifr_flags = IFF_TUN;
+    strncpy(ifr.ifr_name, devname, IFNAMSIZ);
+
+    /* ioctl will use if_name as the name of TUN
+    * interface to open: &quot;tun0&quot;, etc. */
+    if ( (err = ioctl(fd, TUNSETIFF, (void *) &amp;ifr)) == -1 ) {
+        perror(&quot;ioctl TUNSETIFF&quot;);close(fd);exit(1);
+    }
+
+    /* After the ioctl call the fd is &quot;connected&quot; to tun device
+    * specified
+    * by devname */
+
+    return fd;
+}
+
+int main(int argc, char *argv[])
+{
+    int fd, nbytes;
+    char buf[1600];
+
+    fd = tun_open(&quot;asa0&quot;) ;
+    printf(&quot;Device asa0 opened\n&quot;);
+
+    while(1) {
+        nbytes = read(fd, buf, sizeof(buf));
+        printf(&quot;Read %d bytes from asa0\n&quot;, nbytes);
+    }
+    return 0;
+}
+
+
+# 3. 运行
+gcc tun-reader.c
+./a.out
+
+It will open the file descriptor of the asa0 interface and will wait for any packets. Let's send some packets to the asa0 interface as follows to see whether our program receive those packets.
+
+# 4. 测试
+ping 10.0.0.1
+
+无输出
+In the above case, we are pinging to the exact IP address of the asa0 interface. Therefore we receive ping responses from the interface directly without directing the ICMP packets to the back-end program. Now, let's ping to some other IP address in the same network.
+
+ping 10.0.0.2
+[root@10-9-151-160 ~]# ./a.out 
+Device asa0 opened
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+Read 88 bytes from asa0
+
+[root@10-9-151-160 ~]# tcpdump -vvi asa0
+tcpdump: listening on asa0, link-type RAW (Raw IP), capture size 65535 bytes
+18:46:22.633821 IP (tos 0x0, ttl 64, id 37266, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &gt; 10.0.0.2: ICMP echo request, id 2304, seq 1332, length 64
+18:46:23.633767 IP (tos 0x0, ttl 64, id 37267, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &gt; 10.0.0.2: ICMP echo request, id 2304, seq 1333, length 64
+18:46:24.633776 IP (tos 0x0, ttl 64, id 37268, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &gt; 10.0.0.2: ICMP echo request, id 2304, seq 1334, length 64
+
+
+# 5. 这时候新建一个tun0
+ip tuntap add dev tun0 mode tun
+ip addr add 10.0.0.2/24 dev tun0
+ip link set dev tun0 up
+
+# 6. 修改一下tun-reader.c 把数据写到tun0； 即 data-&gt;asa0-&gt;tun0
+#include &lt;fcntl.h&gt;  /* O_RDWR */
+#include &lt;string.h&gt; /* memset(), memcpy() */
+#include &lt;stdio.h&gt; /* perror(), printf(), fprintf() */
+#include &lt;stdlib.h&gt; /* exit(), malloc(), free() */
+#include &lt;sys/ioctl.h&gt; /* ioctl() */
+
+/* includes for struct ifreq, etc */
+#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;linux/if.h&gt;
+#include &lt;linux/if_tun.h&gt;
+
+int tun_open(char *devname)
+{
+    struct ifreq ifr;
+    int fd, err;
+
+    if ( (fd = open(&quot;/dev/net/tun&quot;, O_RDWR)) == -1 ) {
+        perror(&quot;open /dev/net/tun&quot;);
+        exit(1);
+    }
+
+    memset(&amp;ifr, 0, sizeof(ifr));
+    ifr.ifr_flags = IFF_TUN;
+    strncpy(ifr.ifr_name, devname, IFNAMSIZ);
+
+    /* ioctl will use if_name as the name of TUN
+    * interface to open: &quot;tun0&quot;, etc. */
+    if ( (err = ioctl(fd, TUNSETIFF, (void *) &amp;ifr)) == -1 ) {
+        perror(&quot;ioctl TUNSETIFF&quot;);close(fd);exit(1);
+    }
+
+    /* After the ioctl call the fd is &quot;connected&quot; to tun device
+    * specified
+    * by devname */
+
+    return fd;
+}
+
+int main(int argc, char *argv[])
+{
+    int fd, nbytes, fd2;
+    char buf[1600];
+
+    fd = tun_open(&quot;asa0&quot;) ;
+    fd2 = tun_open(&quot;tun0&quot;) ;
+    printf(&quot;Device asa0 opened\n&quot;);
+    printf(&quot;Device tun0 opened\n&quot;);
+
+    while(1) {
+        nbytes = read(fd, buf, sizeof(buf));
+        printf(&quot;Read %d bytes from asa0\n&quot;, nbytes);
+	nbytes = write(fd2, buf, sizeof(buf));
+        printf(&quot;Write %d bytes to tun0\n&quot;, nbytes);
+    }
+    return 0;
+}
+
+# 7. 测试可以看到 tun0 端口有和asa0端口一样的数据
+[root@10-9-151-160 ~]# tcpdump -vvi tun0
+tcpdump: listening on tun0, link-type RAW (Raw IP), capture size 65535 bytes
+18:50:19.642816 IP (tos 0x0, ttl 64, id 37503, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &gt; 10.0.0.2: ICMP echo request, id 2304, seq 1569, length 64
+18:50:20.642842 IP (tos 0x0, ttl 64, id 37504, offset 0, flags [DF], proto ICMP (1), length 84)
+    10-9-151-160 &gt; 10.0.0.2: ICMP echo request, id 2304, seq 1570, length 64
+</code></pre>
+
+<p><a href="https://blog.kghost.info/2013/03/27/linux-network-tun/">参考：TUN/TAP MACVLAN MACVTAP</a>
+<a href="https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/">参考：Linux 上的基础网络设备详解</a>
+<a href="https://www.kernel.org/doc/Documentation/networking/tuntap.txt">参考：tuntap</a>
+<a href="http://www.noah.org/wiki/tun/tap_driver">参考：tun/tap driver</a>
+<a href="http://backreference.org/2010/03/26/tuntap-interface-tutorial/">参考：Tun/Tap interface tutorial</a>
+<a href="http://xcodest.me/tun-vethshe-bei.html">参考：tun &amp; veth设备</a>
+<a href="https://www.gitbook.com/book/yeasy/openstack_understand_neutron">参考：openstack网络的介绍，里面用了tap</a></p>
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='/categoriesnet'>net</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A011/"
+                class="button big previous">Linux网络工具学习之:IP命令学习11</a></li>
+    
+
+    
+        <li><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A009/"
+                class="button big next">Linux网络工具学习之:IP命令学习09</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'shortname';
+    var disqus_identifier = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A010\/';
+    var disqus_title = 'Linux网络工具学习之:IP命令学习10';
+    var disqus_url = 'https:\/\/u2takey.github.io\/blog\/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A010\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <img src="/img/main/logo.jpg" class="intro-circle" width="100pix" alt="Hugo Future Imperfect" />
+                
+            
+            
+                <header>
+                    <h2>LeiiWang&#39;s Blog</h2>
+                    <p>时光如河水流过，一些沙子在这里沉淀。</p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A001/">Linux网络工具学习之:IP命令学习01</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A002/">Linux网络工具学习之:IP命令学习02</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A003/">Linux网络工具学习之:IP命令学习03</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A004/">Linux网络工具学习之:IP命令学习04</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="https://u2takey.github.io/blog/Linux%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0%E4%B9%8B-IP%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A005/">Linux网络工具学习之:IP命令学习05</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-22'>
+                                    September 22, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /blog/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="/categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/net/">net</a>
+                                <span style="float:right;">17</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/ios--macos/">IOS &amp; MacOS</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/%E9%9A%8F%E6%84%9F/">随感</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/db/">Db</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="/categories/golang/">Golang</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>又一个博客.</p>
+
+            <ul class="actions">
+                <li><a href="/about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/u2takey" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            </ul>
+
+            <p class="copyright">&copy; LeiiWang&#39;s Blog. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="/js/main.min.js"></script>
+                
+            
+                
+                    <script src="/js/autohidingnavbar.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            <script>(function($){
+  $(function(){ 
+    var scroll = $(document).scrollTop();
+    var headerHeight = $('.header').outerHeight();
+    $(window).scroll(function() {
+      var scrolled = $(document).scrollTop();
+      if ((scrolled - scroll) > 50 && scrolled > headerHeight){
+         $('#header').hide();
+      } else if((scroll - scrolled) > 100 || scrolled < headerHeight * 2) {
+         $('#header').show();
+      } 
+      console.log(scrolled - scroll);          
+      scroll = $(document).scrollTop(); 
+      
+     });
+
+   });
+})(jQuery);;</script>
+            
+    </body>
+</html>
+
